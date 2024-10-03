@@ -1,4 +1,4 @@
-package mycode.doctor_appointment_api.app.appointments.model;
+package mycode.doctor_appointment_api.app.working_hours.model;
 
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
@@ -6,10 +6,8 @@ import jakarta.persistence.*;
 import lombok.*;
 import mycode.doctor_appointment_api.app.clinic.model.Clinic;
 import mycode.doctor_appointment_api.app.doctor.model.Doctor;
-import mycode.doctor_appointment_api.app.patient.model.Patient;
 
-import java.time.LocalDate;
-import java.time.LocalDateTime;
+import java.time.LocalTime;
 
 import static jakarta.persistence.GenerationType.SEQUENCE;
 
@@ -20,20 +18,20 @@ import static jakarta.persistence.GenerationType.SEQUENCE;
 @Getter
 @Setter
 @Builder
-@Table(name = "appointment")
-@Entity(name = "Appointment")
-public class Appointment {
+@Table(name = "workingHours")
+@Entity(name = "WorkingHours")
+public class WorkingHours {
 
     @Id
     @SequenceGenerator(
-            name="appointment_sequence",
-            sequenceName = "appointment_sequence",
+            name="working_hours_sequence",
+            sequenceName = "working_hours_sequence",
             allocationSize = 1
     )
 
     @GeneratedValue(
             strategy = SEQUENCE,
-            generator = "appointment_sequence"
+            generator = "working_hours_sequence"
     )
 
     @Column(
@@ -43,27 +41,31 @@ public class Appointment {
 
 
     @Column(
-            name = "start",
+            name = "day_of_week",
             nullable = false,
-            columnDefinition = "DATE"
+            columnDefinition = "TEXT"
     )
-    private LocalDateTime start;
+    private String dayOfWeek;
+
 
     @Column(
-            name = "end",
+            name = "start_time",
             nullable = false,
-            columnDefinition = "DATE"
+            columnDefinition = "TIME"
     )
-    private LocalDateTime end;
+    private LocalTime startTime;
+
+    @Column(
+            name = "end_time",
+            nullable = false,
+            columnDefinition = "TIME"
+    )
+    private LocalTime endTime;
+
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "doctor_id", referencedColumnName = "id")
     @JsonBackReference
     private Doctor doctor;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "patient_id", referencedColumnName = "id")
-    @JsonBackReference
-    private Patient patient;
 
 }
