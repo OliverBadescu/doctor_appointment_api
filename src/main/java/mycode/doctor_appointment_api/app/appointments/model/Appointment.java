@@ -45,14 +45,14 @@ public class Appointment {
     @Column(
             name = "start",
             nullable = false,
-            columnDefinition = "DATE"
+            columnDefinition = "TIMESTAMP"
     )
     private LocalDateTime start;
 
     @Column(
             name = "end",
             nullable = false,
-            columnDefinition = "DATE"
+            columnDefinition = "TIMESTAMP"
     )
     private LocalDateTime end;
 
