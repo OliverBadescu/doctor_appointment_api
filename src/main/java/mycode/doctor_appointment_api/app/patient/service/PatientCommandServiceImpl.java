@@ -3,6 +3,8 @@ package mycode.doctor_appointment_api.app.patient.service;
 import lombok.AllArgsConstructor;
 import mycode.doctor_appointment_api.app.patient.dtos.CreatePatientRequest;
 import mycode.doctor_appointment_api.app.patient.dtos.PatientResponse;
+import mycode.doctor_appointment_api.app.patient.dtos.UpdatePatientRequest;
+import mycode.doctor_appointment_api.app.patient.exceptions.NoPatientFound;
 import mycode.doctor_appointment_api.app.patient.exceptions.PatientAlreadyExists;
 import mycode.doctor_appointment_api.app.patient.mapper.PatientMapper;
 import mycode.doctor_appointment_api.app.patient.model.Patient;
@@ -29,6 +31,23 @@ public class PatientCommandServiceImpl implements PatientCommandService{
             }
         });
 
+        patientRepository.saveAndFlush(patient);
+
+        return PatientMapper.patientToResponseDto(patient);
+    }
+
+    @Override
+    public PatientResponse updatePatient(UpdatePatientRequest up, int id) {
+        Patient patient = patientRepository.findById(id)
+                .orElseThrow(() -> new NoPatientFound("No patient with this id found"));
+
+
+        patient.setEmail(up.email());
+        patient.setFullName(up.email());
+        patient.setPassword(up.password());
+        patient.setPhone(up.phone());
+
+        patientRepository.save(patient);
 
         return PatientMapper.patientToResponseDto(patient);
     }
