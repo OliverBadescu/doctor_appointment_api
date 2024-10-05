@@ -4,11 +4,9 @@ package mycode.doctor_appointment_api.app.appointments.model;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.*;
-import mycode.doctor_appointment_api.app.clinic.model.Clinic;
 import mycode.doctor_appointment_api.app.doctor.model.Doctor;
 import mycode.doctor_appointment_api.app.patient.model.Patient;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 import static jakarta.persistence.GenerationType.SEQUENCE;

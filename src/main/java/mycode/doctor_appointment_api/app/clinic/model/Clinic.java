@@ -1,6 +1,8 @@
 package mycode.doctor_appointment_api.app.clinic.model;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.*;
@@ -17,6 +19,7 @@ import static jakarta.persistence.GenerationType.SEQUENCE;
 @Data
 @Getter
 @Setter
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 @Builder
 @Table(name = "clinic")
 @Entity(name = "Clinic")
@@ -54,7 +57,9 @@ public class Clinic {
     )
     private String address;
 
+
     @OneToMany(mappedBy ="clinic",fetch = FetchType.LAZY,cascade = CascadeType.ALL ,orphanRemoval = true)
+    @JsonIgnore
     @Builder.Default
         @ToString.Exclude
     @JsonManagedReference

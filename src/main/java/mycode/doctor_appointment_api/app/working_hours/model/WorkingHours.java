@@ -4,7 +4,6 @@ package mycode.doctor_appointment_api.app.working_hours.model;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.*;
-import mycode.doctor_appointment_api.app.clinic.model.Clinic;
 import mycode.doctor_appointment_api.app.doctor.model.Doctor;
 
 import java.time.LocalTime;
