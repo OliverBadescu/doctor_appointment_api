@@ -10,4 +10,6 @@ public interface PatientCommandService {
 
     PatientResponse updatePatient(UpdatePatientRequest updatePatientRequest, int id);
 
+    PatientResponse deletePatient(int id);
+
 }

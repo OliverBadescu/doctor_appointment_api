@@ -51,4 +51,16 @@ public class PatientCommandServiceImpl implements PatientCommandService{
 
         return PatientMapper.patientToResponseDto(patient);
     }
+
+    @Override
+    public PatientResponse deletePatient(int id) {
+        Patient patient = patientRepository.findById(id)
+                .orElseThrow(() -> new NoPatientFound("No patient with this id found"));
+
+        PatientResponse patientResponse = PatientMapper.patientToResponseDto(patient);
+
+        patientRepository.delete(patient);
+
+        return patientResponse;
+    }
 }
