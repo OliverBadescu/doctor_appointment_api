@@ -12,4 +12,7 @@ public interface ClinicRepository extends JpaRepository<Clinic, Integer> {
     @EntityGraph(attributePaths = {"doctors"}, type = EntityGraph.EntityGraphType.FETCH)
     Optional<Clinic> findByName(String name);
 
+    @EntityGraph(attributePaths = {"doctors"}, type = EntityGraph.EntityGraphType.FETCH)
+    Optional<Clinic> findById(int id);
+
 }
