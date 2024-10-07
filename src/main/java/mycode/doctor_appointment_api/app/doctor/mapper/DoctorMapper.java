@@ -1,5 +1,6 @@
 package mycode.doctor_appointment_api.app.doctor.mapper;
 
+import mycode.doctor_appointment_api.app.clinic.mapper.ClinicMapper;
 import mycode.doctor_appointment_api.app.doctor.dtos.DoctorResponse;
 import mycode.doctor_appointment_api.app.doctor.model.Doctor;
 import mycode.doctor_appointment_api.app.patient.model.Patient;
@@ -15,7 +16,7 @@ public class DoctorMapper {
                 doctor.getEmail(),
                 doctor.getEmail(),
                 doctor.getPhone(),
-                doctor.getClinic());
+                ClinicMapper.clinicToResponseDto(doctor.getClinic()));
     }
 
 
