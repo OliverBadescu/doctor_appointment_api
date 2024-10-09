@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import mycode.doctor_appointment_api.app.appointments.dtos.AppointmentResponse;
 import mycode.doctor_appointment_api.app.appointments.dtos.CreateAppointmentRequest;
 import mycode.doctor_appointment_api.app.appointments.dtos.UpdateAppointmentRequest;
+import mycode.doctor_appointment_api.app.appointments.exceptions.AppointmentAlreadyExistsAtThisDateAndTime;
 import mycode.doctor_appointment_api.app.appointments.exceptions.NoAppointmentFound;
 import mycode.doctor_appointment_api.app.appointments.mapper.AppointmentMapper;
 import mycode.doctor_appointment_api.app.appointments.model.Appointment;
@@ -15,11 +16,20 @@ import mycode.doctor_appointment_api.app.doctor.repository.DoctorRepository;
 import mycode.doctor_appointment_api.app.patient.exceptions.NoPatientFound;
 import mycode.doctor_appointment_api.app.patient.model.Patient;
 import mycode.doctor_appointment_api.app.patient.repository.PatientRepository;
+import mycode.doctor_appointment_api.app.working_hours.exceptions.NoWorkingHoursFound;
+import mycode.doctor_appointment_api.app.working_hours.model.WorkingHours;
 import mycode.doctor_appointment_api.app.working_hours.repository.WorkingHoursRepository;
 import org.springframework.stereotype.Service;
 
 import java.time.DayOfWeek;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.time.chrono.ChronoLocalDateTime;
+import java.util.List;
+import java.util.Optional;
+import java.util.Set;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 @AllArgsConstructor
 @Service
@@ -38,17 +48,65 @@ public class AppointmentCommandServiceImpl implements AppointmentCommandService{
         Doctor doctor = doctorRepository.findById(createAppointmentRequest.doctorId())
                 .orElseThrow(() -> new NoDoctorFound("No doctor with this id found"));
 
-
         LocalDateTime start = createAppointmentRequest.start();
-
         LocalDateTime end = createAppointmentRequest.end();
-
         DayOfWeek day = start.getDayOfWeek();
+        System.out.println(day);
+
+        Optional<List<WorkingHours>> list = workingHoursRepository.findByDoctorId(doctor.getId());
+
+        boolean working = false;
+
+        for (WorkingHours workingHours : list.get()) {
+            if (workingHours.getDayOfWeek().equals(day)) {
+                working = true;
+                break;
+            }
+        }
 
 
+        if(!working){
+            throw new NoWorkingHoursFound("Doctor only works on weekdays");
+        }
 
 
-        return null;
+        LocalDate date = start.toLocalDate();
+        LocalDateTime workingHoursStart = LocalDateTime.of(date, LocalTime.of(9, 0)); // 9:00 AM
+        LocalDateTime workingHoursEnd = LocalDateTime.of(date, LocalTime.of(17, 0)); // 5:00 PM
+
+        if (start.isBefore(workingHoursStart) || end.isAfter(workingHoursEnd)) {
+            throw new NoWorkingHoursFound("Doctor is not working at this time");
+        }
+
+        Optional<List<Appointment>> appointments = appointmentRepository.getAllByDoctorId(doctor.getId());
+
+        boolean hasAppointment = appointments.get().stream().anyMatch(existingAppointment -> {
+            LocalDateTime existingStart = existingAppointment.getStart();
+            LocalDateTime existingEnd = existingAppointment.getEnd();
+
+            boolean sameDate = existingStart.toLocalDate().equals(start.toLocalDate());
+
+            boolean overlaps = start.isBefore(existingEnd) && end.isAfter(existingStart);
+
+
+            return sameDate && overlaps;
+        });
+
+        if (hasAppointment) {
+            throw new AppointmentAlreadyExistsAtThisDateAndTime("Doctor already has an appointment at this time.");
+        }
+
+
+        Appointment appointment = Appointment.builder()
+                .start(start)
+                .end(end)
+                .patient(patient)
+                .doctor(doctor)
+                .build();
+
+        appointmentRepository.saveAndFlush(appointment);
+
+        return AppointmentMapper.appointmentToResponseDto(appointment);
 
     }
 

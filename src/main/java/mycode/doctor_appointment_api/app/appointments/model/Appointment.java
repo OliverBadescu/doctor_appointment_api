@@ -2,6 +2,7 @@ package mycode.doctor_appointment_api.app.appointments.model;
 
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
 import lombok.*;
 import mycode.doctor_appointment_api.app.doctor.model.Doctor;
@@ -39,7 +40,7 @@ public class Appointment {
     )
     private int id;
 
-
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm")
     @Column(
             name = "start",
             nullable = false,
@@ -47,6 +48,7 @@ public class Appointment {
     )
     private LocalDateTime start;
 
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm")
     @Column(
             name = "end",
             nullable = false,

@@ -21,7 +21,7 @@ public class AppointmentController {
 
     @PostMapping
     ResponseEntity<AppointmentResponse> addAppointment(@RequestBody CreateAppointmentRequest createAppointmentRequest){
-        return null;
+        return new ResponseEntity<>(appointmentCommandService.addAppointment(createAppointmentRequest), HttpStatus.CREATED);
     }
 
     @GetMapping(path = "/{appointmentId}")

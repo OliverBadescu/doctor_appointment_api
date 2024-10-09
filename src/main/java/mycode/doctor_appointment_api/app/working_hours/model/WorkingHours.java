@@ -40,6 +40,7 @@ public class WorkingHours {
     private int id;
 
 
+    @Enumerated(EnumType.STRING)
     @Column(
             name = "day_of_week",
             nullable = false,
