@@ -18,6 +18,9 @@ import mycode.doctor_appointment_api.app.patient.repository.PatientRepository;
 import mycode.doctor_appointment_api.app.working_hours.repository.WorkingHoursRepository;
 import org.springframework.stereotype.Service;
 
+import java.time.DayOfWeek;
+import java.time.LocalDateTime;
+
 @AllArgsConstructor
 @Service
 public class AppointmentCommandServiceImpl implements AppointmentCommandService{
@@ -34,6 +37,15 @@ public class AppointmentCommandServiceImpl implements AppointmentCommandService{
 
         Doctor doctor = doctorRepository.findById(createAppointmentRequest.doctorId())
                 .orElseThrow(() -> new NoDoctorFound("No doctor with this id found"));
+
+
+        LocalDateTime start = createAppointmentRequest.start();
+
+        LocalDateTime end = createAppointmentRequest.end();
+
+        DayOfWeek day = start.getDayOfWeek();
+
+
 
 
         return null;

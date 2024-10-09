@@ -6,6 +6,7 @@ import jakarta.persistence.*;
 import lombok.*;
 import mycode.doctor_appointment_api.app.doctor.model.Doctor;
 
+import java.time.DayOfWeek;
 import java.time.LocalTime;
 
 import static jakarta.persistence.GenerationType.SEQUENCE;
@@ -44,7 +45,7 @@ public class WorkingHours {
             nullable = false,
             columnDefinition = "TEXT"
     )
-    private String dayOfWeek;
+    private DayOfWeek dayOfWeek;
 
 
     @Column(
