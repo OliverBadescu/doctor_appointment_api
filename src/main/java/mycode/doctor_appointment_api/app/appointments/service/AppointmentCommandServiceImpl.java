@@ -41,7 +41,7 @@ public class AppointmentCommandServiceImpl implements AppointmentCommandService{
     private WorkingHoursRepository workingHoursRepository;
 
 
-    //todo: how can i improve this 
+    //todo: how can i improve this
     @Override
     public AppointmentResponse addAppointment(CreateAppointmentRequest createAppointmentRequest) {
         Patient patient = patientRepository.findById(createAppointmentRequest.patientId())
