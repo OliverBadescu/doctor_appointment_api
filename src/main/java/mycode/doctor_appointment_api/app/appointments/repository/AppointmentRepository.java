@@ -12,4 +12,6 @@ public interface AppointmentRepository extends JpaRepository<Appointment, Intege
 
     Optional<List<Appointment>> getAllByDoctorId(int id);
 
+    Optional<List<Appointment>> getAllByPatientId(int id);
+
 }

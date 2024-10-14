@@ -1,9 +1,8 @@
 package mycode.doctor_appointment_api.app.appointments.web;
 
 import lombok.AllArgsConstructor;
-import mycode.doctor_appointment_api.app.appointments.dtos.AppointmentResponse;
-import mycode.doctor_appointment_api.app.appointments.dtos.CreateAppointmentRequest;
-import mycode.doctor_appointment_api.app.appointments.dtos.UpdateAppointmentRequest;
+import mycode.doctor_appointment_api.app.appointments.dtos.*;
+import mycode.doctor_appointment_api.app.appointments.model.Appointment;
 import mycode.doctor_appointment_api.app.appointments.service.AppointmentCommandService;
 import mycode.doctor_appointment_api.app.appointments.service.AppointmentQueryService;
 import org.hibernate.dialect.unique.CreateTableUniqueDelegate;
@@ -37,5 +36,16 @@ public class AppointmentController {
     @DeleteMapping(path = "/{appointmentId}")
     ResponseEntity<AppointmentResponse> deleteAppointment(@PathVariable int appointmentId){
         return new ResponseEntity<>(appointmentCommandService.deleteAppointment(appointmentId), HttpStatus.ACCEPTED);
+    }
+
+    @GetMapping(path = "/patient/{patientId}")
+    ResponseEntity<PatientAppointmentList> getPatientAppointments(@PathVariable int patientId){
+
+        return new ResponseEntity<>(appointmentQueryService.getAllPatientAppointments(patientId), HttpStatus.ACCEPTED);
+    }
+
+    @GetMapping(path = "/doctor/{doctorId}")
+    ResponseEntity<DoctorAppointmentList> getDoctorAppointments(@PathVariable int doctorId){
+        return new ResponseEntity<>(appointmentQueryService.getAllDoctorAppointments(doctorId), HttpStatus.ACCEPTED);
     }
 }
