@@ -12,4 +12,7 @@ public interface DoctorRepository extends JpaRepository<Doctor, Integer> {
     @EntityGraph(attributePaths = {"appointments", "workingHours"}, type = EntityGraph.EntityGraphType.FETCH)
     Optional<Doctor> findById(int id);
 
+    @EntityGraph(attributePaths = {"appointments", "workingHours"}, type = EntityGraph.EntityGraphType.FETCH)
+    Optional<Doctor> findByFullName(String fullName);
+
 }

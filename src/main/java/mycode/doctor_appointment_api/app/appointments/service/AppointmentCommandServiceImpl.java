@@ -47,8 +47,8 @@ public class AppointmentCommandServiceImpl implements AppointmentCommandService{
         Patient patient = patientRepository.findById(createAppointmentRequest.patientId())
                 .orElseThrow(() -> new NoPatientFound("No patient with this id found"));
 
-        Doctor doctor = doctorRepository.findById(createAppointmentRequest.doctorId())
-                .orElseThrow(() -> new NoDoctorFound("No doctor with this id found"));
+        Doctor doctor = doctorRepository.findByFullName(createAppointmentRequest.doctorName())
+                .orElseThrow(() -> new NoDoctorFound("No doctor with this name found"));
 
         LocalDateTime start = createAppointmentRequest.start();
         LocalDateTime end = createAppointmentRequest.end();

@@ -19,8 +19,8 @@ public record CreateAppointmentRequest(@NotNull
                                        LocalDateTime end,
 
                                        @NotNull
-                                       @Schema(type = "integer", example = "1")
-                                       int doctorId,
+                                       @Schema(type = "string", example = "Dr. Alex")
+                                       String doctorName,
 
                                        @NotNull
                                        @Schema(type = "integer", example = "1")
