@@ -37,4 +37,10 @@ public class DoctorController {
     ResponseEntity<DoctorResponse> deleteDoctor(@PathVariable int doctorId){
         return new ResponseEntity<>(doctorCommandService.deleteDoctor(doctorId), HttpStatus.ACCEPTED);
     }
+
+    // todo: finish
+    @GetMapping(path = "/{doctorId}")
+    ResponseEntity<DoctorResponse> getDoctorAvailability(@PathVariable int doctorId){
+        return null;
+    }
 }
