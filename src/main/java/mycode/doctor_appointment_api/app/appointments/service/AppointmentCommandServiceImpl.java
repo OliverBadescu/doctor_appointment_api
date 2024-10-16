@@ -1,6 +1,7 @@
 package mycode.doctor_appointment_api.app.appointments.service;
 
 
+import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import mycode.doctor_appointment_api.app.appointments.dtos.AppointmentResponse;
 import mycode.doctor_appointment_api.app.appointments.dtos.CreateAppointmentRequest;
@@ -133,5 +134,25 @@ public class AppointmentCommandServiceImpl implements AppointmentCommandService{
         appointmentRepository.delete(appointment);
 
         return appointmentResponse;
+    }
+
+
+    @Override
+    public AppointmentResponse deletePatientAppointment(int patientId, int appointmentId) {
+        
+        Appointment appointment = appointmentRepository.findById(appointmentId)
+                .orElseThrow(() -> new NoAppointmentFound("No appointment with this id found"));
+
+
+        if(appointment.getPatient().getId() == patientId){
+            AppointmentResponse appointmentResponse = AppointmentMapper.appointmentToResponseDto(appointment);
+
+            appointmentRepository.delete(appointment);
+
+            return appointmentResponse;
+
+        }else{
+            throw new NoAppointmentFound("This patient has no appointment with this id");
+        }
     }
 }
