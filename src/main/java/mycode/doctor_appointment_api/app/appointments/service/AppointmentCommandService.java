@@ -13,4 +13,5 @@ public interface AppointmentCommandService {
 
     AppointmentResponse deleteAppointment(int id);
 
+    AppointmentResponse deletePatientAppointment(int patientId, int appointmentId);
 }

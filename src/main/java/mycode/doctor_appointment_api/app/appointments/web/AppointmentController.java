@@ -48,4 +48,11 @@ public class AppointmentController {
     ResponseEntity<DoctorAppointmentList> getDoctorAppointments(@PathVariable int doctorId){
         return new ResponseEntity<>(appointmentQueryService.getAllDoctorAppointments(doctorId), HttpStatus.ACCEPTED);
     }
+
+    @DeleteMapping(path = "/patient/{patientId}/{appointmentId}")
+    ResponseEntity<AppointmentResponse> deletePatientAppointment(@PathVariable int patientId, @PathVariable int appointmentId){
+
+        return new ResponseEntity<>(appointmentCommandService.deletePatientAppointment(patientId, appointmentId), HttpStatus.ACCEPTED);
+
+    }
 }
