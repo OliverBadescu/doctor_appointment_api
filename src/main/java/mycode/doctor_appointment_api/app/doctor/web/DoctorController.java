@@ -1,14 +1,14 @@
 package mycode.doctor_appointment_api.app.doctor.web;
 
 import lombok.AllArgsConstructor;
-import mycode.doctor_appointment_api.app.doctor.dtos.CreateDoctorRequest;
-import mycode.doctor_appointment_api.app.doctor.dtos.DoctorResponse;
-import mycode.doctor_appointment_api.app.doctor.dtos.UpdateDoctorRequest;
+import mycode.doctor_appointment_api.app.doctor.dtos.*;
 import mycode.doctor_appointment_api.app.doctor.service.DoctorCommandService;
 import mycode.doctor_appointment_api.app.doctor.service.DoctorQueryService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.time.LocalDate;
 
 @RestController
 @AllArgsConstructor
@@ -39,8 +39,9 @@ public class DoctorController {
     }
 
     // todo: finish
-    @GetMapping(path = "/{doctorId}")
-    ResponseEntity<DoctorResponse> getDoctorAvailability(@PathVariable int doctorId){
-        return null;
+    @GetMapping(path = "/available/{doctorId}")
+    ResponseEntity<AvailableDoctorTimes> getDoctorAvailability(@PathVariable int doctorId, @RequestBody DateRequest date){
+        LocalDate localDate = date.getDate();
+        return new ResponseEntity<>(doctorQueryService.getDoctorAvailableTime(doctorId, localDate), HttpStatus.OK);
     }
 }
