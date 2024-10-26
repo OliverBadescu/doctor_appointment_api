@@ -19,6 +19,7 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -46,39 +47,36 @@ public class DoctorQueryServiceImpl implements DoctorQueryService{
         Doctor doctor = doctorRepository.findById(id)
                 .orElseThrow(() -> new NoDoctorFound("No doctor with this id found"));
 
-        List<WorkingHours> workingHours = workingHoursRepository.findByDoctorId(id)
-                .orElseThrow(() -> new NoWorkingHoursFound("No working hours found for this doctor"));
-
-        List<Appointment> appointments = appointmentRepository.findByDoctorIdAndStart(id, date.atStartOfDay())
+        List<Appointment> appointments = appointmentRepository.findByDoctorIdAndDate(id, date)
                 .orElseThrow(() -> new NoAppointmentFound("No appointments found"));
 
-        List<AvailableTimeSlot> availableSlots = new ArrayList<>();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm");
+        List<String> times = new ArrayList<>();
 
-        for (WorkingHours hours : workingHours) {
-            LocalDateTime startOfDay = date.atTime(hours.getStartTime());
-            LocalDateTime endOfDay = date.atTime(hours.getEndTime());
+        String workStart = "09:00";
+        String workEnd = "17:00";
 
-            LocalDateTime current = startOfDay;
-            while (current.isBefore(endOfDay)) {
-                LocalDateTime nextSlot = current.plusMinutes(30);
-                if (nextSlot.isAfter(endOfDay)) {
-                    break;
-                }
-
-                LocalDateTime currentForCheck = current;
-                boolean isAvailable = appointments.stream().noneMatch(appointment ->
-                        (appointment.getStart().isBefore(nextSlot) && appointment.getEnd().isAfter(currentForCheck)));
-
-                if (isAvailable) {
-                    availableSlots.add(new AvailableTimeSlot(current, nextSlot));
-                }
-
-                current = nextSlot;
-            }
+        if (appointments.isEmpty()) {
+            times.add(workStart + " - " + workEnd);
+            return new AvailableDoctorTimes(id, times);
         }
 
+        String lastEnd = workStart;
+        for (Appointment appointment : appointments) {
+            String start = appointment.getStart().format(formatter);
+            String end = appointment.getEnd().format(formatter);
 
-        return new AvailableDoctorTimes(id, availableSlots);
+            if (!lastEnd.equals(start)) {
+                times.add(lastEnd + " - " + start);
+            }
+            lastEnd = end;
+        }
+
+        if (!lastEnd.equals(workEnd)) {
+            times.add(lastEnd + " - " + workEnd);
+        }
+
+        return new AvailableDoctorTimes(id, times);
     }
 
 
