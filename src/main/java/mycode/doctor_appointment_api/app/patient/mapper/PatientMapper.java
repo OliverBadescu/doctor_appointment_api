@@ -6,7 +6,7 @@ import mycode.doctor_appointment_api.app.patient.model.Patient;
 
 public class PatientMapper {
 
-    public static PatientResponse patientToResponseDto(Patient patient){
+    public static PatientResponse patientToResponseDto(Patient patient) {
         return new PatientResponse(
                 patient.getId(),
                 patient.getFullName(),
@@ -15,7 +15,7 @@ public class PatientMapper {
                 patient.getPhone());
     }
 
-    public static Patient patientRequestDtoToPatient(CreatePatientRequest createPatientRequest){
+    public static Patient patientRequestDtoToPatient(CreatePatientRequest createPatientRequest) {
         return Patient.builder()
                 .email(createPatientRequest.email())
                 .fullName(createPatientRequest.fullName())

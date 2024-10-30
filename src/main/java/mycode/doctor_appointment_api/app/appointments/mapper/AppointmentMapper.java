@@ -7,7 +7,7 @@ import mycode.doctor_appointment_api.app.patient.mapper.PatientMapper;
 
 public class AppointmentMapper {
 
-    public static AppointmentResponse appointmentToResponseDto(Appointment appointment){
+    public static AppointmentResponse appointmentToResponseDto(Appointment appointment) {
         return new AppointmentResponse(
                 appointment.getId(),
                 appointment.getStart(),

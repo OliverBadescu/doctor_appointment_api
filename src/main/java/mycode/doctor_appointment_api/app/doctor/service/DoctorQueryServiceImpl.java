@@ -5,29 +5,22 @@ import mycode.doctor_appointment_api.app.appointments.exceptions.NoAppointmentFo
 import mycode.doctor_appointment_api.app.appointments.model.Appointment;
 import mycode.doctor_appointment_api.app.appointments.repository.AppointmentRepository;
 import mycode.doctor_appointment_api.app.doctor.dtos.AvailableDoctorTimes;
-import mycode.doctor_appointment_api.app.doctor.dtos.AvailableTimeSlot;
 import mycode.doctor_appointment_api.app.doctor.dtos.DoctorResponse;
 import mycode.doctor_appointment_api.app.doctor.exceptions.NoDoctorFound;
 import mycode.doctor_appointment_api.app.doctor.mapper.DoctorMapper;
 import mycode.doctor_appointment_api.app.doctor.model.Doctor;
 import mycode.doctor_appointment_api.app.doctor.repository.DoctorRepository;
-import mycode.doctor_appointment_api.app.working_hours.exceptions.NoWorkingHoursFound;
-import mycode.doctor_appointment_api.app.working_hours.model.WorkingHours;
 import mycode.doctor_appointment_api.app.working_hours.repository.WorkingHoursRepository;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
-import java.util.Set;
 
 @Service
 @AllArgsConstructor
-public class DoctorQueryServiceImpl implements DoctorQueryService{
+public class DoctorQueryServiceImpl implements DoctorQueryService {
 
     private DoctorRepository doctorRepository;
     private AppointmentRepository appointmentRepository;

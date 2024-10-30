@@ -1,8 +1,6 @@
 package mycode.doctor_appointment_api.app.appointments.service;
 
-import io.swagger.v3.oas.annotations.servers.Server;
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import mycode.doctor_appointment_api.app.appointments.dtos.AppointmentResponse;
 import mycode.doctor_appointment_api.app.appointments.dtos.DoctorAppointmentList;
 import mycode.doctor_appointment_api.app.appointments.dtos.PatientAppointmentList;
@@ -24,7 +22,7 @@ import java.util.Optional;
 
 @AllArgsConstructor
 @Service
-public class AppointmentQueryServiceImpl implements AppointmentQueryService{
+public class AppointmentQueryServiceImpl implements AppointmentQueryService {
 
     private final PatientRepository patientRepository;
     private final DoctorRepository doctorRepository;
@@ -48,12 +46,12 @@ public class AppointmentQueryServiceImpl implements AppointmentQueryService{
 
         List<AppointmentResponse> appointmentResponses = new ArrayList<>();
 
-       appointments.get().forEach(appointment -> {
-           appointmentResponses.add(AppointmentMapper.appointmentToResponseDto(appointment));
-       });
+        appointments.get().forEach(appointment -> {
+            appointmentResponses.add(AppointmentMapper.appointmentToResponseDto(appointment));
+        });
 
 
-       return new PatientAppointmentList(appointmentResponses);
+        return new PatientAppointmentList(appointmentResponses);
     }
 
     @Override

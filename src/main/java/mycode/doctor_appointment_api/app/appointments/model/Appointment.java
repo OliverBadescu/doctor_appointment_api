@@ -26,7 +26,7 @@ public class Appointment {
 
     @Id
     @SequenceGenerator(
-            name="appointment_sequence",
+            name = "appointment_sequence",
             sequenceName = "appointment_sequence",
             allocationSize = 1
     )

@@ -1,7 +1,6 @@
 package mycode.doctor_appointment_api.app.appointments.service;
 
 
-import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import mycode.doctor_appointment_api.app.appointments.dtos.AppointmentResponse;
 import mycode.doctor_appointment_api.app.appointments.dtos.CreateAppointmentRequest;
@@ -26,15 +25,12 @@ import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
-import java.time.chrono.ChronoLocalDateTime;
 import java.util.List;
 import java.util.Optional;
-import java.util.Set;
-import java.util.concurrent.atomic.AtomicBoolean;
 
 @AllArgsConstructor
 @Service
-public class AppointmentCommandServiceImpl implements AppointmentCommandService{
+public class AppointmentCommandServiceImpl implements AppointmentCommandService {
 
     private AppointmentRepository appointmentRepository;
     private PatientRepository patientRepository;
@@ -66,7 +62,7 @@ public class AppointmentCommandServiceImpl implements AppointmentCommandService{
                 break;
             }
         }
-        if(!working){
+        if (!working) {
             throw new NoWorkingHoursFound("Doctor only works on weekdays");
         }
 
@@ -139,19 +135,19 @@ public class AppointmentCommandServiceImpl implements AppointmentCommandService{
 
     @Override
     public AppointmentResponse deletePatientAppointment(int patientId, int appointmentId) {
-        
+
         Appointment appointment = appointmentRepository.findById(appointmentId)
                 .orElseThrow(() -> new NoAppointmentFound("No appointment with this id found"));
 
 
-        if(appointment.getPatient().getId() == patientId){
+        if (appointment.getPatient().getId() == patientId) {
             AppointmentResponse appointmentResponse = AppointmentMapper.appointmentToResponseDto(appointment);
 
             appointmentRepository.delete(appointment);
 
             return appointmentResponse;
 
-        }else{
+        } else {
             throw new NoAppointmentFound("This patient has no appointment with this id");
         }
     }

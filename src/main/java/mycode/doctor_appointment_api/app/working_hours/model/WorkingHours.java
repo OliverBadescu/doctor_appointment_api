@@ -24,7 +24,7 @@ public class WorkingHours {
 
     @Id
     @SequenceGenerator(
-            name="working_hours_sequence",
+            name = "working_hours_sequence",
             sequenceName = "working_hours_sequence",
             allocationSize = 1
     )

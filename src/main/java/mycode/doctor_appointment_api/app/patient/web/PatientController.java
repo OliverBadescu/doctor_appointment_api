@@ -20,26 +20,26 @@ public class PatientController {
     private PatientQueryService patientQueryService;
 
     @GetMapping(path = "/{patientId}")
-    public ResponseEntity<PatientResponse> getPatient(@PathVariable int patientId){
+    public ResponseEntity<PatientResponse> getPatient(@PathVariable int patientId) {
 
         return new ResponseEntity<>(patientQueryService.findPatientById(patientId), HttpStatus.OK);
 
     }
 
     @PostMapping
-    public ResponseEntity<PatientResponse> addPatient(@RequestBody CreatePatientRequest createPatientRequest){
+    public ResponseEntity<PatientResponse> addPatient(@RequestBody CreatePatientRequest createPatientRequest) {
         return new ResponseEntity<>(patientCommandService.addPatient(createPatientRequest), HttpStatus.CREATED);
     }
 
 
     @PutMapping(path = "/{patientId}")
-    public ResponseEntity<PatientResponse> updatePatient(@RequestBody UpdatePatientRequest updatePatientRequest, @PathVariable int patientId){
+    public ResponseEntity<PatientResponse> updatePatient(@RequestBody UpdatePatientRequest updatePatientRequest, @PathVariable int patientId) {
         return new ResponseEntity<>(patientCommandService.updatePatient(updatePatientRequest, patientId), HttpStatus.ACCEPTED);
     }
 
 
     @DeleteMapping(path = "/{patientId}")
-    public ResponseEntity<PatientResponse> deletePatient(@PathVariable int patientId){
+    public ResponseEntity<PatientResponse> deletePatient(@PathVariable int patientId) {
         return new ResponseEntity<>(patientCommandService.deletePatient(patientId), HttpStatus.ACCEPTED);
     }
 }

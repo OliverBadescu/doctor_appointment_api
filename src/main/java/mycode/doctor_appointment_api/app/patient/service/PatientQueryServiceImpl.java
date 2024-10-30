@@ -11,7 +11,7 @@ import org.springframework.stereotype.Service;
 
 @AllArgsConstructor
 @Service
-public class PatientQueryServiceImpl implements PatientQueryService{
+public class PatientQueryServiceImpl implements PatientQueryService {
 
     private PatientRepository patientRepository;
 

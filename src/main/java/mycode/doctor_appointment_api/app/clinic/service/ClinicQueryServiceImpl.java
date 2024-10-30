@@ -8,8 +8,6 @@ import mycode.doctor_appointment_api.app.clinic.model.Clinic;
 import mycode.doctor_appointment_api.app.clinic.repository.ClinicRepository;
 import org.springframework.stereotype.Service;
 
-import javax.swing.text.html.Option;
-
 @AllArgsConstructor
 @Service
 public class ClinicQueryServiceImpl implements ClinicQueryService {

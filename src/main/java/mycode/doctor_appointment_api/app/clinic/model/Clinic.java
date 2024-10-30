@@ -28,7 +28,7 @@ public class Clinic {
 
     @Id
     @SequenceGenerator(
-            name="clinic_sequence",
+            name = "clinic_sequence",
             sequenceName = "clinic_sequence",
             allocationSize = 1
     )
@@ -59,10 +59,10 @@ public class Clinic {
     private String address;
 
 
-    @OneToMany(mappedBy ="clinic",fetch = FetchType.LAZY,cascade = CascadeType.ALL ,orphanRemoval = true)
+    @OneToMany(mappedBy = "clinic", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonIgnore
     @Builder.Default
-        @ToString.Exclude
+    @ToString.Exclude
     @JsonManagedReference
     private Set<Doctor> doctors = new HashSet<>();
 

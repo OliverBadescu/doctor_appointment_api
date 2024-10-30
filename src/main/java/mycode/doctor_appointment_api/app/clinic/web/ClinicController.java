@@ -19,25 +19,25 @@ public class ClinicController {
     private ClinicQueryService clinicQueryService;
 
     @GetMapping(path = "/{clinicId}")
-    ResponseEntity<ClinicResponse> getClinic(@PathVariable int clinicId){
+    ResponseEntity<ClinicResponse> getClinic(@PathVariable int clinicId) {
 
         return new ResponseEntity<>(clinicQueryService.getClinicById(clinicId), HttpStatus.ACCEPTED);
 
     }
 
     @PostMapping
-    ResponseEntity<ClinicResponse> addClinic(@RequestBody CreateClinicRequest createClinicRequest){
+    ResponseEntity<ClinicResponse> addClinic(@RequestBody CreateClinicRequest createClinicRequest) {
         return new ResponseEntity<>(clinicCommandService.addClinic(createClinicRequest), HttpStatus.CREATED);
     }
 
 
     @PutMapping(path = "/{clinicId}")
-    ResponseEntity<ClinicResponse> updateClinic(@RequestBody UpdateClinicRequest updateClinicRequest, @PathVariable int clinicId){
+    ResponseEntity<ClinicResponse> updateClinic(@RequestBody UpdateClinicRequest updateClinicRequest, @PathVariable int clinicId) {
         return new ResponseEntity<>(clinicCommandService.updateClinic(clinicId, updateClinicRequest), HttpStatus.ACCEPTED);
     }
 
     @DeleteMapping(path = "/{clinicId}")
-    ResponseEntity<ClinicResponse> deleteClinic(@PathVariable int clinicId){
+    ResponseEntity<ClinicResponse> deleteClinic(@PathVariable int clinicId) {
         return new ResponseEntity<>(clinicCommandService.deleteClinic(clinicId), HttpStatus.ACCEPTED);
     }
 }

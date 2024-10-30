@@ -29,7 +29,7 @@ public class Doctor {
 
     @Id
     @SequenceGenerator(
-            name="doctor_sequence",
+            name = "doctor_sequence",
             sequenceName = "doctor_sequence",
             allocationSize = 1
     )
@@ -84,16 +84,16 @@ public class Doctor {
     @JsonBackReference
     private Clinic clinic;
 
-    @OneToMany(mappedBy ="doctor",fetch = FetchType.LAZY,cascade = CascadeType.ALL ,orphanRemoval = true)
+    @OneToMany(mappedBy = "doctor", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     @Builder.Default
-            @ToString.Exclude
+    @ToString.Exclude
     @JsonManagedReference
     private Set<Appointment> appointments = new HashSet<>();
 
 
-    @OneToMany(mappedBy ="doctor",fetch = FetchType.LAZY,cascade = CascadeType.ALL ,orphanRemoval = true)
+    @OneToMany(mappedBy = "doctor", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     @Builder.Default
-        @ToString.Exclude
+    @ToString.Exclude
     @JsonManagedReference
     private Set<WorkingHours> workingHours = new HashSet<>();
 

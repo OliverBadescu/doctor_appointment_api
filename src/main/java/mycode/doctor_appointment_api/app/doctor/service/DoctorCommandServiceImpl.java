@@ -14,12 +14,11 @@ import mycode.doctor_appointment_api.app.doctor.model.Doctor;
 import mycode.doctor_appointment_api.app.doctor.repository.DoctorRepository;
 import org.springframework.stereotype.Service;
 
-import javax.print.Doc;
 import java.util.List;
 
 @Service
 @AllArgsConstructor
-public class DoctorCommandServiceImpl implements DoctorCommandService{
+public class DoctorCommandServiceImpl implements DoctorCommandService {
 
     DoctorRepository doctorRepository;
     ClinicRepository clinicRepository;
@@ -42,7 +41,7 @@ public class DoctorCommandServiceImpl implements DoctorCommandService{
         List<Doctor> list = doctorRepository.findAll();
 
         list.forEach(doctor1 -> {
-            if(doctor1.getFullName().equals(doctor.getFullName()) && doctor1.getEmail().equals(doctor.getEmail())){
+            if (doctor1.getFullName().equals(doctor.getFullName()) && doctor1.getEmail().equals(doctor.getEmail())) {
                 throw new DoctorAlreadyExists("Doctor with this name and email already exists");
             }
         });

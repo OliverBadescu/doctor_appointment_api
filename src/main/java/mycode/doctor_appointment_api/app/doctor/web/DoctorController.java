@@ -19,28 +19,28 @@ public class DoctorController {
     private DoctorCommandService doctorCommandService;
 
     @GetMapping(path = "/{doctorId}")
-    ResponseEntity<DoctorResponse> getDoctor(@PathVariable int doctorId){
+    ResponseEntity<DoctorResponse> getDoctor(@PathVariable int doctorId) {
         return new ResponseEntity<>(doctorQueryService.getDoctorById(doctorId), HttpStatus.ACCEPTED);
     }
 
     @PostMapping
-    ResponseEntity<DoctorResponse> addDoctor(@RequestBody CreateDoctorRequest createDoctorRequest){
+    ResponseEntity<DoctorResponse> addDoctor(@RequestBody CreateDoctorRequest createDoctorRequest) {
         return new ResponseEntity<>(doctorCommandService.addDoctor(createDoctorRequest), HttpStatus.ACCEPTED);
     }
 
     @PutMapping(path = "/{doctorId}")
-    ResponseEntity<DoctorResponse> updateDoctor(@PathVariable int doctorId, @RequestBody UpdateDoctorRequest updateDoctorRequest){
+    ResponseEntity<DoctorResponse> updateDoctor(@PathVariable int doctorId, @RequestBody UpdateDoctorRequest updateDoctorRequest) {
         return new ResponseEntity<>(doctorCommandService.updateDoctor(updateDoctorRequest, doctorId), HttpStatus.ACCEPTED);
     }
 
     @DeleteMapping(path = "/{doctorId}")
-    ResponseEntity<DoctorResponse> deleteDoctor(@PathVariable int doctorId){
+    ResponseEntity<DoctorResponse> deleteDoctor(@PathVariable int doctorId) {
         return new ResponseEntity<>(doctorCommandService.deleteDoctor(doctorId), HttpStatus.ACCEPTED);
     }
 
     // todo: finish
     @GetMapping(path = "/available/{doctorId}")
-    ResponseEntity<AvailableDoctorTimes> getDoctorAvailability(@PathVariable int doctorId, @RequestBody DateRequest date){
+    ResponseEntity<AvailableDoctorTimes> getDoctorAvailability(@PathVariable int doctorId, @RequestBody DateRequest date) {
         LocalDate localDate = date.getDate();
         return new ResponseEntity<>(doctorQueryService.getDoctorAvailableTime(doctorId, localDate), HttpStatus.OK);
     }

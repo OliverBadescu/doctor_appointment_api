@@ -13,7 +13,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 @AllArgsConstructor
-public class ClinicCommandServiceImpl implements ClinicCommandService{
+public class ClinicCommandServiceImpl implements ClinicCommandService {
 
     private ClinicRepository clinicRepository;
 
@@ -25,7 +25,7 @@ public class ClinicCommandServiceImpl implements ClinicCommandService{
 
 
         clinicRepository.findAll().forEach(clinic1 -> {
-            if(clinic1.getAddress().equals(clinic.getAddress()) && clinic1.getName().equals(clinic.getName())){
+            if (clinic1.getAddress().equals(clinic.getAddress()) && clinic1.getName().equals(clinic.getName())) {
                 throw new ClinicAlreadyExists("Clinic with this name and address already exists");
             }
         });
