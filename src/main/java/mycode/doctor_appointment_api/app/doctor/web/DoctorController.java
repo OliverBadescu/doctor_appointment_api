@@ -38,10 +38,19 @@ public class DoctorController {
         return new ResponseEntity<>(doctorCommandService.deleteDoctor(doctorId), HttpStatus.ACCEPTED);
     }
 
-    // todo: finish
+
     @GetMapping(path = "/available/{doctorId}")
     ResponseEntity<AvailableDoctorTimes> getDoctorAvailability(@PathVariable int doctorId, @RequestBody DateRequest date) {
         LocalDate localDate = date.getDate();
         return new ResponseEntity<>(doctorQueryService.getDoctorAvailableTime(doctorId, localDate), HttpStatus.OK);
+    }
+
+
+    @GetMapping(path = "available/days/{doctorId}")
+    ResponseEntity<AvailableDoctorTimesDays> getDoctorAvailability(@PathVariable int doctorId, @RequestBody TwoDateRequest date){
+        LocalDate start = date.start();
+        LocalDate end = date.end();
+
+        return new ResponseEntity<>(doctorQueryService.getDoctorAvailableTimeDifferentDays(doctorId, start,end), HttpStatus.OK);
     }
 }
