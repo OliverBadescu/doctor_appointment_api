@@ -38,7 +38,6 @@ public class AppointmentCommandServiceImpl implements AppointmentCommandService 
     private WorkingHoursRepository workingHoursRepository;
 
 
-    //todo: how can i improve this
     @Override
     public AppointmentResponse addAppointment(CreateAppointmentRequest createAppointmentRequest) {
         Patient patient = patientRepository.findById(createAppointmentRequest.patientId())
@@ -68,8 +67,8 @@ public class AppointmentCommandServiceImpl implements AppointmentCommandService 
 
 
         LocalDate date = start.toLocalDate();
-        LocalDateTime workingHoursStart = LocalDateTime.of(date, LocalTime.of(9, 0)); // 9:00 AM
-        LocalDateTime workingHoursEnd = LocalDateTime.of(date, LocalTime.of(17, 0)); // 5:00 PM
+        LocalDateTime workingHoursStart = LocalDateTime.of(date, LocalTime.of(9, 0));
+        LocalDateTime workingHoursEnd = LocalDateTime.of(date, LocalTime.of(17, 0));
 
         if (start.isBefore(workingHoursStart) || end.isAfter(workingHoursEnd)) {
             throw new NoWorkingHoursFound("Doctor is not working at this time");

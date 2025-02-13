@@ -21,7 +21,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler({NoAppointmentFound.class})
     public ResponseEntity<Object> handleAppointmentNotFoundException(NoAppointmentFound exception) {
         return ResponseEntity
-                .status(HttpStatus.INTERNAL_SERVER_ERROR)
+                .status(HttpStatus.NOT_FOUND)
                 .body(exception.getMessage());
     }
 
@@ -35,7 +35,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler({NoDoctorFound.class})
     public ResponseEntity<Object> handleDoctorNotFoundException(NoDoctorFound exception) {
         return ResponseEntity
-                .status(HttpStatus.INTERNAL_SERVER_ERROR)
+                .status(HttpStatus.NOT_FOUND)
                 .body(exception.getMessage());
     }
 
