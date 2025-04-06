@@ -4,10 +4,7 @@ import lombok.AllArgsConstructor;
 import mycode.doctor_appointment_api.app.appointments.exceptions.NoAppointmentFound;
 import mycode.doctor_appointment_api.app.appointments.model.Appointment;
 import mycode.doctor_appointment_api.app.appointments.repository.AppointmentRepository;
-import mycode.doctor_appointment_api.app.doctor.dtos.AvailableDoctorTimes;
-import mycode.doctor_appointment_api.app.doctor.dtos.AvailableDoctorTimesDays;
-import mycode.doctor_appointment_api.app.doctor.dtos.AvailableTimesAndDates;
-import mycode.doctor_appointment_api.app.doctor.dtos.DoctorResponse;
+import mycode.doctor_appointment_api.app.doctor.dtos.*;
 import mycode.doctor_appointment_api.app.doctor.exceptions.NoDoctorFound;
 import mycode.doctor_appointment_api.app.doctor.mapper.DoctorMapper;
 import mycode.doctor_appointment_api.app.doctor.model.Doctor;
@@ -125,6 +122,22 @@ public class DoctorQueryServiceImpl implements DoctorQueryService {
         return new AvailableDoctorTimesDays(id, result);
     }
 
+    @Override
+    public DoctorResponseList getAllDoctors() {
+        List<Doctor> doctors = doctorRepository.findAll();
+
+        if(doctors.isEmpty()){
+            throw new NoDoctorFound("No doctors found");
+        }
+
+        List<DoctorResponse> list = new ArrayList<>();
+
+        doctors.forEach(doctor -> {
+            list.add(DoctorMapper.doctorToResponseDto(doctor));
+        });
+
+        return new DoctorResponseList(list);
+    }
 
 
 }

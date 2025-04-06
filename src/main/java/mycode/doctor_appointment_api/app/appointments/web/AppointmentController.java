@@ -1,6 +1,7 @@
 package mycode.doctor_appointment_api.app.appointments.web;
 
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import mycode.doctor_appointment_api.app.appointments.dtos.*;
 import mycode.doctor_appointment_api.app.appointments.service.AppointmentCommandService;
 import mycode.doctor_appointment_api.app.appointments.service.AppointmentQueryService;
@@ -10,6 +11,8 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @AllArgsConstructor
+@CrossOrigin
+@Slf4j
 @RequestMapping("/appointment")
 public class AppointmentController {
 

@@ -1,7 +1,9 @@
 package mycode.doctor_appointment_api.app.clinic.web;
 
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import mycode.doctor_appointment_api.app.clinic.dtos.ClinicResponse;
+import mycode.doctor_appointment_api.app.clinic.dtos.ClinicResponseList;
 import mycode.doctor_appointment_api.app.clinic.dtos.CreateClinicRequest;
 import mycode.doctor_appointment_api.app.clinic.dtos.UpdateClinicRequest;
 import mycode.doctor_appointment_api.app.clinic.service.ClinicCommandService;
@@ -12,6 +14,8 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @AllArgsConstructor
+@CrossOrigin
+@Slf4j
 @RequestMapping("/clinic")
 public class ClinicController {
 
@@ -39,5 +43,10 @@ public class ClinicController {
     @DeleteMapping(path = "/{clinicId}")
     ResponseEntity<ClinicResponse> deleteClinic(@PathVariable int clinicId) {
         return new ResponseEntity<>(clinicCommandService.deleteClinic(clinicId), HttpStatus.ACCEPTED);
+    }
+
+    @GetMapping(path = "/getAllClinics")
+    ResponseEntity<ClinicResponseList> getAllClinics(){
+        return new ResponseEntity<>(clinicQueryService.getAllClinics(), HttpStatus.OK);
     }
 }

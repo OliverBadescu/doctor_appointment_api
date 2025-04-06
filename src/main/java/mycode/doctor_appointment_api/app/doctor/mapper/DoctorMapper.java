@@ -11,7 +11,7 @@ public class DoctorMapper {
                 doctor.getFullName(),
                 doctor.getPassword(),
                 doctor.getEmail(),
-                doctor.getEmail(),
+                doctor.getSpecialization(),
                 doctor.getPhone(),
                 ClinicMapper.clinicToResponseDto(doctor.getClinic()));
     }

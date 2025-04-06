@@ -1,6 +1,7 @@
 package mycode.doctor_appointment_api.app.doctor.web;
 
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import mycode.doctor_appointment_api.app.doctor.dtos.*;
 import mycode.doctor_appointment_api.app.doctor.service.DoctorCommandService;
 import mycode.doctor_appointment_api.app.doctor.service.DoctorQueryService;
@@ -12,6 +13,8 @@ import java.time.LocalDate;
 
 @RestController
 @AllArgsConstructor
+@CrossOrigin
+@Slf4j
 @RequestMapping("/doctor")
 public class DoctorController {
 
@@ -46,11 +49,16 @@ public class DoctorController {
     }
 
 
-    @GetMapping(path = "available/days/{doctorId}")
+    @GetMapping(path = "/available/days/{doctorId}")
     ResponseEntity<AvailableDoctorTimesDays> getDoctorAvailability(@PathVariable int doctorId, @RequestBody TwoDateRequest date){
         LocalDate start = date.start();
         LocalDate end = date.end();
 
         return new ResponseEntity<>(doctorQueryService.getDoctorAvailableTimeDifferentDays(doctorId, start,end), HttpStatus.OK);
+    }
+
+    @GetMapping("/getAllDoctors")
+    ResponseEntity<DoctorResponseList> getAllDoctors(){
+        return new ResponseEntity<>(doctorQueryService.getAllDoctors(), HttpStatus.OK);
     }
 }
