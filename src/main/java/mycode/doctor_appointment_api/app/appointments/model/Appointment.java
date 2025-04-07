@@ -6,7 +6,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
 import lombok.*;
 import mycode.doctor_appointment_api.app.doctor.model.Doctor;
-import mycode.doctor_appointment_api.app.patient.model.Patient;
+import mycode.doctor_appointment_api.app.users.model.User;
 
 import java.time.LocalDateTime;
 import java.util.Objects;
@@ -63,9 +63,9 @@ public class Appointment {
     private Doctor doctor;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "patient_id", referencedColumnName = "id")
+    @JoinColumn(name = "user_id", referencedColumnName = "id")
     @JsonBackReference
-    private Patient patient;
+    private User user;
 
     @Override
     public boolean equals(Object o) {

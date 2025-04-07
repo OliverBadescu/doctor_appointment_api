@@ -13,9 +13,9 @@ import mycode.doctor_appointment_api.app.appointments.repository.AppointmentRepo
 import mycode.doctor_appointment_api.app.doctor.exceptions.NoDoctorFound;
 import mycode.doctor_appointment_api.app.doctor.model.Doctor;
 import mycode.doctor_appointment_api.app.doctor.repository.DoctorRepository;
-import mycode.doctor_appointment_api.app.patient.exceptions.NoPatientFound;
-import mycode.doctor_appointment_api.app.patient.model.Patient;
-import mycode.doctor_appointment_api.app.patient.repository.PatientRepository;
+import mycode.doctor_appointment_api.app.users.exceptions.NoUserFound;
+import mycode.doctor_appointment_api.app.users.model.User;
+import mycode.doctor_appointment_api.app.users.repository.UserRepository;
 import mycode.doctor_appointment_api.app.working_hours.exceptions.NoWorkingHoursFound;
 import mycode.doctor_appointment_api.app.working_hours.model.WorkingHours;
 import mycode.doctor_appointment_api.app.working_hours.repository.WorkingHoursRepository;
@@ -33,15 +33,15 @@ import java.util.Optional;
 public class AppointmentCommandServiceImpl implements AppointmentCommandService {
 
     private AppointmentRepository appointmentRepository;
-    private PatientRepository patientRepository;
+    private UserRepository userRepository;
     private DoctorRepository doctorRepository;
     private WorkingHoursRepository workingHoursRepository;
 
 
     @Override
     public AppointmentResponse addAppointment(CreateAppointmentRequest createAppointmentRequest) {
-        Patient patient = patientRepository.findById(createAppointmentRequest.patientId())
-                .orElseThrow(() -> new NoPatientFound("No patient with this id found"));
+        User user = userRepository.findById(createAppointmentRequest.patientId())
+                .orElseThrow(() -> new NoUserFound("No user with this id found"));
 
         Doctor doctor = doctorRepository.findByFullName(createAppointmentRequest.doctorName())
                 .orElseThrow(() -> new NoDoctorFound("No doctor with this name found"));
@@ -96,7 +96,7 @@ public class AppointmentCommandServiceImpl implements AppointmentCommandService 
         Appointment appointment = Appointment.builder()
                 .start(start)
                 .end(end)
-                .patient(patient)
+                .user(user)
                 .doctor(doctor)
                 .build();
 
@@ -133,13 +133,13 @@ public class AppointmentCommandServiceImpl implements AppointmentCommandService 
 
 
     @Override
-    public AppointmentResponse deletePatientAppointment(int patientId, int appointmentId) {
+    public AppointmentResponse deletePatientAppointment(int userId, int appointmentId) {
 
         Appointment appointment = appointmentRepository.findById(appointmentId)
                 .orElseThrow(() -> new NoAppointmentFound("No appointment with this id found"));
 
 
-        if (appointment.getPatient().getId() == patientId) {
+        if (appointment.getUser().getId() == userId) {
             AppointmentResponse appointmentResponse = AppointmentMapper.appointmentToResponseDto(appointment);
 
             appointmentRepository.delete(appointment);

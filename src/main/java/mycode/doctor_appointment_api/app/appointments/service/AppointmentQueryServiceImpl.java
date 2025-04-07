@@ -11,9 +11,9 @@ import mycode.doctor_appointment_api.app.appointments.repository.AppointmentRepo
 import mycode.doctor_appointment_api.app.doctor.exceptions.NoDoctorFound;
 import mycode.doctor_appointment_api.app.doctor.model.Doctor;
 import mycode.doctor_appointment_api.app.doctor.repository.DoctorRepository;
-import mycode.doctor_appointment_api.app.patient.exceptions.NoPatientFound;
-import mycode.doctor_appointment_api.app.patient.model.Patient;
-import mycode.doctor_appointment_api.app.patient.repository.PatientRepository;
+import mycode.doctor_appointment_api.app.users.exceptions.NoUserFound;
+import mycode.doctor_appointment_api.app.users.model.User;
+import mycode.doctor_appointment_api.app.users.repository.UserRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -24,7 +24,7 @@ import java.util.Optional;
 @Service
 public class AppointmentQueryServiceImpl implements AppointmentQueryService {
 
-    private final PatientRepository patientRepository;
+    private final UserRepository userRepository;
     private final DoctorRepository doctorRepository;
     private AppointmentRepository appointmentRepository;
 
@@ -39,10 +39,10 @@ public class AppointmentQueryServiceImpl implements AppointmentQueryService {
 
     @Override
     public PatientAppointmentList getAllPatientAppointments(int id) {
-        Patient patient = patientRepository.findById(id)
-                .orElseThrow(() -> new NoPatientFound("No patient with this id found"));
+        User user = userRepository.findById(id)
+                .orElseThrow(() -> new NoUserFound("No user with this id found"));
 
-        Optional<List<Appointment>> appointments = appointmentRepository.getAllByPatientId(id);
+        Optional<List<Appointment>> appointments = appointmentRepository.getAllByUserId(id);
 
         List<AppointmentResponse> appointmentResponses = new ArrayList<>();
 

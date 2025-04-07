@@ -3,7 +3,7 @@ package mycode.doctor_appointment_api.app.appointments.mapper;
 import mycode.doctor_appointment_api.app.appointments.dtos.AppointmentResponse;
 import mycode.doctor_appointment_api.app.appointments.model.Appointment;
 import mycode.doctor_appointment_api.app.doctor.mapper.DoctorMapper;
-import mycode.doctor_appointment_api.app.patient.mapper.PatientMapper;
+import mycode.doctor_appointment_api.app.users.mapper.UserMapper;
 
 public class AppointmentMapper {
 
@@ -13,7 +13,7 @@ public class AppointmentMapper {
                 appointment.getStart(),
                 appointment.getEnd(),
                 DoctorMapper.doctorToResponseDto(appointment.getDoctor()),
-                PatientMapper.patientToResponseDto(appointment.getPatient())
+                UserMapper.userToResponseDto(appointment.getUser())
         );
     }
 

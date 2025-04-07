@@ -7,8 +7,8 @@ import mycode.doctor_appointment_api.app.clinic.exceptions.ClinicAlreadyExists;
 import mycode.doctor_appointment_api.app.clinic.exceptions.NoClinicFound;
 import mycode.doctor_appointment_api.app.doctor.exceptions.DoctorAlreadyExists;
 import mycode.doctor_appointment_api.app.doctor.exceptions.NoDoctorFound;
-import mycode.doctor_appointment_api.app.patient.exceptions.NoPatientFound;
-import mycode.doctor_appointment_api.app.patient.exceptions.PatientAlreadyExists;
+import mycode.doctor_appointment_api.app.users.exceptions.NoUserFound;
+import mycode.doctor_appointment_api.app.users.exceptions.UserAlreadyExists;
 import mycode.doctor_appointment_api.app.working_hours.exceptions.NoWorkingHoursFound;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -60,15 +60,15 @@ public class GlobalExceptionHandler {
                 .body(exception.getMessage());
     }
 
-    @ExceptionHandler({NoPatientFound.class})
-    public ResponseEntity<Object> handleNoPatientFoundException(NoPatientFound exception) {
+    @ExceptionHandler({NoUserFound.class})
+    public ResponseEntity<Object> handleNoUserFoundException(NoUserFound exception) {
         return ResponseEntity
                 .status(HttpStatus.NOT_FOUND)
                 .body(exception.getMessage());
     }
 
-    @ExceptionHandler({PatientAlreadyExists.class})
-    public ResponseEntity<Object> handlePatientAlreadyExistsException(PatientAlreadyExists exception) {
+    @ExceptionHandler({UserAlreadyExists.class})
+    public ResponseEntity<Object> handleUserAlreadyExistsException(UserAlreadyExists exception) {
         return ResponseEntity
                 .status(HttpStatus.INTERNAL_SERVER_ERROR)
                 .body(exception.getMessage());
