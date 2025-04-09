@@ -9,7 +9,6 @@ import mycode.doctor_appointment_api.app.doctor.exceptions.NoDoctorFound;
 import mycode.doctor_appointment_api.app.doctor.mapper.DoctorMapper;
 import mycode.doctor_appointment_api.app.doctor.model.Doctor;
 import mycode.doctor_appointment_api.app.doctor.repository.DoctorRepository;
-import mycode.doctor_appointment_api.app.working_hours.repository.WorkingHoursRepository;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -26,7 +25,6 @@ public class DoctorQueryServiceImpl implements DoctorQueryService {
 
     private DoctorRepository doctorRepository;
     private AppointmentRepository appointmentRepository;
-    private WorkingHoursRepository workingHoursRepository;
 
     @Override
     public DoctorResponse getDoctorById(int id) {

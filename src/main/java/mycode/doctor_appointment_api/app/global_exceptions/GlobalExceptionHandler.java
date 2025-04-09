@@ -9,7 +9,6 @@ import mycode.doctor_appointment_api.app.doctor.exceptions.DoctorAlreadyExists;
 import mycode.doctor_appointment_api.app.doctor.exceptions.NoDoctorFound;
 import mycode.doctor_appointment_api.app.users.exceptions.NoUserFound;
 import mycode.doctor_appointment_api.app.users.exceptions.UserAlreadyExists;
-import mycode.doctor_appointment_api.app.working_hours.exceptions.NoWorkingHoursFound;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -28,7 +27,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler({AppointmentAlreadyExistsAtThisDateAndTime.class})
     public ResponseEntity<Object> handleAppointmentAlreadyExistsException(AppointmentAlreadyExistsAtThisDateAndTime exception) {
         return ResponseEntity
-                .status(HttpStatus.INTERNAL_SERVER_ERROR)
+                .status(HttpStatus.CONFLICT)
                 .body(exception.getMessage());
     }
 
@@ -42,14 +41,14 @@ public class GlobalExceptionHandler {
     @ExceptionHandler({DoctorAlreadyExists.class})
     public ResponseEntity<Object> handleDoctorAlreadyException(DoctorAlreadyExists exception) {
         return ResponseEntity
-                .status(HttpStatus.INTERNAL_SERVER_ERROR)
+                .status(HttpStatus.CONFLICT)
                 .body(exception.getMessage());
     }
 
     @ExceptionHandler({ClinicAlreadyExists.class})
     public ResponseEntity<Object> handleClinicAlreadyExistsException(ClinicAlreadyExists exception) {
         return ResponseEntity
-                .status(HttpStatus.INTERNAL_SERVER_ERROR)
+                .status(HttpStatus.CONFLICT)
                 .body(exception.getMessage());
     }
 
@@ -70,16 +69,11 @@ public class GlobalExceptionHandler {
     @ExceptionHandler({UserAlreadyExists.class})
     public ResponseEntity<Object> handleUserAlreadyExistsException(UserAlreadyExists exception) {
         return ResponseEntity
-                .status(HttpStatus.INTERNAL_SERVER_ERROR)
+                .status(HttpStatus.CONFLICT)
                 .body(exception.getMessage());
     }
 
-    @ExceptionHandler({NoWorkingHoursFound.class})
-    public ResponseEntity<Object> handleNoWorkingHoursFoundException(NoWorkingHoursFound exception) {
-        return ResponseEntity
-                .status(HttpStatus.NOT_FOUND)
-                .body(exception.getMessage());
-    }
+
 
 
 }

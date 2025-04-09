@@ -7,7 +7,6 @@ import jakarta.persistence.*;
 import lombok.*;
 import mycode.doctor_appointment_api.app.appointments.model.Appointment;
 import mycode.doctor_appointment_api.app.clinic.model.Clinic;
-import mycode.doctor_appointment_api.app.working_hours.model.WorkingHours;
 
 import java.util.HashSet;
 import java.util.Objects;
@@ -91,11 +90,7 @@ public class Doctor {
     private Set<Appointment> appointments = new HashSet<>();
 
 
-    @OneToMany(mappedBy = "doctor", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
-    @Builder.Default
-    @ToString.Exclude
-    @JsonManagedReference
-    private Set<WorkingHours> workingHours = new HashSet<>();
+
 
 
     @Override

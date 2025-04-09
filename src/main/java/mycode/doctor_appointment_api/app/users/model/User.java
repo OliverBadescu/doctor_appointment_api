@@ -24,7 +24,6 @@ import static jakarta.persistence.GenerationType.SEQUENCE;
 @Getter
 @Setter
 @Builder
-
 @Table(name = "users")
 @Entity(name = "User")
 public class User implements UserDetails {

@@ -10,6 +10,7 @@ import mycode.doctor_appointment_api.app.clinic.service.ClinicCommandService;
 import mycode.doctor_appointment_api.app.clinic.service.ClinicQueryService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -22,6 +23,7 @@ public class ClinicController {
     private ClinicCommandService clinicCommandService;
     private ClinicQueryService clinicQueryService;
 
+    @PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_CLIENT')")
     @GetMapping(path = "/{clinicId}")
     ResponseEntity<ClinicResponse> getClinic(@PathVariable int clinicId) {
 
@@ -29,22 +31,26 @@ public class ClinicController {
 
     }
 
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @PostMapping
     ResponseEntity<ClinicResponse> addClinic(@RequestBody CreateClinicRequest createClinicRequest) {
         return new ResponseEntity<>(clinicCommandService.addClinic(createClinicRequest), HttpStatus.CREATED);
     }
 
 
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @PutMapping(path = "/{clinicId}")
     ResponseEntity<ClinicResponse> updateClinic(@RequestBody UpdateClinicRequest updateClinicRequest, @PathVariable int clinicId) {
         return new ResponseEntity<>(clinicCommandService.updateClinic(clinicId, updateClinicRequest), HttpStatus.ACCEPTED);
     }
 
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @DeleteMapping(path = "/{clinicId}")
     ResponseEntity<ClinicResponse> deleteClinic(@PathVariable int clinicId) {
         return new ResponseEntity<>(clinicCommandService.deleteClinic(clinicId), HttpStatus.ACCEPTED);
     }
 
+    @PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_CLIENT')")
     @GetMapping(path = "/getAllClinics")
     ResponseEntity<ClinicResponseList> getAllClinics(){
         return new ResponseEntity<>(clinicQueryService.getAllClinics(), HttpStatus.OK);

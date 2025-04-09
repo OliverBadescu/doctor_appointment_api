@@ -16,15 +16,11 @@ import mycode.doctor_appointment_api.app.doctor.repository.DoctorRepository;
 import mycode.doctor_appointment_api.app.users.exceptions.NoUserFound;
 import mycode.doctor_appointment_api.app.users.model.User;
 import mycode.doctor_appointment_api.app.users.repository.UserRepository;
-import mycode.doctor_appointment_api.app.working_hours.exceptions.NoWorkingHoursFound;
-import mycode.doctor_appointment_api.app.working_hours.model.WorkingHours;
-import mycode.doctor_appointment_api.app.working_hours.repository.WorkingHoursRepository;
+
 import org.springframework.stereotype.Service;
 
-import java.time.DayOfWeek;
-import java.time.LocalDate;
+
 import java.time.LocalDateTime;
-import java.time.LocalTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -35,63 +31,42 @@ public class AppointmentCommandServiceImpl implements AppointmentCommandService 
     private AppointmentRepository appointmentRepository;
     private UserRepository userRepository;
     private DoctorRepository doctorRepository;
-    private WorkingHoursRepository workingHoursRepository;
 
 
     @Override
     public AppointmentResponse addAppointment(CreateAppointmentRequest createAppointmentRequest) {
+
         User user = userRepository.findById(createAppointmentRequest.patientId())
                 .orElseThrow(() -> new NoUserFound("No user with this id found"));
+
 
         Doctor doctor = doctorRepository.findByFullName(createAppointmentRequest.doctorName())
                 .orElseThrow(() -> new NoDoctorFound("No doctor with this name found"));
 
+
         LocalDateTime start = createAppointmentRequest.start();
         LocalDateTime end = createAppointmentRequest.end();
-        DayOfWeek day = start.getDayOfWeek();
-        System.out.println(day);
 
-        Optional<List<WorkingHours>> list = workingHoursRepository.findByDoctorId(doctor.getId());
 
-        boolean working = false;
+        Optional<List<Appointment>> appointmentsOpt = appointmentRepository.getAllByDoctorId(doctor.getId());
 
-        for (WorkingHours workingHours : list.get()) {
-            if (workingHours.getDayOfWeek().equals(day)) {
-                working = true;
-                break;
+
+        if (appointmentsOpt.isPresent()) {
+            boolean hasAppointment = appointmentsOpt.get().stream().anyMatch(existingAppointment -> {
+                LocalDateTime existingStart = existingAppointment.getStart();
+                LocalDateTime existingEnd = existingAppointment.getEnd();
+
+                boolean sameDate = existingStart.toLocalDate().equals(start.toLocalDate());
+                boolean overlaps = start.isBefore(existingEnd) && end.isAfter(existingStart);
+                return sameDate && overlaps;
+            });
+
+            if (hasAppointment) {
+                throw new AppointmentAlreadyExistsAtThisDateAndTime(
+                        "Doctor already has an appointment at this time."
+                );
             }
         }
-        if (!working) {
-            throw new NoWorkingHoursFound("Doctor only works on weekdays");
-        }
-
-
-        LocalDate date = start.toLocalDate();
-        LocalDateTime workingHoursStart = LocalDateTime.of(date, LocalTime.of(9, 0));
-        LocalDateTime workingHoursEnd = LocalDateTime.of(date, LocalTime.of(17, 0));
-
-        if (start.isBefore(workingHoursStart) || end.isAfter(workingHoursEnd)) {
-            throw new NoWorkingHoursFound("Doctor is not working at this time");
-        }
-
-        Optional<List<Appointment>> appointments = appointmentRepository.getAllByDoctorId(doctor.getId());
-
-        boolean hasAppointment = appointments.get().stream().anyMatch(existingAppointment -> {
-            LocalDateTime existingStart = existingAppointment.getStart();
-            LocalDateTime existingEnd = existingAppointment.getEnd();
-
-            boolean sameDate = existingStart.toLocalDate().equals(start.toLocalDate());
-
-            boolean overlaps = start.isBefore(existingEnd) && end.isAfter(existingStart);
-
-
-            return sameDate && overlaps;
-        });
-
-        if (hasAppointment) {
-            throw new AppointmentAlreadyExistsAtThisDateAndTime("Doctor already has an appointment at this time.");
-        }
-
 
         Appointment appointment = Appointment.builder()
                 .start(start)
@@ -103,8 +78,8 @@ public class AppointmentCommandServiceImpl implements AppointmentCommandService 
         appointmentRepository.saveAndFlush(appointment);
 
         return AppointmentMapper.appointmentToResponseDto(appointment);
-
     }
+
 
     @Override
     public AppointmentResponse updateAppointment(UpdateAppointmentRequest updateAppointmentRequest, int id) {
