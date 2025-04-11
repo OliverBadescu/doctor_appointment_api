@@ -12,6 +12,7 @@ import mycode.doctor_appointment_api.app.doctor.repository.DoctorRepository;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
@@ -44,17 +45,35 @@ public class DoctorQueryServiceImpl implements DoctorQueryService {
         List<Appointment> appointments = appointmentRepository.findByDoctorIdAndDate(id, date)
                 .orElse(Collections.emptyList());
 
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm");
-        List<String> bookedTimes = new ArrayList<>();
+        LocalDateTime workStart = date.atTime(9, 0);
+        LocalDateTime workEnd = date.atTime(17, 0);
 
-        for (Appointment appointment : appointments) {
-            String start = appointment.getStart().format(formatter);
-            String end = appointment.getEnd().format(formatter);
-            bookedTimes.add(start + " - " + end);
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm");
+
+        List<String> availableSlots = new ArrayList<>();
+
+        for (LocalDateTime slotStart = workStart; !slotStart.plusMinutes(30).isAfter(workEnd); slotStart = slotStart.plusMinutes(30)) {
+            LocalDateTime slotEnd = slotStart.plusMinutes(30);
+            boolean isAvailable = true;
+
+
+            for (Appointment appointment : appointments) {
+                LocalDateTime appointmentStart = appointment.getStart();
+                LocalDateTime appointmentEnd = appointment.getEnd();
+                if (slotStart.isBefore(appointmentEnd) && slotEnd.isAfter(appointmentStart)) {
+                    isAvailable = false;
+                    break;
+                }
+            }
+
+            if (isAvailable) {
+                availableSlots.add(slotStart.toLocalTime().format(formatter) + " - " + slotEnd.toLocalTime().format(formatter));
+            }
         }
 
-        return new AvailableDoctorTimes(id, bookedTimes);
+        return new AvailableDoctorTimes(id, availableSlots);
     }
+
 
 
     @Override
