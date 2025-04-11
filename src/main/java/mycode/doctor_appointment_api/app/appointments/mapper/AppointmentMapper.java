@@ -12,6 +12,7 @@ public class AppointmentMapper {
                 appointment.getId(),
                 appointment.getStart(),
                 appointment.getEnd(),
+                appointment.getReason(),
                 DoctorMapper.doctorToResponseDto(appointment.getDoctor()),
                 UserMapper.userToResponseDto(appointment.getUser())
         );

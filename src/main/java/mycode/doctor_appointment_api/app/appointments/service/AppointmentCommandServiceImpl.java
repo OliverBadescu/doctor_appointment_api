@@ -72,6 +72,7 @@ public class AppointmentCommandServiceImpl implements AppointmentCommandService 
                 .start(start)
                 .end(end)
                 .user(user)
+                .reason(createAppointmentRequest.reason())
                 .doctor(doctor)
                 .build();
 

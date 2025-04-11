@@ -4,6 +4,7 @@ import jakarta.validation.constraints.NotNull;
 
 import java.time.LocalDateTime;
 
-public record UpdateAppointmentRequest(@NotNull LocalDateTime start,
+public record UpdateAppointmentRequest(@NotNull String reason,
+                                        @NotNull LocalDateTime start,
                                        @NotNull LocalDateTime end) {
 }

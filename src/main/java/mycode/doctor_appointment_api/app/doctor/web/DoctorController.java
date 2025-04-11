@@ -47,7 +47,7 @@ public class DoctorController {
     }
 
     @PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_CLIENT')")
-    @GetMapping(path = "/available/{doctorId}")
+    @PostMapping(path = "/available/{doctorId}")
     ResponseEntity<AvailableDoctorTimes> getDoctorAvailability(@PathVariable int doctorId, @RequestBody DateRequest date) {
         LocalDate localDate = date.getDate();
         return new ResponseEntity<>(doctorQueryService.getDoctorAvailableTime(doctorId, localDate), HttpStatus.OK);

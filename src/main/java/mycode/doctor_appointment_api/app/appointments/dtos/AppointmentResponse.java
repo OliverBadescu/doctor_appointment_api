@@ -11,6 +11,7 @@ import java.time.LocalDateTime;
 public record AppointmentResponse(@NotNull int id,
                                   @NotNull @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm") LocalDateTime start,
                                   @NotNull @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm") LocalDateTime end,
+                                  @NotNull String reason,
                                   @NotNull DoctorResponse doctor,
                                   @NotNull UserResponse user) {
 }

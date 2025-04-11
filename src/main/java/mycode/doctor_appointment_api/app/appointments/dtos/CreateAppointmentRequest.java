@@ -15,6 +15,8 @@ public record CreateAppointmentRequest(@NotNull
                                        @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm")
                                        @Schema(type = "string", example = "2024-10-09 09:30")
                                        LocalDateTime end,
+                                       @NotNull
+                                       String reason,
 
                                        @NotNull
                                        @Schema(type = "string", example = "Dr. Alex")

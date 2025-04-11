@@ -57,6 +57,13 @@ public class Appointment {
     )
     private LocalDateTime end;
 
+    @Column(
+            name = "reason",
+            nullable = false,
+            columnDefinition = "TEXT"
+    )
+    private String reason;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "doctor_id", referencedColumnName = "id")
     @JsonBackReference

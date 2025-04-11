@@ -51,7 +51,7 @@ public class AppointmentController {
         return new ResponseEntity<>(appointmentQueryService.getAllPatientAppointments(patientId), HttpStatus.ACCEPTED);
     }
 
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_CLIENT')")
     @GetMapping(path = "/doctor/{doctorId}")
     ResponseEntity<DoctorAppointmentList> getDoctorAppointments(@PathVariable int doctorId) {
         return new ResponseEntity<>(appointmentQueryService.getAllDoctorAppointments(doctorId), HttpStatus.ACCEPTED);

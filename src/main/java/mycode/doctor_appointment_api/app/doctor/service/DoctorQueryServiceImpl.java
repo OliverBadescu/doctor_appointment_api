@@ -15,6 +15,7 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Stream;
 
@@ -41,36 +42,20 @@ public class DoctorQueryServiceImpl implements DoctorQueryService {
                 .orElseThrow(() -> new NoDoctorFound("No doctor with this id found"));
 
         List<Appointment> appointments = appointmentRepository.findByDoctorIdAndDate(id, date)
-                .orElseThrow(() -> new NoAppointmentFound("No appointments found"));
+                .orElse(Collections.emptyList());
 
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm");
-        List<String> times = new ArrayList<>();
+        List<String> bookedTimes = new ArrayList<>();
 
-        String workStart = "09:00";
-        String workEnd = "17:00";
-
-        if (appointments.isEmpty()) {
-            times.add(workStart + " - " + workEnd);
-            return new AvailableDoctorTimes(id, times);
-        }
-
-        String lastEnd = workStart;
         for (Appointment appointment : appointments) {
             String start = appointment.getStart().format(formatter);
             String end = appointment.getEnd().format(formatter);
-
-            if (!lastEnd.equals(start)) {
-                times.add(lastEnd + " - " + start);
-            }
-            lastEnd = end;
+            bookedTimes.add(start + " - " + end);
         }
 
-        if (!lastEnd.equals(workEnd)) {
-            times.add(lastEnd + " - " + workEnd);
-        }
-
-        return new AvailableDoctorTimes(id, times);
+        return new AvailableDoctorTimes(id, bookedTimes);
     }
+
 
     @Override
     public AvailableDoctorTimesDays getDoctorAvailableTimeDifferentDays(int id, LocalDate start, LocalDate end) {
