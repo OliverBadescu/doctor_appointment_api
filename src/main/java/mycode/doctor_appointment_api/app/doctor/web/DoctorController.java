@@ -67,4 +67,10 @@ public class DoctorController {
     ResponseEntity<DoctorResponseList> getAllDoctors(){
         return new ResponseEntity<>(doctorQueryService.getAllDoctors(), HttpStatus.OK);
     }
+
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @GetMapping("/getTotalDoctors")
+    ResponseEntity<Integer> getTotalDoctors(){
+        return new ResponseEntity<>(doctorQueryService.totalDoctors(), HttpStatus.OK);
+    }
 }

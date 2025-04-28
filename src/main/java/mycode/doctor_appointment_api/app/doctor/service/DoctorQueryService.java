@@ -17,4 +17,6 @@ public interface DoctorQueryService {
 
     DoctorResponseList getAllDoctors();
 
+    int totalDoctors();
+
 }

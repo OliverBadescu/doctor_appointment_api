@@ -12,5 +12,6 @@
 
         User findByEmail(String email);
 
+        int totalUsers();
 
     }

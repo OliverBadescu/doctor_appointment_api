@@ -46,5 +46,9 @@ public class UserQueryServiceImpl implements UserQueryService{
         return userRepository.findByEmail(email).orElseThrow(() -> new NoUserFound("No user with this email found"));
     }
 
+    @Override
+    public  int totalUsers(){
+        return userRepository.findAll().size();
+    }
 
 }

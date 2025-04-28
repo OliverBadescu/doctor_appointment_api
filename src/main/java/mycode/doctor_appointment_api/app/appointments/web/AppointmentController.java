@@ -64,4 +64,10 @@ public class AppointmentController {
         return new ResponseEntity<>(appointmentCommandService.deletePatientAppointment(patientId, appointmentId), HttpStatus.ACCEPTED);
 
     }
+
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @GetMapping("/getTotalAppointments")
+    ResponseEntity<Integer> getTotalAppointments(){
+        return new ResponseEntity<>(appointmentQueryService.totalAppointments(), HttpStatus.OK);
+    }
 }

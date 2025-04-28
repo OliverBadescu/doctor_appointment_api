@@ -6,6 +6,8 @@ import mycode.doctor_appointment_api.app.appointments.dtos.PatientAppointmentLis
 
 public interface AppointmentQueryService {
 
+    int totalAppointments();
+
     AppointmentResponse getAppointment(int id);
 
     PatientAppointmentList getAllPatientAppointments(int id);

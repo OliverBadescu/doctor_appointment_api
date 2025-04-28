@@ -14,11 +14,10 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.stream.Stream;
+
 
 @Service
 @AllArgsConstructor
@@ -139,6 +138,11 @@ public class DoctorQueryServiceImpl implements DoctorQueryService {
         });
 
         return new DoctorResponseList(list);
+    }
+
+    @Override
+    public int totalDoctors(){
+        return doctorRepository.findAll().size();
     }
 
 

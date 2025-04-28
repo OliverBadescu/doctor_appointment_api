@@ -31,6 +31,11 @@ public class UserController {
     private final AuthenticationManager authenticationManager;
 
 
+    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
+    @GetMapping("/totalUsers")
+    public ResponseEntity<Integer> getTotalUsers(){
+        return new ResponseEntity<>(userQueryService.totalUsers(), HttpStatus.OK);
+    }
 
     @PreAuthorize("hasAuthority('ROLE_ADMIN') or hasAuthority('ROLE_CLIENT')")
     @GetMapping(path = "/getUserById/{userId}")

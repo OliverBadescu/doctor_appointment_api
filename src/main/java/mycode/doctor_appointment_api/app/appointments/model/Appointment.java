@@ -43,7 +43,7 @@ public class Appointment {
 
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm")
     @Column(
-            name = "start",
+            name = "start_time",
             nullable = false,
             columnDefinition = "TIMESTAMP"
     )
@@ -51,7 +51,7 @@ public class Appointment {
 
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm")
     @Column(
-            name = "end",
+            name = "end_time",
             nullable = false,
             columnDefinition = "TIMESTAMP"
     )

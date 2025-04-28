@@ -9,4 +9,6 @@ public interface ClinicQueryService {
 
     ClinicResponseList getAllClinics();
 
+    int getTotalClinics();
+
 }

@@ -18,8 +18,6 @@ public interface AppointmentRepository extends JpaRepository<Appointment, Intege
 
     Optional<List<Appointment>> getAllByUserId(int id);
 
-    Optional<List<Appointment>> findByDoctorIdAndStart(int id, LocalDateTime dateTime);
-
     @Query("SELECT a FROM Appointment a WHERE a.doctor.id = :doctorId AND DATE(a.start) = :date ORDER BY a.start ASC")
     Optional<List<Appointment>> findByDoctorIdAndDate(@Param("doctorId") int doctorId, @Param("date") LocalDate date);
 

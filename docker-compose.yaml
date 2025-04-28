@@ -24,7 +24,7 @@ services:
 
   service:
     container_name: service-container-doctor-appointment-api
-    image: "oliver005/doctorappointment-api:v10"
+    image: "oliver005/doctorappointment-api:v11"
     ports:
       - "8080:8080"
     restart: always
@@ -37,7 +37,7 @@ services:
 
   client:
     container_name: client-container-doctor-appointment-api
-    image: "oliver005/doctorappointment-ui:v1"
+    image: "oliver005/doctorappointment-ui:v2"
     ports:
       - "3000:80"
     restart: always

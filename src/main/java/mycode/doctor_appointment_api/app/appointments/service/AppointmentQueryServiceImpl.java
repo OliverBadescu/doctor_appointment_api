@@ -71,4 +71,9 @@ public class AppointmentQueryServiceImpl implements AppointmentQueryService {
 
         return new DoctorAppointmentList(appointmentResponses);
     }
+
+    @Override
+    public int totalAppointments(){
+        return appointmentRepository.findAll().size();
+    }
 }

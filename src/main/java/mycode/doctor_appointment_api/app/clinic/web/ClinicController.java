@@ -32,20 +32,20 @@ public class ClinicController {
     }
 
     @PreAuthorize("hasRole('ROLE_ADMIN')")
-    @PostMapping
+    @PostMapping("/createClinic")
     ResponseEntity<ClinicResponse> addClinic(@RequestBody CreateClinicRequest createClinicRequest) {
         return new ResponseEntity<>(clinicCommandService.addClinic(createClinicRequest), HttpStatus.CREATED);
     }
 
 
     @PreAuthorize("hasRole('ROLE_ADMIN')")
-    @PutMapping(path = "/{clinicId}")
+    @PutMapping(path = "/updateClinic/{clinicId}")
     ResponseEntity<ClinicResponse> updateClinic(@RequestBody UpdateClinicRequest updateClinicRequest, @PathVariable int clinicId) {
         return new ResponseEntity<>(clinicCommandService.updateClinic(clinicId, updateClinicRequest), HttpStatus.ACCEPTED);
     }
 
     @PreAuthorize("hasRole('ROLE_ADMIN')")
-    @DeleteMapping(path = "/{clinicId}")
+    @DeleteMapping(path = "/deleteClinic/{clinicId}")
     ResponseEntity<ClinicResponse> deleteClinic(@PathVariable int clinicId) {
         return new ResponseEntity<>(clinicCommandService.deleteClinic(clinicId), HttpStatus.ACCEPTED);
     }
@@ -54,5 +54,11 @@ public class ClinicController {
     @GetMapping(path = "/getAllClinics")
     ResponseEntity<ClinicResponseList> getAllClinics(){
         return new ResponseEntity<>(clinicQueryService.getAllClinics(), HttpStatus.OK);
+    }
+
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @GetMapping("/getTotalClinics")
+    ResponseEntity<Integer> getTotalClinics(){
+        return new ResponseEntity<>(clinicQueryService.getTotalClinics(), HttpStatus.OK);
     }
 }

@@ -43,4 +43,9 @@ public class ClinicQueryServiceImpl implements ClinicQueryService {
 
         return new ClinicResponseList(list);
     }
+
+    @Override
+    public int getTotalClinics(){
+        return clinicRepository.findAll().size();
+    }
 }
