@@ -23,8 +23,7 @@ import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.*;
 
 class DoctorCommandServiceImplTest {
@@ -45,12 +44,12 @@ class DoctorCommandServiceImplTest {
 
     @Test
     void shouldAddDoctorSuccessfully() {
+        Clinic clinic = ClinicMockData.createClinic();
         CreateDoctorRequest req = new CreateDoctorRequest(
                 "John Doe", "securePass123", "johndoe@example.com", "Cardiology",
-                "+1234567890", "Unknown Clinic"
+                "+1234567890", clinic.getId()
         );
-        Clinic clinic = ClinicMockData.createClinic();
-        when(clinicRepository.findByName(anyString())).thenReturn(Optional.of(clinic));
+        when(clinicRepository.findById(anyInt())).thenReturn(Optional.of(clinic));
         when(doctorRepository.findAll()).thenReturn(Collections.emptyList());
         Doctor saved = DoctorMockData.createDoctor();
         when(doctorRepository.saveAndFlush(any(Doctor.class))).thenReturn(saved);
@@ -69,9 +68,9 @@ class DoctorCommandServiceImplTest {
     void shouldThrowWhenClinicNotFound() {
         CreateDoctorRequest req = new CreateDoctorRequest(
                 "John Doe", "securePass123", "johndoe@example.com", "Cardiology",
-                "+1234567890", "Test Clinic"
+                "+1234567890", 1
         );
-        when(clinicRepository.findByName(anyString())).thenReturn(Optional.empty());
+        when(clinicRepository.findById(anyInt())).thenReturn(Optional.empty());
 
         assertThrows(NoClinicFound.class, () -> doctorCommandService.addDoctor(req));
         verify(doctorRepository, never()).saveAndFlush(any());
@@ -79,11 +78,12 @@ class DoctorCommandServiceImplTest {
 
     @Test
     void shouldThrowWhenDoctorAlreadyExists() {
+        Clinic clinic = ClinicMockData.createClinic();
         CreateDoctorRequest req = new CreateDoctorRequest(
                 "John Doe", "securePass123", "johndoe@example.com", "Cardiology",
-                "+1234567890", "Test Clinic"
+                "+1234567890", clinic.getId()
         );
-        when(clinicRepository.findByName(anyString())).thenReturn(Optional.of(ClinicMockData.createClinic()));
+        when(clinicRepository.findById(anyInt())).thenReturn(Optional.of(clinic));
 
         List<Doctor> existing = List.of(DoctorMockData.createDoctor());
         when(doctorRepository.findAll()).thenReturn(existing);

@@ -26,7 +26,7 @@ public class DoctorCommandServiceImpl implements DoctorCommandService {
     @Override
     public DoctorResponse addDoctor(CreateDoctorRequest rq) {
         Clinic clinic = clinicRepository.findById(rq.clinicId())
-                .orElseThrow(() -> new NoClinicFound("No clinic with this name found"));
+                .orElseThrow(() -> new NoClinicFound("No clinic with this id found"));
 
 
         Doctor doctor = Doctor.builder()
