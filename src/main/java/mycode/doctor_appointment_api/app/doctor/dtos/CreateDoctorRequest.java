@@ -7,6 +7,6 @@ public record CreateDoctorRequest(@NotNull String fullName,
                                   @NotNull String email,
                                   @NotNull String specialization,
                                   @NotNull String phone,
-                                  @NotNull String clinic) {
+                                  @NotNull int clinicId) {
 
 }

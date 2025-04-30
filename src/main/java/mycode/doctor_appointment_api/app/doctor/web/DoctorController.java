@@ -29,19 +29,19 @@ public class DoctorController {
     }
 
     @PreAuthorize("hasRole('ROLE_ADMIN')")
-    @PostMapping
+    @PostMapping("/addDoctor")
     ResponseEntity<DoctorResponse> addDoctor(@RequestBody CreateDoctorRequest createDoctorRequest) {
         return new ResponseEntity<>(doctorCommandService.addDoctor(createDoctorRequest), HttpStatus.ACCEPTED);
     }
 
     @PreAuthorize("hasRole('ROLE_ADMIN')")
-    @PutMapping(path = "/{doctorId}")
+    @PutMapping(path = "/updateDoctor/{doctorId}")
     ResponseEntity<DoctorResponse> updateDoctor(@PathVariable int doctorId, @RequestBody UpdateDoctorRequest updateDoctorRequest) {
         return new ResponseEntity<>(doctorCommandService.updateDoctor(updateDoctorRequest, doctorId), HttpStatus.ACCEPTED);
     }
 
     @PreAuthorize("hasRole('ROLE_ADMIN')")
-    @DeleteMapping(path = "/{doctorId}")
+    @DeleteMapping(path = "/deleteDoctor/{doctorId}")
     ResponseEntity<DoctorResponse> deleteDoctor(@PathVariable int doctorId) {
         return new ResponseEntity<>(doctorCommandService.deleteDoctor(doctorId), HttpStatus.ACCEPTED);
     }
