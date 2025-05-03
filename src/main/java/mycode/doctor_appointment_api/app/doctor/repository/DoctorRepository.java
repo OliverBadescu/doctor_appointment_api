@@ -9,7 +9,10 @@ import java.util.Optional;
 public interface DoctorRepository extends JpaRepository<Doctor, Integer> {
 
     @EntityGraph(attributePaths = {"appointments"}, type = EntityGraph.EntityGraphType.FETCH)
-    Optional<Doctor> findById(int id);
+    Optional<Doctor> findById(Long id);
+
+    @EntityGraph(attributePaths = {"appointments"}, type = EntityGraph.EntityGraphType.FETCH)
+    Optional<Doctor> findByEmail(String email);
 
     @EntityGraph(attributePaths = {"appointments"}, type = EntityGraph.EntityGraphType.FETCH)
     Optional<Doctor> findByFullName(String fullName);

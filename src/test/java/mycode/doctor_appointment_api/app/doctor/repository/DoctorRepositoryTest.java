@@ -2,6 +2,7 @@ package mycode.doctor_appointment_api.app.doctor.repository;
 
 import mycode.doctor_appointment_api.app.doctor.model.Doctor;
 import mycode.doctor_appointment_api.app.doctor.mock.DoctorMockData;
+import mycode.doctor_appointment_api.app.system.security.UserRole;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,6 +30,7 @@ class DoctorRepositoryTest {
         doctor.setFullName("John Doe");
         doctor.setPhone("+1234567890");
         doctor.setSpecialization("Cardiology");
+        doctor.setUserRole(UserRole.DOCTOR);
         Doctor persisted = entityManager.persistAndFlush(doctor);
 
         Optional<Doctor> fetched = doctorRepository.findById(persisted.getId());
@@ -52,6 +54,7 @@ class DoctorRepositoryTest {
         doctor.setFullName("Jane Doe");
         doctor.setPhone("+1987654321");
         doctor.setSpecialization("Dermatology");
+        doctor.setUserRole(UserRole.DOCTOR);
         entityManager.persistAndFlush(doctor);
 
         Optional<Doctor> fetched = doctorRepository.findByFullName("Jane Doe");

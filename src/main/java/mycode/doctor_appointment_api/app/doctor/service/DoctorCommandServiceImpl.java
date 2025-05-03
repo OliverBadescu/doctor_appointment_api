@@ -12,9 +12,11 @@ import mycode.doctor_appointment_api.app.doctor.exceptions.NoDoctorFound;
 import mycode.doctor_appointment_api.app.doctor.mapper.DoctorMapper;
 import mycode.doctor_appointment_api.app.doctor.model.Doctor;
 import mycode.doctor_appointment_api.app.doctor.repository.DoctorRepository;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @AllArgsConstructor
@@ -22,33 +24,34 @@ public class DoctorCommandServiceImpl implements DoctorCommandService {
 
     DoctorRepository doctorRepository;
     ClinicRepository clinicRepository;
+    private BCryptPasswordEncoder passwordEncoder;
 
     @Override
     public DoctorResponse addDoctor(CreateDoctorRequest rq) {
         Clinic clinic = clinicRepository.findById(rq.clinicId())
                 .orElseThrow(() -> new NoClinicFound("No clinic with this id found"));
 
+        Optional<Doctor> doctorFound = doctorRepository.findByEmail(rq.email());
 
-        Doctor doctor = Doctor.builder()
-                .clinic(clinic)
-                .email(rq.email())
-                .fullName(rq.fullName())
-                .password(rq.password())
-                .phone(rq.phone())
-                .specialization(rq.specialization())
-                .build();
+        if(doctorFound.isPresent()){
+            throw new DoctorAlreadyExists("Doctor with this email already exists");
+        }else{
+            Doctor doctor = Doctor.builder()
+                    .clinic(clinic)
+                    .email(rq.email())
+                    .fullName(rq.fullName())
+                    .password(passwordEncoder.encode(rq.password()))
+                    .phone(rq.phone())
+                    .specialization(rq.specialization())
+                    .build();
 
-        List<Doctor> list = doctorRepository.findAll();
+            doctorRepository.saveAndFlush(doctor);
 
-        list.forEach(doctor1 -> {
-            if (doctor1.getFullName().equals(doctor.getFullName()) && doctor1.getEmail().equals(doctor.getEmail())) {
-                throw new DoctorAlreadyExists("Doctor with this name and email already exists");
-            }
-        });
+            return DoctorMapper.doctorToResponseDto(doctor);
+        }
 
-        doctorRepository.saveAndFlush(doctor);
 
-        return DoctorMapper.doctorToResponseDto(doctor);
+
 
     }
 

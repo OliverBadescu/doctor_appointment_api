@@ -7,7 +7,12 @@ import jakarta.persistence.*;
 import lombok.*;
 import mycode.doctor_appointment_api.app.appointments.model.Appointment;
 import mycode.doctor_appointment_api.app.clinic.model.Clinic;
+import mycode.doctor_appointment_api.app.system.security.UserRole;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
@@ -23,7 +28,7 @@ import static jakarta.persistence.GenerationType.SEQUENCE;
 @Builder
 @Table(name = "doctor")
 @Entity(name = "Doctor")
-public class Doctor {
+public class Doctor implements UserDetails {
 
 
     @Id
@@ -83,6 +88,10 @@ public class Doctor {
     @JsonBackReference
     private Clinic clinic;
 
+    @Column(name = "role", nullable = false)
+    @Enumerated(EnumType.STRING)
+    private UserRole userRole;
+
     @OneToMany(mappedBy = "doctor", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     @Builder.Default
     @ToString.Exclude
@@ -90,6 +99,50 @@ public class Doctor {
     private Set<Appointment> appointments = new HashSet<>();
 
 
+    public Doctor(int id, String fullName, String email, String password, UserRole userRole, String specialization, Clinic clinic) {
+        this.id = id;
+        this.fullName = fullName;
+        this.email = email;
+        this.password = new BCryptPasswordEncoder().encode(password);
+        this.userRole = userRole;
+        this.specialization = specialization;
+        this.clinic = clinic;
+
+    }
+
+    public void setPassword(String password){
+        this.password= new BCryptPasswordEncoder().encode(password);
+    }
+
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return userRole.getGrantedAuthorities();
+    }
+
+    @Override
+    public String getUsername(){
+        return this.email;
+    }
+
+    @Override
+    public boolean isAccountNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return true;
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return true;
+    }
 
 
 

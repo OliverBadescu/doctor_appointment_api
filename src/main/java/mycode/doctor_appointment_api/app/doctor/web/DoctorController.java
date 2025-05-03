@@ -3,14 +3,25 @@ package mycode.doctor_appointment_api.app.doctor.web;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import mycode.doctor_appointment_api.app.doctor.dtos.*;
+import mycode.doctor_appointment_api.app.doctor.mapper.DoctorMapper;
+import mycode.doctor_appointment_api.app.doctor.model.Doctor;
 import mycode.doctor_appointment_api.app.doctor.service.DoctorCommandService;
 import mycode.doctor_appointment_api.app.doctor.service.DoctorQueryService;
+import mycode.doctor_appointment_api.app.system.jwt.JWTTokenProvider;
+import mycode.doctor_appointment_api.app.users.dtos.LoginRequest;
+import mycode.doctor_appointment_api.app.users.dtos.LoginResponse;
+import mycode.doctor_appointment_api.app.users.model.User;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
+
+import static mycode.doctor_appointment_api.app.system.constants.Constants.JWT_TOKEN_HEADER;
 
 @RestController
 @AllArgsConstructor
@@ -21,6 +32,8 @@ public class DoctorController {
 
     private DoctorQueryService doctorQueryService;
     private DoctorCommandService doctorCommandService;
+    private final JWTTokenProvider jwtTokenProvider;
+    private final AuthenticationManager authenticationManager;
 
     @PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_CLIENT')")
     @GetMapping(path = "/{doctorId}")
@@ -73,4 +86,46 @@ public class DoctorController {
     ResponseEntity<Integer> getTotalDoctors(){
         return new ResponseEntity<>(doctorQueryService.totalDoctors(), HttpStatus.OK);
     }
+
+    @PostMapping("/login")
+    public ResponseEntity<LoginResponse> login(@RequestBody LoginRequest user) {
+
+        Doctor loginUser = doctorQueryService.findByEmail(user.email());
+        Doctor userPrincipal = getUser(loginUser);
+
+        authenticate(user.email(), user.password());
+        HttpHeaders jwtHeader = getJwtHeader(userPrincipal);
+        LoginResponse loginResponse = new LoginResponse(
+                jwtHeader.getFirst(JWT_TOKEN_HEADER),
+                (long) userPrincipal.getId(),
+                userPrincipal.getFullName(),
+                userPrincipal.getEmail(),
+                userPrincipal.getUserRole()
+        );
+        return new ResponseEntity<>(loginResponse, jwtHeader, HttpStatus.OK);
+    }
+
+    private void authenticate(String username, String password) {
+        authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(username, password));
+    }
+
+    private Doctor getUser(Doctor loginUser) {
+        Doctor userPrincipal = new Doctor();
+        userPrincipal.setEmail(loginUser.getEmail());
+        userPrincipal.setId(loginUser.getId());
+        userPrincipal.setPassword(loginUser.getPassword());
+        userPrincipal.setUserRole(loginUser.getUserRole());
+        userPrincipal.setFullName(loginUser.getFullName());
+        userPrincipal.setPhone(loginUser.getPhone());
+        userPrincipal.setSpecialization(loginUser.getSpecialization());
+        return userPrincipal;
+    }
+
+    private HttpHeaders getJwtHeader(Doctor user) {
+        HttpHeaders headers = new HttpHeaders();
+        headers.add(JWT_TOKEN_HEADER, jwtTokenProvider.generateJWTToken(user));
+        return headers;
+    }
+
+
 }

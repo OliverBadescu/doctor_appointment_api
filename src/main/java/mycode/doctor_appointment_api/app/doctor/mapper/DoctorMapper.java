@@ -13,7 +13,8 @@ public class DoctorMapper {
                 doctor.getEmail(),
                 doctor.getSpecialization(),
                 doctor.getPhone(),
-                ClinicMapper.clinicToResponseDto(doctor.getClinic()));
+                ClinicMapper.clinicToResponseDto(doctor.getClinic()),
+                doctor.getUserRole());
     }
 
 

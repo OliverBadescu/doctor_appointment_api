@@ -3,6 +3,7 @@ package mycode.doctor_appointment_api.app.clinic.repository;
 import mycode.doctor_appointment_api.app.clinic.model.Clinic;
 import mycode.doctor_appointment_api.app.doctor.model.Doctor;
 import mycode.doctor_appointment_api.app.doctor.repository.DoctorRepository;
+import mycode.doctor_appointment_api.app.system.security.UserRole;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -49,6 +50,7 @@ class ClinicRepositoryTest {
         doctor1.setPassword("");
         doctor1.setPhone("");
         doctor1.setSpecialization("");
+        doctor1.setUserRole(UserRole.DOCTOR);
 
         doctor2 = new Doctor();
         doctor2.setClinic(testClinic);
@@ -57,6 +59,7 @@ class ClinicRepositoryTest {
         doctor2.setPassword("");
         doctor2.setPhone("");
         doctor2.setSpecialization("");
+        doctor2.setUserRole(UserRole.DOCTOR);
 
         doctor1 = doctorRepository.save(doctor1);
         doctor2 = doctorRepository.save(doctor2);

@@ -35,6 +35,7 @@ class AppointmentRepositoryTest {
         doctor.setFullName(name);
         doctor.setPhone("+100");
         doctor.setSpecialization("Spec");
+        doctor.setUserRole(UserRole.DOCTOR);
         return entityManager.persistAndFlush(doctor);
     }
 

@@ -61,7 +61,7 @@ class AppointmentControllerTest {
         startTime = LocalDateTime.of(2025, 5, 1, 10, 0);
         endTime = LocalDateTime.of(2025, 5, 1, 11, 0);
 
-        doctorResponse = new DoctorResponse(1, "John Doe", "pass", "test@doctor.com", "Cardiologist", "", null);
+        doctorResponse = new DoctorResponse(1, "John Doe", "pass", "test@doctor.com", "Cardiologist", "", null, UserRole.DOCTOR);
         userResponse = new UserResponse(1, "jane@example.com", "pass", "Jane Smith", UserRole.CLIENT);
 
         appointmentResponse = new AppointmentResponse(

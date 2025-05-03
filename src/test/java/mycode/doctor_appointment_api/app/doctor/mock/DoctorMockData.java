@@ -2,6 +2,7 @@ package mycode.doctor_appointment_api.app.doctor.mock;
 
 import mycode.doctor_appointment_api.app.clinic.mock.ClinicMockData;
 import mycode.doctor_appointment_api.app.doctor.model.Doctor;
+import mycode.doctor_appointment_api.app.system.security.UserRole;
 
 public class DoctorMockData {
 
@@ -14,6 +15,7 @@ public class DoctorMockData {
                 .phone("+1234567890")
                 .specialization("Cardiology")
                 .clinic(ClinicMockData.createClinic())
+                .userRole(UserRole.DOCTOR)
                 .build();
     }
 

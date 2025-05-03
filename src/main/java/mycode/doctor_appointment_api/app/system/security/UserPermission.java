@@ -7,11 +7,9 @@ import lombok.Getter;
 @AllArgsConstructor
 public enum UserPermission {
 
-    USER_READ("user:read"),
-    USER_WRITE("user:write"),
-    ORDER_WRITE("order:write"),
-    ORDER_READ("order:read"),
-    PRODUCT_WRITE("product:write"),
-    PRODUCT_READ("product:read");
+    USER_READ("read"),
+    USER_WRITE("write"),
+    APPOINTMENT_READ("appointment:read"),
+    APPOINTMENT_WRITE("appointment:write");
     private final String permission;
 }
