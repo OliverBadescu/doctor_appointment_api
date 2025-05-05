@@ -2,6 +2,7 @@ package mycode.doctor_appointment_api.app.doctor.web;
 
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import mycode.doctor_appointment_api.app.appointments.dtos.DoctorAppointmentList;
 import mycode.doctor_appointment_api.app.doctor.dtos.*;
 import mycode.doctor_appointment_api.app.doctor.mapper.DoctorMapper;
 import mycode.doctor_appointment_api.app.doctor.model.Doctor;
@@ -35,7 +36,13 @@ public class DoctorController {
     private final JWTTokenProvider jwtTokenProvider;
     private final AuthenticationManager authenticationManager;
 
-    @PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_CLIENT')")
+    @PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_DOCTOR')")
+    @GetMapping(path = "/getAllDoctorAppointments/{doctorId}")
+    ResponseEntity<DoctorAppointmentList> getAllDoctorAppointments(@PathVariable int doctorId) {
+        return new ResponseEntity<>(doctorQueryService.getAllDoctorAppointments(doctorId), HttpStatus.ACCEPTED);
+    }
+
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @GetMapping(path = "/{doctorId}")
     ResponseEntity<DoctorResponse> getDoctor(@PathVariable int doctorId) {
         return new ResponseEntity<>(doctorQueryService.getDoctorById(doctorId), HttpStatus.ACCEPTED);
@@ -87,7 +94,7 @@ public class DoctorController {
         return new ResponseEntity<>(doctorQueryService.totalDoctors(), HttpStatus.OK);
     }
 
-    @PostMapping("/login")
+    @PostMapping("/login/doctor")
     public ResponseEntity<LoginResponse> login(@RequestBody LoginRequest user) {
 
         Doctor loginUser = doctorQueryService.findByEmail(user.email());

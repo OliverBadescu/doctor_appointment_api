@@ -1,6 +1,10 @@
 package mycode.doctor_appointment_api.app.doctor.service;
 
 import lombok.AllArgsConstructor;
+import mycode.doctor_appointment_api.app.appointments.dtos.AppointmentResponse;
+import mycode.doctor_appointment_api.app.appointments.dtos.DoctorAppointmentList;
+import mycode.doctor_appointment_api.app.appointments.exceptions.NoAppointmentFound;
+import mycode.doctor_appointment_api.app.appointments.mapper.AppointmentMapper;
 import mycode.doctor_appointment_api.app.appointments.model.Appointment;
 import mycode.doctor_appointment_api.app.appointments.repository.AppointmentRepository;
 import mycode.doctor_appointment_api.app.doctor.dtos.*;
@@ -16,6 +20,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 
 
 @Service
@@ -147,6 +152,26 @@ public class DoctorQueryServiceImpl implements DoctorQueryService {
     @Override
     public Doctor findByEmail(String email){
         return doctorRepository.findByEmail(email).orElseThrow(() -> new NoDoctorFound("No doctor with this email found"));
+    }
+
+    @Override
+    public DoctorAppointmentList getAllDoctorAppointments(int id){
+        Doctor doctor = doctorRepository.findById(id)
+                .orElseThrow(() -> new NoDoctorFound("No doctor with this id found"));
+
+        Optional<List<Appointment>> list = appointmentRepository.getAllByDoctorId(id);
+
+        if(list.isPresent()){
+            List<AppointmentResponse> res = new ArrayList<>();
+
+            list.get().forEach(appointment -> {
+                res.add(AppointmentMapper.appointmentToResponseDto(appointment));
+            });
+
+            return new DoctorAppointmentList(res);
+        }else{
+            throw new NoAppointmentFound("No appointments found");
+        }
     }
 
 }

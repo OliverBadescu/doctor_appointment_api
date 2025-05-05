@@ -12,6 +12,7 @@ import mycode.doctor_appointment_api.app.doctor.exceptions.NoDoctorFound;
 import mycode.doctor_appointment_api.app.doctor.mapper.DoctorMapper;
 import mycode.doctor_appointment_api.app.doctor.model.Doctor;
 import mycode.doctor_appointment_api.app.doctor.repository.DoctorRepository;
+import mycode.doctor_appointment_api.app.system.security.UserRole;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -43,6 +44,7 @@ public class DoctorCommandServiceImpl implements DoctorCommandService {
                     .password(passwordEncoder.encode(rq.password()))
                     .phone(rq.phone())
                     .specialization(rq.specialization())
+                    .userRole(UserRole.DOCTOR)
                     .build();
 
             doctorRepository.saveAndFlush(doctor);

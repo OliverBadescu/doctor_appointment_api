@@ -1,5 +1,6 @@
 package mycode.doctor_appointment_api.app.doctor.service;
 
+import mycode.doctor_appointment_api.app.appointments.dtos.DoctorAppointmentList;
 import mycode.doctor_appointment_api.app.doctor.dtos.AvailableDoctorTimes;
 import mycode.doctor_appointment_api.app.doctor.dtos.AvailableDoctorTimesDays;
 import mycode.doctor_appointment_api.app.doctor.dtos.DoctorResponse;
@@ -21,5 +22,7 @@ public interface DoctorQueryService {
     DoctorResponseList getAllDoctors();
 
     int totalDoctors();
+
+    DoctorAppointmentList getAllDoctorAppointments(int id);
 
 }
