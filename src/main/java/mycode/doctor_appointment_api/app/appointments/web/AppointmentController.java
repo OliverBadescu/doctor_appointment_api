@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.*;
 @AllArgsConstructor
 @CrossOrigin
 @Slf4j
-@RequestMapping("/appointment")
+@RequestMapping("/api/appointment")
 public class AppointmentController {
 
     private AppointmentCommandService appointmentCommandService;

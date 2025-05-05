@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.*;
 @AllArgsConstructor
 @CrossOrigin
 @Slf4j
-@RequestMapping("/clinic")
+@RequestMapping("/api/clinic")
 public class ClinicController {
 
     private ClinicCommandService clinicCommandService;

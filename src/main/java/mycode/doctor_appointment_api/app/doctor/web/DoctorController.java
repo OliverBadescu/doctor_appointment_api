@@ -27,7 +27,7 @@ import static mycode.doctor_appointment_api.app.system.constants.Constants.JWT_T
 @AllArgsConstructor
 @CrossOrigin
 @Slf4j
-@RequestMapping("/doctor")
+@RequestMapping("/api/doctor")
 public class DoctorController {
 
     private DoctorQueryService doctorQueryService;

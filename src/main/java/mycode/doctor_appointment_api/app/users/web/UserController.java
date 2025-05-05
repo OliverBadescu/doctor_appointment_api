@@ -20,7 +20,7 @@ import static mycode.doctor_appointment_api.app.system.constants.Constants.JWT_T
 
 @RestController
 @AllArgsConstructor
-@RequestMapping("/user")
+@RequestMapping("/api/user")
 @CrossOrigin
 @Slf4j
 public class UserController {
