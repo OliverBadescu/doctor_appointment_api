@@ -4,9 +4,12 @@ package mycode.doctor_appointment_api.app.appointments.service;
 import lombok.AllArgsConstructor;
 import mycode.doctor_appointment_api.app.appointments.dtos.AppointmentResponse;
 import mycode.doctor_appointment_api.app.appointments.dtos.CreateAppointmentRequest;
+import mycode.doctor_appointment_api.app.appointments.dtos.StatusUpdateRequest;
 import mycode.doctor_appointment_api.app.appointments.dtos.UpdateAppointmentRequest;
+import mycode.doctor_appointment_api.app.appointments.enums.AppointmentStatus;
 import mycode.doctor_appointment_api.app.appointments.exceptions.AppointmentAlreadyExistsAtThisDateAndTime;
 import mycode.doctor_appointment_api.app.appointments.exceptions.NoAppointmentFound;
+import mycode.doctor_appointment_api.app.appointments.exceptions.NoStatusFound;
 import mycode.doctor_appointment_api.app.appointments.mapper.AppointmentMapper;
 import mycode.doctor_appointment_api.app.appointments.model.Appointment;
 import mycode.doctor_appointment_api.app.appointments.repository.AppointmentRepository;
@@ -74,6 +77,7 @@ public class AppointmentCommandServiceImpl implements AppointmentCommandService 
                 .user(user)
                 .reason(createAppointmentRequest.reason())
                 .doctor(doctor)
+                .status(AppointmentStatus.UPCOMING)
                 .build();
 
         appointmentRepository.saveAndFlush(appointment);
@@ -125,5 +129,38 @@ public class AppointmentCommandServiceImpl implements AppointmentCommandService 
         } else {
             throw new NoAppointmentFound("This patient has no appointment with this id");
         }
+    }
+    
+    @Override
+    public AppointmentResponse updateStatus(StatusUpdateRequest status, int appointmentId){
+
+        Appointment appointment = appointmentRepository.findById(appointmentId)
+                .orElseThrow(() -> new NoAppointmentFound("No appointment with this id found"));
+
+        String statusReq = status.status();
+        // Remove any quotes from the status string
+        String cleanStatus = statusReq.replace("\"", "").trim();
+
+        System.out.println("Updating appointment ID: " + appointmentId + " with cleaned status: " + cleanStatus);
+
+        // Case-insensitive comparison with cleaned status
+        if (cleanStatus.equalsIgnoreCase("COMPLETED")) {
+            appointment.setStatus(AppointmentStatus.COMPLETED);
+        } else if (cleanStatus.equalsIgnoreCase("CANCELLED")) {
+            appointment.setStatus(AppointmentStatus.CANCELLED);
+        } else if (cleanStatus.equalsIgnoreCase("UPCOMING")) {
+            appointment.setStatus(AppointmentStatus.UPCOMING);
+        } else {
+            System.out.println("Warning: Unrecognized status '" + cleanStatus + "' - no update performed");
+        }
+
+        // Save the appointment
+        Appointment savedAppointment = appointmentRepository.save(appointment);
+
+        // Log the result to verify it worked
+        System.out.println("Updated appointment status: " + savedAppointment.getStatus());
+
+        return AppointmentMapper.appointmentToResponseDto(savedAppointment);
+
     }
 }

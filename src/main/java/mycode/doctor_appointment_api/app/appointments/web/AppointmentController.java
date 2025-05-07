@@ -44,7 +44,7 @@ public class AppointmentController {
         return new ResponseEntity<>(appointmentCommandService.deleteAppointment(appointmentId), HttpStatus.ACCEPTED);
     }
 
-    @PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_CLIENT')")
+    @PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_CLIENT') or hasRole('ROLE_DOCTOR')")
     @GetMapping(path = "/patient/{patientId}")
     ResponseEntity<PatientAppointmentList> getPatientAppointments(@PathVariable int patientId) {
 
@@ -69,5 +69,11 @@ public class AppointmentController {
     @GetMapping("/getTotalAppointments")
     ResponseEntity<Integer> getTotalAppointments(){
         return new ResponseEntity<>(appointmentQueryService.totalAppointments(), HttpStatus.OK);
+    }
+
+    @PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_DOCTOR')")
+    @PutMapping("/updateStatus/{appointmentId}")
+    ResponseEntity<AppointmentResponse> updateAppointmentStatus(@PathVariable int appointmentId, @RequestBody StatusUpdateRequest status){
+        return new ResponseEntity<>(appointmentCommandService.updateStatus(status, appointmentId), HttpStatus.ACCEPTED);
     }
 }

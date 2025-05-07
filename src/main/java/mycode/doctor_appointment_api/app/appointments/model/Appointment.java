@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
 import lombok.*;
+import mycode.doctor_appointment_api.app.appointments.enums.AppointmentStatus;
 import mycode.doctor_appointment_api.app.doctor.model.Doctor;
 import mycode.doctor_appointment_api.app.users.model.User;
 
@@ -63,6 +64,14 @@ public class Appointment {
             columnDefinition = "TEXT"
     )
     private String reason;
+
+    @Enumerated(EnumType.STRING)
+    @Column(
+            name = "status",
+            nullable = false
+    )
+    private AppointmentStatus status = AppointmentStatus.UPCOMING;
+
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "doctor_id", referencedColumnName = "id")

@@ -2,6 +2,7 @@ package mycode.doctor_appointment_api.app.appointments.web;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import mycode.doctor_appointment_api.app.appointments.dtos.*;
+import mycode.doctor_appointment_api.app.appointments.enums.AppointmentStatus;
 import mycode.doctor_appointment_api.app.doctor.dtos.DoctorResponse;
 import mycode.doctor_appointment_api.app.appointments.service.AppointmentCommandService;
 import mycode.doctor_appointment_api.app.appointments.service.AppointmentQueryService;
@@ -70,7 +71,8 @@ class AppointmentControllerTest {
                 endTime,
                 "Consultation",
                 doctorResponse,
-                userResponse
+                userResponse,
+                AppointmentStatus.UPCOMING
         );
     }
 
@@ -117,7 +119,8 @@ class AppointmentControllerTest {
                 endTime.plusDays(1),
                 "Updated Consultation",
                 doctorResponse,
-                userResponse
+                userResponse,
+                AppointmentStatus.UPCOMING
         );
 
         when(appointmentCommandService.updateAppointment(any(UpdateAppointmentRequest.class), any(Integer.class))).thenReturn(updatedResponse);

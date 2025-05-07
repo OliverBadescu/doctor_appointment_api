@@ -3,6 +3,7 @@ package mycode.doctor_appointment_api.app.global_exceptions;
 
 import mycode.doctor_appointment_api.app.appointments.exceptions.AppointmentAlreadyExistsAtThisDateAndTime;
 import mycode.doctor_appointment_api.app.appointments.exceptions.NoAppointmentFound;
+import mycode.doctor_appointment_api.app.appointments.exceptions.NoStatusFound;
 import mycode.doctor_appointment_api.app.clinic.exceptions.ClinicAlreadyExists;
 import mycode.doctor_appointment_api.app.clinic.exceptions.NoClinicFound;
 import mycode.doctor_appointment_api.app.doctor.exceptions.DoctorAlreadyExists;
@@ -68,6 +69,13 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler({UserAlreadyExists.class})
     public ResponseEntity<Object> handleUserAlreadyExistsException(UserAlreadyExists exception) {
+        return ResponseEntity
+                .status(HttpStatus.CONFLICT)
+                .body(exception.getMessage());
+    }
+
+    @ExceptionHandler({NoStatusFound.class})
+    public ResponseEntity<Object> handleNoStatusFound(NoStatusFound exception){
         return ResponseEntity
                 .status(HttpStatus.CONFLICT)
                 .body(exception.getMessage());
