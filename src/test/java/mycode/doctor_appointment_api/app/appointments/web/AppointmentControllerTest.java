@@ -78,13 +78,13 @@ class AppointmentControllerTest {
 
     @Test
     @WithMockUser(roles = "CLIENT")
-    @DisplayName("POST /appointment/addAppointment - should return 201 CREATED")
+    @DisplayName("POST /api/appointment/addAppointment - should return 201 CREATED")
     void addAppointment() throws Exception {
         CreateAppointmentRequest request = new CreateAppointmentRequest(startTime, endTime,"" , "John Doe", 1);
 
         when(appointmentCommandService.addAppointment(any(CreateAppointmentRequest.class))).thenReturn(appointmentResponse);
 
-        mockMvc.perform(post("/appointment/addAppointment")
+        mockMvc.perform(post("/api/appointment/addAppointment")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(request)))
                 .andExpect(status().isCreated())
@@ -96,11 +96,11 @@ class AppointmentControllerTest {
 
     @Test
     @WithMockUser(roles = "CLIENT")
-    @DisplayName("GET /appointment/{id} - should return 202 ACCEPTED")
+    @DisplayName("GET /api/appointment/{id} - should return 202 ACCEPTED")
     void getAppointmentById() throws Exception {
         when(appointmentQueryService.getAppointment(1)).thenReturn(appointmentResponse);
 
-        mockMvc.perform(get("/appointment/1"))
+        mockMvc.perform(get("/api/appointment/1"))
                 .andExpect(status().isAccepted())
                 .andExpect(jsonPath("$.id").value(1))
                 .andExpect(jsonPath("$.doctor.fullName").value("John Doe"))
@@ -109,7 +109,7 @@ class AppointmentControllerTest {
 
     @Test
     @WithMockUser(roles = "CLIENT")
-    @DisplayName("PUT /appointment/{id} - should return 202 ACCEPTED")
+    @DisplayName("PUT /api/appointment/{id} - should return 202 ACCEPTED")
     void updateAppointment() throws Exception {
         UpdateAppointmentRequest request = new UpdateAppointmentRequest(" ",startTime, startTime.plusDays(1));
 
@@ -125,7 +125,7 @@ class AppointmentControllerTest {
 
         when(appointmentCommandService.updateAppointment(any(UpdateAppointmentRequest.class), any(Integer.class))).thenReturn(updatedResponse);
 
-        mockMvc.perform(put("/appointment/1")
+        mockMvc.perform(put("/api/appointment/1")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(request)))
                 .andExpect(status().isAccepted())
@@ -134,61 +134,61 @@ class AppointmentControllerTest {
 
     @Test
     @WithMockUser(roles = "CLIENT")
-    @DisplayName("DELETE /appointment/{id} - should return 202 ACCEPTED")
+    @DisplayName("DELETE /api/appointment/{id} - should return 202 ACCEPTED")
     void deleteAppointment() throws Exception {
         when(appointmentCommandService.deleteAppointment(1)).thenReturn(appointmentResponse);
 
-        mockMvc.perform(delete("/appointment/1"))
+        mockMvc.perform(delete("/api/appointment/1"))
                 .andExpect(status().isAccepted())
                 .andExpect(jsonPath("$.id").value(1));
     }
 
     @Test
     @WithMockUser(roles = "CLIENT")
-    @DisplayName("GET /appointment/patient/{id} - should return 202 ACCEPTED")
+    @DisplayName("GET /api/appointment/patient/{id} - should return 202 ACCEPTED")
     void getPatientAppointments() throws Exception {
         List<AppointmentResponse> list = List.of(appointmentResponse);
         PatientAppointmentList patientAppointmentList = new PatientAppointmentList(list);
 
         when(appointmentQueryService.getAllPatientAppointments(1)).thenReturn(patientAppointmentList);
 
-        mockMvc.perform(get("/appointment/patient/1"))
+        mockMvc.perform(get("/api/appointment/patient/1"))
                 .andExpect(status().isAccepted())
                 .andExpect(jsonPath("$.appointments.length()").value(1));
     }
 
     @Test
     @WithMockUser(roles = "CLIENT")
-    @DisplayName("GET /appointment/doctor/{id} - should return 202 ACCEPTED")
+    @DisplayName("GET /api/appointment/doctor/{id} - should return 202 ACCEPTED")
     void getDoctorAppointments() throws Exception {
         List<AppointmentResponse> list = List.of(appointmentResponse);
         DoctorAppointmentList doctorAppointmentList = new DoctorAppointmentList(list);
 
         when(appointmentQueryService.getAllDoctorAppointments(1)).thenReturn(doctorAppointmentList);
 
-        mockMvc.perform(get("/appointment/doctor/1"))
+        mockMvc.perform(get("/api/appointment/doctor/1"))
                 .andExpect(status().isAccepted())
                 .andExpect(jsonPath("$.list.length()").value(1));
     }
 
     @Test
     @WithMockUser(roles = "ADMIN")
-    @DisplayName("DELETE /appointment/patient/{patientId}/{appointmentId} - should return 202 ACCEPTED")
+    @DisplayName("DELETE /api/appointment/patient/{patientId}/{appointmentId} - should return 202 ACCEPTED")
     void deletePatientAppointment() throws Exception {
         when(appointmentCommandService.deletePatientAppointment(1, 1)).thenReturn(appointmentResponse);
 
-        mockMvc.perform(delete("/appointment/patient/1/1"))
+        mockMvc.perform(delete("/api/appointment/patient/1/1"))
                 .andExpect(status().isAccepted())
                 .andExpect(jsonPath("$.reason").value("Consultation"));
     }
 
     @Test
     @WithMockUser(roles = "ADMIN")
-    @DisplayName("GET /appointment/getTotalAppointments - should return 200 OK")
+    @DisplayName("GET /api/appointment/getTotalAppointments - should return 200 OK")
     void getTotalAppointments() throws Exception {
         when(appointmentQueryService.totalAppointments()).thenReturn(10);
 
-        mockMvc.perform(get("/appointment/getTotalAppointments"))
+        mockMvc.perform(get("/api/appointment/getTotalAppointments"))
                 .andExpect(status().isOk())
                 .andExpect(content().string("10"));
     }

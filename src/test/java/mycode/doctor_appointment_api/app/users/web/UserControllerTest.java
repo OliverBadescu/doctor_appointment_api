@@ -63,7 +63,7 @@ public class UserControllerTest {
 
         when(userQueryService.totalUsers()).thenReturn(5);
 
-        mockMvc.perform(get("/user/totalUsers"))
+        mockMvc.perform(get("/api/user/totalUsers"))
                 .andExpect(status().isOk())
                 .andExpect(content().string("5"));
 
@@ -81,7 +81,7 @@ public class UserControllerTest {
 
         when(userQueryService.findUserById(1)).thenReturn(userResponse);
 
-        mockMvc.perform(get("/user/getUserById/1"))
+        mockMvc.perform(get("/api/user/getUserById/1"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.email").value("user"));
 
@@ -101,7 +101,7 @@ public class UserControllerTest {
         UserResponse userResponse= UserMapper.userToResponseDto(user);
 
         when(userCommandService.createUser(createUserRequest)).thenReturn(userResponse);
-        mockMvc.perform(post("/user/add")
+        mockMvc.perform(post("/api/user/add")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(createUserRequest)))
                 .andExpect(status().isCreated())
@@ -121,7 +121,7 @@ public class UserControllerTest {
 
         when(userCommandService.deleteUser(1)).thenReturn(userResponse);
 
-        mockMvc.perform(delete("/user/delete/1"))
+        mockMvc.perform(delete("/api/user/delete/1"))
                 .andExpect(status().isAccepted())
                 .andExpect(jsonPath("$.email").value("email"));
     }
@@ -142,7 +142,7 @@ public class UserControllerTest {
 
         when(userCommandService.updateUser(any(UpdateUserRequest.class), eq(1L))).thenReturn(userResponse);
 
-        mockMvc.perform(put("/user/update/1")
+        mockMvc.perform(put("/api/user/update/1")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(updateUserRequest)))
                 .andExpect(status().isAccepted())
@@ -167,7 +167,7 @@ public class UserControllerTest {
 
         when(userQueryService.getAllUsers()).thenReturn(userResponseList);
 
-        mockMvc.perform(get("/user/getAllUsers"))
+        mockMvc.perform(get("/api/user/getAllUsers"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.list.length()").value(2))
                 .andExpect(jsonPath("$.list[0].email").value("user1@test.com"))
@@ -192,7 +192,7 @@ public class UserControllerTest {
         when(jwtTokenProvider.isTokenValid(username, extractedToken)).thenReturn(true);
         when(userQueryService.findByEmail(username)).thenReturn(user);
 
-        mockMvc.perform(get("/user/getUserRole")
+        mockMvc.perform(get("/api/user/getUserRole")
                         .header("Authorization", token))
                 .andExpect(status().isOk())
                 .andExpect(content().string("ADMIN"));
@@ -213,7 +213,7 @@ public class UserControllerTest {
         when(jwtTokenProvider.getSubject(extractedToken)).thenReturn(username);
         when(jwtTokenProvider.isTokenValid(username, extractedToken)).thenReturn(false);
 
-        mockMvc.perform(get("/user/getUserRole")
+        mockMvc.perform(get("/api/user/getUserRole")
                         .header("Authorization", token))
                 .andExpect(status().isUnauthorized())
                 .andExpect(content().string("Invalid or expired token"));
@@ -229,7 +229,7 @@ public class UserControllerTest {
 
         String token = "InvalidFormat token";
 
-        mockMvc.perform(get("/user/getUserRole")
+        mockMvc.perform(get("/api/user/getUserRole")
                         .header("Authorization", token))
                 .andExpect(status().isBadRequest());
     }
@@ -258,7 +258,7 @@ public class UserControllerTest {
         when(userQueryService.findByEmail("user@test.com")).thenReturn(user);
         when(jwtTokenProvider.generateJWTToken(any(User.class))).thenReturn(jwtToken);
 
-        mockMvc.perform(post("/user/login")
+        mockMvc.perform(post("/api/user/login")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(loginRequest)))
                 .andExpect(status().isOk())
@@ -298,7 +298,7 @@ public class UserControllerTest {
         when(userQueryService.findByEmail("newuser@test.com")).thenReturn(user);
         when(jwtTokenProvider.generateJWTToken(any(User.class))).thenReturn(jwtToken);
 
-        mockMvc.perform(post("/user/register")
+        mockMvc.perform(post("/api/user/register")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(createUserRequest)))
                 .andExpect(status().isCreated())

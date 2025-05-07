@@ -18,16 +18,5 @@ public class DoctorMockData {
                 .userRole(UserRole.DOCTOR)
                 .build();
     }
-
-    public static Doctor createDuplicateDoctor() {
-        return Doctor.builder()
-                .id(2)
-                .email("johndoe@example.com")
-                .password("securePass123")
-                .fullName("John Doe")
-                .phone("+1234567890")
-                .specialization("Cardiology")
-                .clinic(ClinicMockData.createClinic())
-                .build();
-    }
+    
 }

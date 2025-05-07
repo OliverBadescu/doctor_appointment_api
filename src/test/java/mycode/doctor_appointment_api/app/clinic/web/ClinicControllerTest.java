@@ -50,12 +50,12 @@ class ClinicControllerTest {
 
     @Test
     @WithMockUser(roles = "CLIENT")
-    @DisplayName("GET /clinic/{id} - should return 202 ACCEPTED")
+    @DisplayName("GET /api/clinic/{id} - should return 202 ACCEPTED")
     void getClinicById() throws Exception {
         ClinicResponse response = new ClinicResponse(1, "Test Clinic", "123 Main St");
         when(clinicQueryService.getClinicById(1)).thenReturn(response);
 
-        mockMvc.perform(get("/clinic/1"))
+        mockMvc.perform(get("/api/clinic/1"))
                 .andExpect(status().isAccepted())
                 .andExpect(jsonPath("$.id").value(1))
                 .andExpect(jsonPath("$.name").value("Test Clinic"))
@@ -64,13 +64,13 @@ class ClinicControllerTest {
 
     @Test
     @WithMockUser(roles = "ADMIN")
-    @DisplayName("POST /clinic/createClinic - should return 201 CREATED")
+    @DisplayName("POST /api/clinic/createClinic - should return 201 CREATED")
     void addClinic() throws Exception {
         CreateClinicRequest request = new CreateClinicRequest("New Clinic", "789 New Rd");
         ClinicResponse response = new ClinicResponse(2, "New Clinic", "789 New Rd");
         when(clinicCommandService.addClinic(any(CreateClinicRequest.class))).thenReturn(response);
 
-        mockMvc.perform(post("/clinic/createClinic")
+        mockMvc.perform(post("/api/clinic/createClinic")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(request)))
                 .andExpect(status().isCreated())
@@ -80,13 +80,13 @@ class ClinicControllerTest {
 
     @Test
     @WithMockUser(roles = "ADMIN")
-    @DisplayName("PUT /clinic/updateClinic/{id} - should return 202 ACCEPTED")
+    @DisplayName("PUT /api/clinic/updateClinic/{id} - should return 202 ACCEPTED")
     void updateClinic() throws Exception {
         UpdateClinicRequest request = new UpdateClinicRequest("Updated Clinic", "321 Elm St");
         ClinicResponse response = new ClinicResponse(1, "Updated Clinic", "321 Elm St");
         when(clinicCommandService.updateClinic(1, request)).thenReturn(response);
 
-        mockMvc.perform(put("/clinic/updateClinic/1")
+        mockMvc.perform(put("/api/clinic/updateClinic/1")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(request)))
                 .andExpect(status().isAccepted())
@@ -96,19 +96,19 @@ class ClinicControllerTest {
 
     @Test
     @WithMockUser(roles = "ADMIN")
-    @DisplayName("DELETE /clinic/deleteClinic/{id} - should return 202 ACCEPTED")
+    @DisplayName("DELETE /api/clinic/deleteClinic/{id} - should return 202 ACCEPTED")
     void deleteClinic() throws Exception {
         ClinicResponse response = new ClinicResponse(1, "Test Clinic", "123 Main St");
         when(clinicCommandService.deleteClinic(1)).thenReturn(response);
 
-        mockMvc.perform(delete("/clinic/deleteClinic/1"))
+        mockMvc.perform(delete("/api/clinic/deleteClinic/1"))
                 .andExpect(status().isAccepted())
                 .andExpect(jsonPath("$.name").value("Test Clinic"));
     }
 
     @Test
     @WithMockUser(roles = "CLIENT")
-    @DisplayName("GET /clinic/getAllClinics - should return 200 OK")
+    @DisplayName("GET /api/clinic/getAllClinics - should return 200 OK")
     void getAllClinics() throws Exception {
         List<ClinicResponse> clinics = List.of(
                 new ClinicResponse(1, "Test Clinic", "123 Main St"),
@@ -117,18 +117,18 @@ class ClinicControllerTest {
         ClinicResponseList responseList = new ClinicResponseList(clinics);
         when(clinicQueryService.getAllClinics()).thenReturn(responseList);
 
-        mockMvc.perform(get("/clinic/getAllClinics"))
+        mockMvc.perform(get("/api/clinic/getAllClinics"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.list.length()").value(2));
     }
 
     @Test
     @WithMockUser(roles = "ADMIN")
-    @DisplayName("GET /clinic/getTotalClinics - should return 200 OK")
+    @DisplayName("GET /api/clinic/getTotalClinics - should return 200 OK")
     void getTotalClinics() throws Exception {
         when(clinicQueryService.getTotalClinics()).thenReturn(5);
 
-        mockMvc.perform(get("/clinic/getTotalClinics"))
+        mockMvc.perform(get("/api/clinic/getTotalClinics"))
                 .andExpect(status().isOk())
                 .andExpect(content().string("5"));
     }

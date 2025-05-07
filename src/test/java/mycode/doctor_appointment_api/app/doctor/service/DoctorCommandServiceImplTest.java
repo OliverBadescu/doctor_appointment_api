@@ -7,7 +7,6 @@ import mycode.doctor_appointment_api.app.clinic.repository.ClinicRepository;
 import mycode.doctor_appointment_api.app.doctor.dtos.CreateDoctorRequest;
 import mycode.doctor_appointment_api.app.doctor.dtos.DoctorResponse;
 import mycode.doctor_appointment_api.app.doctor.dtos.UpdateDoctorRequest;
-import mycode.doctor_appointment_api.app.doctor.exceptions.DoctorAlreadyExists;
 import mycode.doctor_appointment_api.app.doctor.exceptions.NoDoctorFound;
 import mycode.doctor_appointment_api.app.doctor.mock.DoctorMockData;
 import mycode.doctor_appointment_api.app.doctor.model.Doctor;
@@ -20,7 +19,6 @@ import org.mockito.MockitoAnnotations;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import java.util.Collections;
-import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -131,7 +129,9 @@ class DoctorCommandServiceImplTest {
     void shouldDeleteDoctorSuccessfully() {
         Doctor existing = DoctorMockData.createDoctor();
         existing.setId(1);
-        when(doctorRepository.findById(1)).thenReturn(Optional.of(existing));
+
+
+        when(doctorRepository.findById(eq(1))).thenReturn(Optional.of(existing));
 
         DoctorResponse resp = doctorCommandService.deleteDoctor(1);
 
