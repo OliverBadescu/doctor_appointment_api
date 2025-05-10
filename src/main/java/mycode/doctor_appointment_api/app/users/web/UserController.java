@@ -20,7 +20,7 @@ import static mycode.doctor_appointment_api.app.system.constants.Constants.JWT_T
 
 @RestController
 @AllArgsConstructor
-@RequestMapping("/api/user")
+@RequestMapping("/api/v1/user")
 @CrossOrigin
 @Slf4j
 public class UserController {
@@ -31,38 +31,38 @@ public class UserController {
     private final AuthenticationManager authenticationManager;
 
 
-    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @GetMapping("/totalUsers")
     public ResponseEntity<Integer> getTotalUsers(){
         return new ResponseEntity<>(userQueryService.totalUsers(), HttpStatus.OK);
     }
 
-    @PreAuthorize("hasAuthority('ROLE_ADMIN') or hasAuthority('ROLE_CLIENT')")
+    @PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_CLIENT')")
     @GetMapping(path = "/getUserById/{userId}")
     public ResponseEntity<UserResponse> getUser(@PathVariable long userId){
         return new ResponseEntity<>(userQueryService.findUserById(userId), HttpStatus.OK);
     }
 
-    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @PostMapping("/add")
     public ResponseEntity<UserResponse> addUser(@RequestBody CreateUserRequest createUserRequest){
         return new ResponseEntity<>(userCommandService.createUser(createUserRequest), HttpStatus.CREATED);
     }
 
-    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @DeleteMapping(path = "/delete/{userId}")
     public ResponseEntity<UserResponse> deleteUser(@PathVariable long userId){
         return new ResponseEntity<>(userCommandService.deleteUser(userId), HttpStatus.ACCEPTED);
     }
 
-    @PreAuthorize("hasAuthority('ROLE_ADMIN') or hasAuthority('ROLE_CLIENT')")
+    @PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_CLIENT')")
     @PutMapping(path = "/update/{userId}")
     public ResponseEntity<UserResponse> updateUser(@PathVariable long userId, @RequestBody UpdateUserRequest updateUserRequest){
     return new ResponseEntity<>(userCommandService.updateUser(updateUserRequest, userId), HttpStatus.ACCEPTED);
     }
 
 
-    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @GetMapping("/getAllUsers")
     public ResponseEntity<UserResponseList> getAllUsers(){
         return new ResponseEntity<>(userQueryService.getAllUsers(),HttpStatus.OK);

@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.*;
 @AllArgsConstructor
 @CrossOrigin
 @Slf4j
-@RequestMapping("/api/appointment")
+@RequestMapping("/api/v1/appointment")
 public class AppointmentController {
 
     private AppointmentCommandService appointmentCommandService;
@@ -27,19 +27,19 @@ public class AppointmentController {
     }
 
     @PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_CLIENT')")
-    @GetMapping(path = "/{appointmentId}")
+    @GetMapping(path = "/getAppointment/{appointmentId}")
     ResponseEntity<AppointmentResponse> getAppointment(@PathVariable int appointmentId) {
         return new ResponseEntity<>(appointmentQueryService.getAppointment(appointmentId), HttpStatus.ACCEPTED);
     }
 
     @PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_CLIENT')")
-    @PutMapping(path = "/{appointmentId}")
+    @PutMapping(path = "/updateAppointment/{appointmentId}")
     ResponseEntity<AppointmentResponse> updateAppointment(@PathVariable int appointmentId, UpdateAppointmentRequest updateAppointmentRequest) {
         return new ResponseEntity<>(appointmentCommandService.updateAppointment(updateAppointmentRequest, appointmentId), HttpStatus.ACCEPTED);
     }
 
     @PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_CLIENT')")
-    @DeleteMapping(path = "/{appointmentId}")
+    @DeleteMapping(path = "/deleteAppointment/{appointmentId}")
     ResponseEntity<AppointmentResponse> deleteAppointment(@PathVariable int appointmentId) {
         return new ResponseEntity<>(appointmentCommandService.deleteAppointment(appointmentId), HttpStatus.ACCEPTED);
     }

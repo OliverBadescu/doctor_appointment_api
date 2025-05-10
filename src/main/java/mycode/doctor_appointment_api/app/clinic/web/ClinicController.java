@@ -17,14 +17,14 @@ import org.springframework.web.bind.annotation.*;
 @AllArgsConstructor
 @CrossOrigin
 @Slf4j
-@RequestMapping("/api/clinic")
+@RequestMapping("/api/v1/clinic")
 public class ClinicController {
 
     private ClinicCommandService clinicCommandService;
     private ClinicQueryService clinicQueryService;
 
     @PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_CLIENT')")
-    @GetMapping(path = "/{clinicId}")
+    @GetMapping(path = "/getClinic/{clinicId}")
     ResponseEntity<ClinicResponse> getClinic(@PathVariable int clinicId) {
 
         return new ResponseEntity<>(clinicQueryService.getClinicById(clinicId), HttpStatus.ACCEPTED);

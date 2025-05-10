@@ -28,7 +28,7 @@ import static mycode.doctor_appointment_api.app.system.constants.Constants.JWT_T
 @AllArgsConstructor
 @CrossOrigin
 @Slf4j
-@RequestMapping("/api/doctor")
+@RequestMapping("/api/v1/doctor")
 public class DoctorController {
 
     private DoctorQueryService doctorQueryService;
@@ -43,7 +43,7 @@ public class DoctorController {
     }
 
     @PreAuthorize("hasRole('ROLE_ADMIN')")
-    @GetMapping(path = "/{doctorId}")
+    @GetMapping(path = "/getDoctor/{doctorId}")
     ResponseEntity<DoctorResponse> getDoctor(@PathVariable int doctorId) {
         return new ResponseEntity<>(doctorQueryService.getDoctorById(doctorId), HttpStatus.ACCEPTED);
     }
