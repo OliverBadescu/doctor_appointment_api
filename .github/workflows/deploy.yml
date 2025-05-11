@@ -28,8 +28,8 @@ jobs:
 
       - name: Docker Build and push
         run: |
-          chmod +x ci/build-publish.sh
+          chmod +x ci/build.sh prod
           USERNAME=oliver005 \
           REPO=doctor_appointment_api \
           TAG=${{ env.BUILD_NUMBER }} \
-          ci/build-publish.sh ./
+          ci/build.sh prod ./
