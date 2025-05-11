@@ -29,4 +29,4 @@ jobs:
       - name: Docker Build and push
         run: |
           chmod +x ci/build.sh
-          ci/build-publish.sh prod
+          ci/build.sh prod
