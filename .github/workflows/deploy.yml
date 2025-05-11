@@ -32,4 +32,4 @@ jobs:
           USERNAME=oliver005 \
           REPO=doctor_appointment_api \
           TAG=${{ env.BUILD_NUMBER }} \
-          ci/build.sh prod ./
+          ci/build.sh ./
