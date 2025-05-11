@@ -38,11 +38,11 @@ fi
 
 
 docker buildx build \
-  --platform linux/amd64,linux/arm64 \
-  --build-arg NODE_ENV="$ENVIRONMENT" \
-  --cache-from type=registry,ref="$CACHE_IMAGE" \
-  --cache-to   type=registry,ref="$CACHE_IMAGE",mode=max \
-  -t "$FULL_IMAGE" \
-  . --push
+    --platform=linux/amd64 \
+    -t "${USERNAME}/${REPO}:${TAG}" \
+    -t "${USERNAME}/${REPO}:latest" \
+    "${@:2}" \
+    --push \
+    "$1"
 
 printf '\n✅  Done! Multi‑arch image pushed as: %s\n' "$FULL_IMAGE"
