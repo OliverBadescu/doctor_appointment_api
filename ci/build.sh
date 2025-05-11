@@ -5,7 +5,7 @@ set -euo pipefail
 : "${USERNAME:?USERNAME not set or empty}"
 : "${REPO:?REPO not set or empty}"
 BUILD_NUMBER="$(date '+%d.%m.%Y.%H.%M.%S')"
-: "${ENVIRONMENT="${1:-prod}" }"    # test | staging | prod (default: test)
+: "${ENVIRONMENT="${1:-prod}" }"
 : "${TAG:{BUILD_NUMBER}-${ENVIRONMENT}}"
 CACHE_TAG="buildcache"
 BUILDER_NAME="multiarch-builder"
