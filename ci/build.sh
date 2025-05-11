@@ -3,16 +3,16 @@ set -euo pipefail
 
 : "${USERNAME:?USERNAME not set or empty}"
 : "${REPO:?REPO not set or empty}"
+ENVIRONMENT="${1:-${ENVIRONMENT:-prod}}"  # test | staging | prod
 BUILD_NUMBER="$(date '+%d.%m.%Y.%H.%M.%S')"
-: "${ENVIRONMENT:="${1:-prod}"}" # test | staging | prod
-: "${TAG:="${BUILD_NUMBER}-${ENVIRONMENT}"}" 
-CACHE_TAG="buildcache"
-BUILDER_NAME="multiarch-builder"
+: "${TAG:="${BUILD_NUMBER}-${ENVIRONMENT}"}"
+
+
 
 FULL_IMAGE="$USERNAME/$REPO:$TAG"
-CACHE_IMAGE="$USERNAME/$REPO:$CACHE_TAG"
+CACHE_IMAGE="$USERNAME/$REPO:buildcache"
+BUILDER_NAME="multiarch-builder"
 
-printf '\n🚀  Building multi‑arch Docker image: %s (linux/amd64 + linux/arm64)\n' "$FULL_IMAGE"
 
 if ! docker buildx inspect "$BUILDER_NAME" >/dev/null 2>&1; then
   echo "🔧  Creating buildx builder '$BUILDER_NAME' with docker-container driver…"
@@ -34,11 +34,10 @@ if ! docker info | grep -q "Username: $USERNAME"; then
 fi
 
 docker buildx build \
-    --platform=linux/amd64,linux/arm64 \
-    -t "${USERNAME}/${REPO}:${TAG}" \
-    -t "${USERNAME}/${REPO}:latest" \
-    "${@:2}" \
-    --push \
-    .
+  --platform=linux/amd64 \
+  -t "${FULL_IMAGE}" \
+  -t "${USERNAME}/${REPO}:latest" \
+  --push \
+  .
 
 printf '\n✅  Done! Multi‑arch image pushed as: %s\n' "$FULL_IMAGE"
