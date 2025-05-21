@@ -33,8 +33,8 @@ jobs:
 
       - name: Docker Build and push
         run: |
-          chmod +x ci/build.sh
-          ci/build.sh prod
+          chmod +x ci/build-publish.sh
+          ./ci/build-publish.sh "$ENVIRONMENT" 
 
   deploy-ec2:
     needs: deploy
