@@ -47,13 +47,13 @@ jobs:
             set -euo pipefail
             
             ENV_FILE=/home/ubuntu/.env
-            NEW_TAG="${{ needs.build-client.outputs.tag }}"
+            NEW_TAG="${{ needs.deploy.outputs.tag }}"
             
-            echo "🔄  Set CLIENT_TAG=$NEW_TAG"
-            if grep -q '^CLIENT_TAG=' "$ENV_FILE"; then
-              sudo sed -i "s/^CLIENT_TAG=.*/CLIENT_TAG=$NEW_TAG/" "$ENV_FILE"
+            echo "🔄  Set API_TAG=$NEW_TAG"
+            if grep -q '^API_TAG=' "$ENV_FILE"; then
+              sudo sed -i "s/^API_TAG=.*/API_TAG=$NEW_TAG/" "$ENV_FILE"
             else
-              echo "CLIENT_TAG=$NEW_TAG" | sudo tee -a "$ENV_FILE"
+              echo "API_TAG=$NEW_TAG" | sudo tee -a "$ENV_FILE"
             fi
             
             echo "🚢  Pull & restart client"
