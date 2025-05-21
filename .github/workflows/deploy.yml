@@ -12,10 +12,15 @@ permissions:
 jobs:
   deploy:
     runs-on: ubuntu-latest
+    outputs:
+      tag: ${{ steps.set-tag.outputs.tag }}  # Properly define the output to be used in the second job
     steps:
-      - name: Set build number
-        id: build-number
-        run: echo "BUILD_NUMBER=$(date '+%d.%m.%Y.%H.%M.%S')" >> $GITHUB_ENV
+      - name: Set build number and tag
+        id: set-tag
+        run: |
+          BUILD_NUMBER=$(date '+%d.%m.%Y.%H.%M.%S')
+          echo "BUILD_NUMBER=$BUILD_NUMBER" >> $GITHUB_ENV
+          echo "tag=${BUILD_NUMBER}-prod" >> $GITHUB_OUTPUT  # Set the output properly
 
       - name: Checkout code
         uses: actions/checkout@v2
@@ -30,6 +35,7 @@ jobs:
         run: |
           chmod +x ci/build.sh
           ci/build.sh prod
+
   deploy-ec2:
     needs: deploy
     if: github.ref == 'refs/heads/master'
@@ -43,20 +49,20 @@ jobs:
           host: ${{ secrets.EC2_HOST }}
           username: ${{ secrets.EC2_USER }}
           key: ${{ secrets.EC2_SSH_KEY }}
+          timeout: 60s  # Increased timeout for SSH connection
           script: |
             set -euo pipefail
             
             ENV_FILE=/home/ubuntu/.env
             NEW_TAG="${{ needs.deploy.outputs.tag }}"
             
-            echo "🔄  Set API_TAG=$NEW_TAG"
+            echo "🔄 Set API_TAG=$NEW_TAG"
             if grep -q '^API_TAG=' "$ENV_FILE"; then
               sudo sed -i "s/^API_TAG=.*/API_TAG=$NEW_TAG/" "$ENV_FILE"
             else
               echo "API_TAG=$NEW_TAG" | sudo tee -a "$ENV_FILE"
             fi
             
-            echo "🚢  Pull & restart client"
-            # dacă fișierul tău se numește docker-compose.yml, schimbă extensia aici
+            echo "🚢 Pull & restart client"
             sudo docker compose -f /home/ubuntu/docker-compose.yaml pull client
             sudo docker compose -f /home/ubuntu/docker-compose.yaml up -d --no-deps client
