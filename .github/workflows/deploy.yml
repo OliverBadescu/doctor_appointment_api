@@ -12,9 +12,11 @@ permissions:
 jobs:
   deploy:
     runs-on: ubuntu-latest
-    outputs:
-      tag: ${{ steps.build-publish.outputs.tag }}  
     steps:
+      - name: Set build number
+        id: build-number
+        run: echo "BUILD_NUMBER=$(date '+%d.%m.%Y.%H.%M.%S')" >> $GITHUB_ENV
+
       - name: Checkout code
         uses: actions/checkout@v2
 
@@ -24,45 +26,37 @@ jobs:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
-      - name: Build and push
-        id: build-publish
+      - name: Docker Build and push
         run: |
           chmod +x ci/build.sh
           ci/build.sh prod
-
   deploy-ec2:
     needs: deploy
     if: github.ref == 'refs/heads/master'
     runs-on: ubuntu-latest
     steps:
-
-      - name: Update tag & restart services
+      - name: Update tag & restart client
         uses: appleboy/ssh-action@v0.1.10
         env:
-          TAG: ${{ needs.deploy.outputs.tag }}
+          COMPOSE_PROJECT_NAME: doctorapp
         with:
           host: ${{ secrets.EC2_HOST }}
           username: ${{ secrets.EC2_USER }}
           key: ${{ secrets.EC2_SSH_KEY }}
-          timeout: 60s
-          envs: TAG
           script: |
             set -euo pipefail
             
             ENV_FILE=/home/ubuntu/.env
+            NEW_TAG="${{ needs.deploy.outputs.tag }}"
             
-            # Use the exact tag received from the build job
-            echo "🔄 Setting API_TAG=$TAG"
+            echo "🔄  Set API_TAG=$NEW_TAG"
             if grep -q '^API_TAG=' "$ENV_FILE"; then
-              sudo sed -i "s/^API_TAG=.*$/API_TAG=$TAG/" "$ENV_FILE"
+              sudo sed -i "s/^API_TAG=.*/API_TAG=$NEW_TAG/" "$ENV_FILE"
             else
-              echo "API_TAG=$TAG" | sudo tee -a "$ENV_FILE"
+              echo "API_TAG=$NEW_TAG" | sudo tee -a "$ENV_FILE"
             fi
             
-            echo "🚢 Pulling & restarting API container"
-            sudo docker compose -f /home/ubuntu/docker-compose.yaml pull api
-            sudo docker compose -f /home/ubuntu/docker-compose.yaml up -d --no-deps api
-            
-            # Verify the image was pulled correctly
-            echo "🔍 Verifying deployment:"
-            sudo docker image ls | grep "$TAG" || echo "⚠️ Warning: Image with tag $TAG not found locally"
+            echo "🚢  Pull & restart client"
+            # dacă fișierul tău se numește docker-compose.yml, schimbă extensia aici
+            sudo docker compose -f /home/ubuntu/docker-compose.yaml pull client
+            sudo docker compose -f /home/ubuntu/docker-compose.yaml up -d --no-deps client
