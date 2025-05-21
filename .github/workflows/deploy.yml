@@ -63,6 +63,5 @@ jobs:
             fi
 
             echo "🚢  Pull & restart backend"
-            # Assuming your docker-compose service for the backend is named 'api'
-            sudo docker compose -f /home/ubuntu/docker-compose.yaml pull api
-            sudo docker compose -f /home/ubuntu/docker-compose.yaml up -d --no-deps api
+            sudo docker compose -f /home/ubuntu/docker-compose.yaml pull service
+            sudo docker compose -f /home/ubuntu/docker-compose.yaml up -d --no-deps service
