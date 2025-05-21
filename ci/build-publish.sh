@@ -4,7 +4,7 @@ set -euo pipefail
 # === Config ===
 USERNAME="oliver005"
 REPO="doctor_appointment_api"
-ENVIRONMENT="${1:-dev}"
+ENVIRONMENT="${1:-prod}"
 BUILD_NUMBER="$(date '+%d.%m.%Y.%H.%M.%S')"
 TAG="${BUILD_NUMBER}-${ENVIRONMENT}"
 CACHE_TAG="buildcache"
