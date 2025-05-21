@@ -28,8 +28,8 @@ jobs:
 
       - name: Docker Build and push
         run: |
-          chmod +x ci/build.sh
-          ci/build.sh prod
+          chmod +x ci/build-publish.sh
+          ./ci/build-publish.sh "$ENVIRONMENT"  
   deploy-ec2:
     needs: deploy
     if: github.ref == 'refs/heads/master'
@@ -56,7 +56,7 @@ jobs:
               echo "API_TAG=$NEW_TAG" | sudo tee -a "$ENV_FILE"
             fi
             
-            echo "🚢  Pull & restart client"
+            echo "🚢  Pull & restart api"
             # dacă fișierul tău se numește docker-compose.yml, schimbă extensia aici
             sudo docker compose -f /home/ubuntu/docker-compose.yaml pull client
             sudo docker compose -f /home/ubuntu/docker-compose.yaml up -d --no-deps client
