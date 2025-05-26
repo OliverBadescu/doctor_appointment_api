@@ -9,7 +9,6 @@ import mycode.doctor_appointment_api.app.appointments.dtos.UpdateAppointmentRequ
 import mycode.doctor_appointment_api.app.appointments.enums.AppointmentStatus;
 import mycode.doctor_appointment_api.app.appointments.exceptions.AppointmentAlreadyExistsAtThisDateAndTime;
 import mycode.doctor_appointment_api.app.appointments.exceptions.NoAppointmentFound;
-import mycode.doctor_appointment_api.app.appointments.exceptions.NoStatusFound;
 import mycode.doctor_appointment_api.app.appointments.mapper.AppointmentMapper;
 import mycode.doctor_appointment_api.app.appointments.model.Appointment;
 import mycode.doctor_appointment_api.app.appointments.repository.AppointmentRepository;
@@ -138,12 +137,10 @@ public class AppointmentCommandServiceImpl implements AppointmentCommandService 
                 .orElseThrow(() -> new NoAppointmentFound("No appointment with this id found"));
 
         String statusReq = status.status();
-        // Remove any quotes from the status string
         String cleanStatus = statusReq.replace("\"", "").trim();
 
         System.out.println("Updating appointment ID: " + appointmentId + " with cleaned status: " + cleanStatus);
 
-        // Case-insensitive comparison with cleaned status
         if (cleanStatus.equalsIgnoreCase("COMPLETED")) {
             appointment.setStatus(AppointmentStatus.COMPLETED);
         } else if (cleanStatus.equalsIgnoreCase("CANCELLED")) {
@@ -154,10 +151,8 @@ public class AppointmentCommandServiceImpl implements AppointmentCommandService 
             System.out.println("Warning: Unrecognized status '" + cleanStatus + "' - no update performed");
         }
 
-        // Save the appointment
         Appointment savedAppointment = appointmentRepository.save(appointment);
 
-        // Log the result to verify it worked
         System.out.println("Updated appointment status: " + savedAppointment.getStatus());
 
         return AppointmentMapper.appointmentToResponseDto(savedAppointment);
