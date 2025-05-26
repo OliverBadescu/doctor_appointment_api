@@ -27,7 +27,6 @@ jobs:
           restore-keys: ${{ runner.os }}-maven-
       - name: Run tests
         run: ./mvnw -B test
-
   # ─────────────────────────── BUILD ────────────────────────────────
   build-backend:
     needs: unit-tests
