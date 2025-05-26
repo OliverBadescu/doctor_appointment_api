@@ -42,6 +42,7 @@ public class UserController {
     public ResponseEntity<UserResponse> getUser(@PathVariable long userId){
         return new ResponseEntity<>(userQueryService.findUserById(userId), HttpStatus.OK);
     }
+    
 
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @PostMapping("/add")
