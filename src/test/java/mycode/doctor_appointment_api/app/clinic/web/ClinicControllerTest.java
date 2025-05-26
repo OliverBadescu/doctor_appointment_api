@@ -55,7 +55,7 @@ class ClinicControllerTest {
         ClinicResponse response = new ClinicResponse(1, "Test Clinic", "123 Main St");
         when(clinicQueryService.getClinicById(1)).thenReturn(response);
 
-        mockMvc.perform(get("/api/clinic/1"))
+        mockMvc.perform(get("/api/v1/clinic/getClinic/1"))
                 .andExpect(status().isAccepted())
                 .andExpect(jsonPath("$.id").value(1))
                 .andExpect(jsonPath("$.name").value("Test Clinic"))
@@ -70,7 +70,7 @@ class ClinicControllerTest {
         ClinicResponse response = new ClinicResponse(2, "New Clinic", "789 New Rd");
         when(clinicCommandService.addClinic(any(CreateClinicRequest.class))).thenReturn(response);
 
-        mockMvc.perform(post("/api/clinic/createClinic")
+        mockMvc.perform(post("/api/v1/clinic/createClinic")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(request)))
                 .andExpect(status().isCreated())
@@ -86,7 +86,7 @@ class ClinicControllerTest {
         ClinicResponse response = new ClinicResponse(1, "Updated Clinic", "321 Elm St");
         when(clinicCommandService.updateClinic(1, request)).thenReturn(response);
 
-        mockMvc.perform(put("/api/clinic/updateClinic/1")
+        mockMvc.perform(put("/api/v1/clinic/updateClinic/1")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(request)))
                 .andExpect(status().isAccepted())
@@ -101,7 +101,7 @@ class ClinicControllerTest {
         ClinicResponse response = new ClinicResponse(1, "Test Clinic", "123 Main St");
         when(clinicCommandService.deleteClinic(1)).thenReturn(response);
 
-        mockMvc.perform(delete("/api/clinic/deleteClinic/1"))
+        mockMvc.perform(delete("/api/v1/clinic/deleteClinic/1"))
                 .andExpect(status().isAccepted())
                 .andExpect(jsonPath("$.name").value("Test Clinic"));
     }
@@ -117,7 +117,7 @@ class ClinicControllerTest {
         ClinicResponseList responseList = new ClinicResponseList(clinics);
         when(clinicQueryService.getAllClinics()).thenReturn(responseList);
 
-        mockMvc.perform(get("/api/clinic/getAllClinics"))
+        mockMvc.perform(get("/api/v1/clinic/getAllClinics"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.list.length()").value(2));
     }
@@ -128,7 +128,7 @@ class ClinicControllerTest {
     void getTotalClinics() throws Exception {
         when(clinicQueryService.getTotalClinics()).thenReturn(5);
 
-        mockMvc.perform(get("/api/clinic/getTotalClinics"))
+        mockMvc.perform(get("/api/v1/clinic/getTotalClinics"))
                 .andExpect(status().isOk())
                 .andExpect(content().string("5"));
     }

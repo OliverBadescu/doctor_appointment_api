@@ -84,7 +84,7 @@ class AppointmentControllerTest {
 
         when(appointmentCommandService.addAppointment(any(CreateAppointmentRequest.class))).thenReturn(appointmentResponse);
 
-        mockMvc.perform(post("/api/appointment/addAppointment")
+        mockMvc.perform(post("/api/v1/appointment/addAppointment")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(request)))
                 .andExpect(status().isCreated())
@@ -100,7 +100,7 @@ class AppointmentControllerTest {
     void getAppointmentById() throws Exception {
         when(appointmentQueryService.getAppointment(1)).thenReturn(appointmentResponse);
 
-        mockMvc.perform(get("/api/appointment/1"))
+        mockMvc.perform(get("/api/v1/appointment/getAppointment/1"))
                 .andExpect(status().isAccepted())
                 .andExpect(jsonPath("$.id").value(1))
                 .andExpect(jsonPath("$.doctor.fullName").value("John Doe"))
@@ -125,7 +125,7 @@ class AppointmentControllerTest {
 
         when(appointmentCommandService.updateAppointment(any(UpdateAppointmentRequest.class), any(Integer.class))).thenReturn(updatedResponse);
 
-        mockMvc.perform(put("/api/appointment/1")
+        mockMvc.perform(put("/api/v1/appointment/updateAppointment/1")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(request)))
                 .andExpect(status().isAccepted())
@@ -138,7 +138,7 @@ class AppointmentControllerTest {
     void deleteAppointment() throws Exception {
         when(appointmentCommandService.deleteAppointment(1)).thenReturn(appointmentResponse);
 
-        mockMvc.perform(delete("/api/appointment/1"))
+        mockMvc.perform(delete("/api/v1/appointment/deleteAppointment/1"))
                 .andExpect(status().isAccepted())
                 .andExpect(jsonPath("$.id").value(1));
     }
@@ -152,7 +152,7 @@ class AppointmentControllerTest {
 
         when(appointmentQueryService.getAllPatientAppointments(1)).thenReturn(patientAppointmentList);
 
-        mockMvc.perform(get("/api/appointment/patient/1"))
+        mockMvc.perform(get("/api/v1/appointment/patient/1"))
                 .andExpect(status().isAccepted())
                 .andExpect(jsonPath("$.appointments.length()").value(1));
     }
@@ -166,7 +166,7 @@ class AppointmentControllerTest {
 
         when(appointmentQueryService.getAllDoctorAppointments(1)).thenReturn(doctorAppointmentList);
 
-        mockMvc.perform(get("/api/appointment/doctor/1"))
+        mockMvc.perform(get("/api/v1/appointment/doctor/1"))
                 .andExpect(status().isAccepted())
                 .andExpect(jsonPath("$.list.length()").value(1));
     }
@@ -177,7 +177,7 @@ class AppointmentControllerTest {
     void deletePatientAppointment() throws Exception {
         when(appointmentCommandService.deletePatientAppointment(1, 1)).thenReturn(appointmentResponse);
 
-        mockMvc.perform(delete("/api/appointment/patient/1/1"))
+        mockMvc.perform(delete("/api/v1/appointment/patient/1/1"))
                 .andExpect(status().isAccepted())
                 .andExpect(jsonPath("$.reason").value("Consultation"));
     }
@@ -188,7 +188,7 @@ class AppointmentControllerTest {
     void getTotalAppointments() throws Exception {
         when(appointmentQueryService.totalAppointments()).thenReturn(10);
 
-        mockMvc.perform(get("/api/appointment/getTotalAppointments"))
+        mockMvc.perform(get("/api/v1/appointment/getTotalAppointments"))
                 .andExpect(status().isOk())
                 .andExpect(content().string("10"));
     }
