@@ -1,11 +1,13 @@
 package mycode.doctor_appointment_api.app.users.model;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 import lombok.*;
 import mycode.doctor_appointment_api.app.appointments.model.Appointment;
+import mycode.doctor_appointment_api.app.reviews.model.Review;
 import mycode.doctor_appointment_api.app.system.security.UserRole;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -78,6 +80,13 @@ public class User implements UserDetails {
     @ToString.Exclude
     @JsonManagedReference
     private Set<Appointment> appointments = new HashSet<>();
+
+    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonIgnore
+    @Builder.Default
+    @ToString.Exclude
+    @JsonManagedReference
+    private Set<Review> reviews = new HashSet<>();
 
 
     public User(Long id, String fullName, String email, String password, UserRole userRole) {

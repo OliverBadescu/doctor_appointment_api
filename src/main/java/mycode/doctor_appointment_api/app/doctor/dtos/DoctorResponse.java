@@ -2,6 +2,7 @@ package mycode.doctor_appointment_api.app.doctor.dtos;
 
 import jakarta.validation.constraints.NotNull;
 import mycode.doctor_appointment_api.app.clinic.dtos.ClinicResponse;
+import mycode.doctor_appointment_api.app.reviews.dtos.ReviewResponse;
 import mycode.doctor_appointment_api.app.system.security.UserRole;
 
 import java.io.Serializable;
