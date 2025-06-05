@@ -8,6 +8,7 @@ import mycode.doctor_appointment_api.app.clinic.exceptions.ClinicAlreadyExists;
 import mycode.doctor_appointment_api.app.clinic.exceptions.NoClinicFound;
 import mycode.doctor_appointment_api.app.doctor.exceptions.DoctorAlreadyExists;
 import mycode.doctor_appointment_api.app.doctor.exceptions.NoDoctorFound;
+import mycode.doctor_appointment_api.app.reviews.exceptions.NoReviewsFound;
 import mycode.doctor_appointment_api.app.users.exceptions.NoUserFound;
 import mycode.doctor_appointment_api.app.users.exceptions.UserAlreadyExists;
 import org.springframework.http.HttpStatus;
@@ -24,12 +25,16 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(BadCredentialsException.class)
     public ResponseEntity<?> handleBadCredentials(BadCredentialsException e) {
-        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        return ResponseEntity
+                .status(HttpStatus.UNAUTHORIZED)
+                .body(e.getMessage());
     }
 
     @ExceptionHandler(AuthenticationException.class)
     public ResponseEntity<?> handleAuthentication(AuthenticationException e) {
-        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        return ResponseEntity
+                .status(HttpStatus.UNAUTHORIZED)
+                .body(e.getMessage());
     }
 
     @ExceptionHandler({NoAppointmentFound.class})
@@ -91,7 +96,14 @@ public class GlobalExceptionHandler {
     @ExceptionHandler({NoStatusFound.class})
     public ResponseEntity<Object> handleNoStatusFound(NoStatusFound exception){
         return ResponseEntity
-                .status(HttpStatus.CONFLICT)
+                .status(HttpStatus.NOT_FOUND)
+                .body(exception.getMessage());
+    }
+
+    @ExceptionHandler({NoReviewsFound.class})
+    public ResponseEntity<Object> handleNoReviewFound(NoReviewsFound exception){
+        return ResponseEntity
+                .status(HttpStatus.NOT_FOUND)
                 .body(exception.getMessage());
     }
 

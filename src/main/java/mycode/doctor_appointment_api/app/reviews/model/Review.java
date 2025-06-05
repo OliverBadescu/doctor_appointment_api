@@ -21,14 +21,14 @@ public class Review {
 
     @Id
     @SequenceGenerator(
-            name = "clinic_sequence",
-            sequenceName = "clinic_sequence",
+            name = "review_sequence",
+            sequenceName = "review_sequence",
             allocationSize = 1
     )
 
     @GeneratedValue(
             strategy = SEQUENCE,
-            generator = "clinic_sequence"
+            generator = "review_sequence"
     )
 
     @Column(
