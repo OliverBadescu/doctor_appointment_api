@@ -119,9 +119,6 @@ public class Doctor implements UserDetails {
 
     }
 
-    public void setPassword(String password){
-        this.password= new BCryptPasswordEncoder().encode(password);
-    }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

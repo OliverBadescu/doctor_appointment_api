@@ -33,6 +33,7 @@ public class DoctorCommandServiceImpl implements DoctorCommandService {
                 .orElseThrow(() -> new NoClinicFound("No clinic with this id found"));
 
         Optional<Doctor> doctorFound = doctorRepository.findByEmail(rq.email());
+        System.out.println("Encoded password: " + rq.password());
 
         if(doctorFound.isPresent()){
             throw new DoctorAlreadyExists("Doctor with this email already exists");
@@ -51,10 +52,6 @@ public class DoctorCommandServiceImpl implements DoctorCommandService {
 
             return DoctorMapper.doctorToResponseDto(doctor);
         }
-
-
-
-
     }
 
     @Override
