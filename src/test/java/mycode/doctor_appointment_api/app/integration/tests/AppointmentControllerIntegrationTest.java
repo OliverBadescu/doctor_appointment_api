@@ -72,9 +72,18 @@ class AppointmentControllerIntegrationTest {
         startTime = LocalDateTime.now();
         endTime = LocalDateTime.now();
 
-        clinicRepository.save(ClinicMockData.createClinic());
+        Clinic savedClinic = clinicRepository.save(ClinicMockData.createClinic());
 
-        testDoctor = DoctorMockData.createDoctor();
+
+        testDoctor = Doctor.builder()
+                .email("johndoe@example.com")
+                .password("securePass123")
+                .fullName("John Doe")
+                .phone("+1234567890")
+                .specialization("Cardiology")
+                .clinic(savedClinic)
+                .userRole(UserRole.DOCTOR)
+                .build();
         testDoctor = doctorRepository.save(testDoctor);
 
         testUser = UserMockData.createUser("patient@test.com", "Jane Doe");
