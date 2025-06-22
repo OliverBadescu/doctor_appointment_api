@@ -8,7 +8,6 @@ import mycode.doctor_appointment_api.app.reviews.dtos.ReviewResponseList;
 import mycode.doctor_appointment_api.app.reviews.dtos.UpdateReviewRequest;
 import mycode.doctor_appointment_api.app.reviews.service.ReviewCommandService;
 import mycode.doctor_appointment_api.app.reviews.service.ReviewQueryService;
-import org.apache.coyote.Response;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -46,6 +45,12 @@ public class ReviewController {
     @PutMapping("/updateReview/{reviewId}")
     public ResponseEntity<ReviewResponse> updateReview(@RequestBody UpdateReviewRequest updateReviewRequest, @PathVariable int reviewId){
         return new ResponseEntity<>(reviewCommandService.updateReview(reviewId, updateReviewRequest), HttpStatus.OK);
+    }
+
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_CLIENT')")
+    @GetMapping("/getByDoctorId/{doctorId}")
+    public ResponseEntity<ReviewResponseList> getByDoctorId(@PathVariable int doctorId){
+        return new ResponseEntity<>(reviewQueryService.getDoctorsReviews(doctorId), HttpStatus.OK);
     }
 
 }
