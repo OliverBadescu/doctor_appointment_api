@@ -19,6 +19,12 @@ import java.util.Set;
 
 import static jakarta.persistence.GenerationType.SEQUENCE;
 
+
+
+/**
+ * Entity representing a user in the system.
+ * Implements UserDetails for Spring Security integration.
+ */
 @AllArgsConstructor
 @ToString
 @NoArgsConstructor

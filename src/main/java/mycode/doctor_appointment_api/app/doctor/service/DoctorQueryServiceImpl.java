@@ -22,7 +22,11 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
-
+/**
+ * Implementation of the {@link DoctorQueryService} interface.
+ * Provides methods to retrieve doctor information,
+ * available appointment times, and appointments.
+ */
 @Service
 @AllArgsConstructor
 public class DoctorQueryServiceImpl implements DoctorQueryService {

@@ -7,6 +7,10 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * Repository interface for managing Review entities.
+ */
+
 public interface ReviewRepository extends JpaRepository<Review, Integer> {
 
     Optional<List<Review>> findAllByDoctor_Id(int doctorId);

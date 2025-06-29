@@ -24,6 +24,10 @@ import java.time.LocalDate;
 
 import static mycode.doctor_appointment_api.app.system.constants.Constants.JWT_TOKEN_HEADER;
 
+
+/**
+ * REST controller handling all Doctor related HTTP requests.
+ */
 @RestController
 @AllArgsConstructor
 @CrossOrigin

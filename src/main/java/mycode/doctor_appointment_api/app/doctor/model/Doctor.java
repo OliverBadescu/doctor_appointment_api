@@ -21,6 +21,12 @@ import java.util.Set;
 
 import static jakarta.persistence.GenerationType.SEQUENCE;
 
+
+/**
+ * Entity representing a Doctor in the system.
+ * Implements Spring Security's UserDetails interface for authentication and authorization.
+ * Stores doctor details, authentication credentials, and relationships to Clinic, Appointments, and Reviews.
+ */
 @AllArgsConstructor
 @ToString
 @NoArgsConstructor

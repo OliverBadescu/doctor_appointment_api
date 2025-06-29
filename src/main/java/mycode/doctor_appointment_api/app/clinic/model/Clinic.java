@@ -14,6 +14,12 @@ import java.util.Set;
 
 import static jakarta.persistence.GenerationType.SEQUENCE;
 
+
+/**
+ * Entity representing a medical clinic.
+ * <p>
+ * Each clinic has a name, address, and a list of associated doctors.
+ */
 @AllArgsConstructor
 @ToString
 @NoArgsConstructor

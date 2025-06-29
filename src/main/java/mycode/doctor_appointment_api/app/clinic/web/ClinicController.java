@@ -13,6 +13,16 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+
+/**
+ * REST controller for managing Clinic entities.
+ * Provides endpoints for creating, retrieving, updating, and deleting clinics,
+ * as well as retrieving all clinics and getting the total count.
+ * <p>
+ * Access control:
+ * - Some endpoints are restricted to ADMIN role only.
+ * - Others are accessible by both ADMIN and CLIENT roles.
+ */
 @RestController
 @AllArgsConstructor
 @CrossOrigin

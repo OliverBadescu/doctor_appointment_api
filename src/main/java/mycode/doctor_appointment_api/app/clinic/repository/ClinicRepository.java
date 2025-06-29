@@ -6,6 +6,10 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;
 
+/**
+ * Repository interface for managing {@link Clinic} entities.
+ * Supports fetching clinics by ID or name along with their associated doctors.
+ */
 public interface ClinicRepository extends JpaRepository<Clinic, Integer> {
 
     @EntityGraph(attributePaths = {"doctors"}, type = EntityGraph.EntityGraphType.FETCH)

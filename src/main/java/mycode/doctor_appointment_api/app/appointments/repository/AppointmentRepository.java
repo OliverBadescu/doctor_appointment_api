@@ -10,6 +10,11 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
+
+/**
+ * Repository interface for managing {@link Appointment} entities.
+ * Provides methods to find appointments by ID, doctor, user, and date.
+ */
 public interface AppointmentRepository extends JpaRepository<Appointment, Integer> {
 
     Optional<Appointment> findById(int id);

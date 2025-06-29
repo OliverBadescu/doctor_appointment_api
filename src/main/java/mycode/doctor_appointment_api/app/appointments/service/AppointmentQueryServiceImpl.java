@@ -20,6 +20,13 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+
+
+/**
+ * Implementation of {@link AppointmentQueryService}.
+ * <p>
+ * Provides methods to retrieve appointment data for patients, doctors, and overall statistics.
+ */
 @AllArgsConstructor
 @Service
 public class AppointmentQueryServiceImpl implements AppointmentQueryService {
@@ -27,6 +34,7 @@ public class AppointmentQueryServiceImpl implements AppointmentQueryService {
     private final UserRepository userRepository;
     private final DoctorRepository doctorRepository;
     private AppointmentRepository appointmentRepository;
+
 
     @Override
     public AppointmentResponse getAppointment(int id) {

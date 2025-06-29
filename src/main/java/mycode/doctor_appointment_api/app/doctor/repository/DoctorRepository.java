@@ -6,6 +6,11 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;
 
+/**
+ * Repository interface for accessing Doctor entities from the database.
+ * Extends JpaRepository to provide standard CRUD operations.
+ * Use EntityGraph to eagerly fetch associated appointments when querying doctors.
+ */
 public interface DoctorRepository extends JpaRepository<Doctor, Integer> {
 
     @EntityGraph(attributePaths = {"appointments"}, type = EntityGraph.EntityGraphType.FETCH)

@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import mycode.doctor_appointment_api.app.clinic.exceptions.NoClinicFound;
 import mycode.doctor_appointment_api.app.clinic.model.Clinic;
 import mycode.doctor_appointment_api.app.clinic.repository.ClinicRepository;
+import mycode.doctor_appointment_api.app.clinic.service.ClinicCommandService;
 import mycode.doctor_appointment_api.app.doctor.dtos.CreateDoctorRequest;
 import mycode.doctor_appointment_api.app.doctor.dtos.DoctorResponse;
 import mycode.doctor_appointment_api.app.doctor.dtos.UpdateDoctorRequest;
@@ -18,6 +19,11 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+
+/**
+ * Implementation of {@link DoctorCommandService} that handles
+ * logic for creating, updating, and deleting doctors.
+ */
 
 @Service
 @AllArgsConstructor

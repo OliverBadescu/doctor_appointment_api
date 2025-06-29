@@ -16,8 +16,13 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
-import javax.naming.AuthenticationException;
 
+
+/**
+ * GlobalExceptionHandler handles all exceptions thrown by the application controllers.
+ * It maps specific exceptions to HTTP status codes and returns meaningful error messages to the client.
+ * This centralizes exception handling to avoid repetitive try/catch blocks in controllers and services.
+ */
 @ControllerAdvice
 public class GlobalExceptionHandler {
 

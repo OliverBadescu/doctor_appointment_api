@@ -26,6 +26,12 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ *Implementation of {@link AppointmentCommandService}.
+ * <p>
+ * Interacts with repositories for users, doctors, and appointments.
+ */
+
 @AllArgsConstructor
 @Service
 public class AppointmentCommandServiceImpl implements AppointmentCommandService {

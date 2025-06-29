@@ -1,17 +1,41 @@
-    package mycode.doctor_appointment_api.app.users.service;
+package mycode.doctor_appointment_api.app.users.service;
 
-    import mycode.doctor_appointment_api.app.users.dtos.UserResponse;
-    import mycode.doctor_appointment_api.app.users.dtos.UserResponseList;
-    import mycode.doctor_appointment_api.app.users.model.User;
+import mycode.doctor_appointment_api.app.users.dtos.UserResponse;
+import mycode.doctor_appointment_api.app.users.dtos.UserResponseList;
+import mycode.doctor_appointment_api.app.users.model.User;
 
-    public interface UserQueryService {
+/**
+ * Service interface for querying user data.
+ */
+public interface UserQueryService {
 
-        UserResponse findUserById(long id);
+    /**
+     * Finds a user by their ID.
+     *
+     * @param id user ID
+     * @return user response DTO
+     */
+    UserResponse findUserById(long id);
 
-        UserResponseList getAllUsers();
+    /**
+     * Retrieves a list of all users.
+     *
+     * @return list of user response DTOs
+     */
+    UserResponseList getAllUsers();
 
-        User findByEmail(String email);
+    /**
+     * Finds a user by their email.
+     *
+     * @param email user email
+     * @return user entity
+     */
+    User findByEmail(String email);
 
-        int totalUsers();
-
-    }
+    /**
+     * Gets the total number of users.
+     *
+     * @return total user count
+     */
+    int totalUsers();
+}

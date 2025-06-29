@@ -18,6 +18,11 @@ import org.springframework.web.bind.annotation.*;
 
 import static mycode.doctor_appointment_api.app.system.constants.Constants.JWT_TOKEN_HEADER;
 
+
+
+/**
+ * REST controller for handling user-related endpoints.
+ */
 @RestController
 @AllArgsConstructor
 @RequestMapping("/api/v1/user")

@@ -8,6 +8,10 @@ import mycode.doctor_appointment_api.app.users.model.User;
 
 import static jakarta.persistence.GenerationType.SEQUENCE;
 
+/**
+ * Entity representing a Review left by a User for a Doctor.
+ */
+
 @AllArgsConstructor
 @ToString
 @NoArgsConstructor

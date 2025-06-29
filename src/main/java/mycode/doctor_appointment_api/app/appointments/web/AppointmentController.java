@@ -10,6 +10,14 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+
+/**
+ * REST controller for managing doctor appointment-related operations.
+ * <p>
+ * Handles creation, retrieval, update, deletion, and status management of appointments.
+ * Access is controlled via role-based authorization (ADMIN, CLIENT, DOCTOR).
+ */
+
 @RestController
 @AllArgsConstructor
 @CrossOrigin

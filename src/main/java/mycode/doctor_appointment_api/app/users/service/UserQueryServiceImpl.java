@@ -13,6 +13,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+
+/**
+ * Implementation of UserQueryService for querying user data.
+ */
 @AllArgsConstructor
 @Service
 public class UserQueryServiceImpl implements UserQueryService{

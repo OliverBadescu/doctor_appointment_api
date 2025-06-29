@@ -16,6 +16,11 @@ import mycode.doctor_appointment_api.app.users.model.User;
 import mycode.doctor_appointment_api.app.users.repository.UserRepository;
 import org.springframework.stereotype.Service;
 
+
+
+/**
+ * Service implementation for {@link ReviewCommandService}, handling review creation, deletion, and updates.
+ */
 @Service
 @AllArgsConstructor
 public class ReviewCommandServiceImpl implements ReviewCommandService{
