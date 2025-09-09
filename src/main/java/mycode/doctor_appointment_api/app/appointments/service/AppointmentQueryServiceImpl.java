@@ -14,7 +14,10 @@ import mycode.doctor_appointment_api.app.doctor.repository.DoctorRepository;
 import mycode.doctor_appointment_api.app.users.exceptions.NoUserFound;
 import mycode.doctor_appointment_api.app.users.model.User;
 import mycode.doctor_appointment_api.app.users.repository.UserRepository;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,11 +25,6 @@ import java.util.Optional;
 
 
 
-/**
- * Implementation of {@link AppointmentQueryService}.
- * <p>
- * Provides methods to retrieve appointment data for patients, doctors, and overall statistics.
- */
 @AllArgsConstructor
 @Service
 public class AppointmentQueryServiceImpl implements AppointmentQueryService {
@@ -83,5 +81,32 @@ public class AppointmentQueryServiceImpl implements AppointmentQueryService {
     @Override
     public int totalAppointments(){
         return appointmentRepository.findAll().size();
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public Page<AppointmentResponse> getAllAppointmentsPaginated(Pageable pageable) {
+        Page<Appointment> appointmentPage = appointmentRepository.findAll(pageable);
+        return appointmentPage.map(AppointmentMapper::appointmentToResponseDto);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public Page<AppointmentResponse> getPatientAppointmentsPaginated(int patientId, Pageable pageable) {
+        userRepository.findById((long) patientId)
+                .orElseThrow(() -> new NoUserFound("No user with this id found"));
+        
+        Page<Appointment> appointmentPage = appointmentRepository.findByUserId((long) patientId, pageable);
+        return appointmentPage.map(AppointmentMapper::appointmentToResponseDto);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public Page<AppointmentResponse> getDoctorAppointmentsPaginated(int doctorId, Pageable pageable) {
+        doctorRepository.findById(doctorId)
+                .orElseThrow(() -> new NoDoctorFound("No doctor with this id found"));
+        
+        Page<Appointment> appointmentPage = appointmentRepository.findByDoctorId(doctorId, pageable);
+        return appointmentPage.map(AppointmentMapper::appointmentToResponseDto);
     }
 }

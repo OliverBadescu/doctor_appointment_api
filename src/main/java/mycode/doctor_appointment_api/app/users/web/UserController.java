@@ -4,10 +4,16 @@ package mycode.doctor_appointment_api.app.users.web;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import mycode.doctor_appointment_api.app.system.jwt.JWTTokenProvider;
+import mycode.doctor_appointment_api.app.system.response.ApiResponse;
+import mycode.doctor_appointment_api.app.system.response.PagedResponse;
 import mycode.doctor_appointment_api.app.users.dtos.*;
 import mycode.doctor_appointment_api.app.users.model.User;
 import mycode.doctor_appointment_api.app.users.service.UserCommandService;
 import mycode.doctor_appointment_api.app.users.service.UserQueryService;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -20,9 +26,6 @@ import static mycode.doctor_appointment_api.app.system.constants.Constants.JWT_T
 
 
 
-/**
- * REST controller for handling user-related endpoints.
- */
 @RestController
 @AllArgsConstructor
 @RequestMapping("/api/v1/user")
@@ -72,6 +75,27 @@ public class UserController {
     @GetMapping("/getAllUsers")
     public ResponseEntity<UserResponseList> getAllUsers(){
         return new ResponseEntity<>(userQueryService.getAllUsers(),HttpStatus.OK);
+    }
+
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @GetMapping("/users")
+    public ResponseEntity<ApiResponse<PagedResponse<UserResponse>>> getUsersPaginated(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size,
+            @RequestParam(defaultValue = "id") String sortBy,
+            @RequestParam(defaultValue = "asc") String sortDir) {
+        
+        Sort sort = sortDir.equalsIgnoreCase("desc") ? 
+                Sort.by(sortBy).descending() : 
+                Sort.by(sortBy).ascending();
+        
+        Pageable pageable = PageRequest.of(page, size, sort);
+        Page<UserResponse> userPage = userQueryService.getAllUsersPaginated(pageable);
+        
+        return ResponseEntity.ok(ApiResponse.success(
+                PagedResponse.of(userPage), 
+                "Users retrieved successfully"
+        ));
     }
 
     @GetMapping("/getUserRole")

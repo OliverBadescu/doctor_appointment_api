@@ -7,16 +7,16 @@ import mycode.doctor_appointment_api.app.users.exceptions.NoUserFound;
 import mycode.doctor_appointment_api.app.users.mapper.UserMapper;
 import mycode.doctor_appointment_api.app.users.model.User;
 import mycode.doctor_appointment_api.app.users.repository.UserRepository;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
 
-/**
- * Implementation of UserQueryService for querying user data.
- */
 @AllArgsConstructor
 @Service
 public class UserQueryServiceImpl implements UserQueryService{
@@ -53,6 +53,13 @@ public class UserQueryServiceImpl implements UserQueryService{
     @Override
     public  int totalUsers(){
         return userRepository.findAll().size();
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public Page<UserResponse> getAllUsersPaginated(Pageable pageable) {
+        Page<User> userPage = userRepository.findAll(pageable);
+        return userPage.map(UserMapper::userToResponseDto);
     }
 
 }

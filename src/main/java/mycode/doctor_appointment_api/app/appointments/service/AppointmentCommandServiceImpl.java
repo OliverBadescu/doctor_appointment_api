@@ -20,17 +20,12 @@ import mycode.doctor_appointment_api.app.users.model.User;
 import mycode.doctor_appointment_api.app.users.repository.UserRepository;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
-
-/**
- *Implementation of {@link AppointmentCommandService}.
- * <p>
- * Interacts with repositories for users, doctors, and appointments.
- */
 
 @AllArgsConstructor
 @Service
@@ -42,6 +37,7 @@ public class AppointmentCommandServiceImpl implements AppointmentCommandService 
 
 
     @Override
+    @Transactional
     public AppointmentResponse addAppointment(CreateAppointmentRequest createAppointmentRequest) {
 
         User user = userRepository.findById(createAppointmentRequest.patientId())
@@ -92,6 +88,7 @@ public class AppointmentCommandServiceImpl implements AppointmentCommandService 
 
 
     @Override
+    @Transactional
     public AppointmentResponse updateAppointment(UpdateAppointmentRequest updateAppointmentRequest, int id) {
         Appointment appointment = appointmentRepository.findById(id)
                 .orElseThrow(() -> new NoAppointmentFound("No appointment with this id found"));
@@ -105,6 +102,7 @@ public class AppointmentCommandServiceImpl implements AppointmentCommandService 
     }
 
     @Override
+    @Transactional
     public AppointmentResponse deleteAppointment(int id) {
         Appointment appointment = appointmentRepository.findById(id)
                 .orElseThrow(() -> new NoAppointmentFound("No appointment with this id found"));
@@ -118,6 +116,7 @@ public class AppointmentCommandServiceImpl implements AppointmentCommandService 
 
 
     @Override
+    @Transactional
     public AppointmentResponse deletePatientAppointment(int userId, int appointmentId) {
 
         Appointment appointment = appointmentRepository.findById(appointmentId)
@@ -137,6 +136,7 @@ public class AppointmentCommandServiceImpl implements AppointmentCommandService 
     }
     
     @Override
+    @Transactional
     public AppointmentResponse updateStatus(StatusUpdateRequest status, int appointmentId){
 
         Appointment appointment = appointmentRepository.findById(appointmentId)

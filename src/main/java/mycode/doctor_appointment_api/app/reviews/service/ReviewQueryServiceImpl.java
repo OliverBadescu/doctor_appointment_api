@@ -17,9 +17,6 @@ import java.util.List;
 import java.util.Optional;
 
 
-/**
- * Service implementation for querying review data.
- */
 @Service
 @AllArgsConstructor
 public class ReviewQueryServiceImpl implements ReviewQueryService{

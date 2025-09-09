@@ -17,9 +17,6 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 
-/**
- * Implementation of user command service for managing user accounts.
- */
 @AllArgsConstructor
 @Service
 public class UserCommandServiceImpl implements UserCommandService{

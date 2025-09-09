@@ -22,11 +22,6 @@ import java.util.Set;
 import static jakarta.persistence.GenerationType.SEQUENCE;
 
 
-/**
- * Entity representing a Doctor in the system.
- * Implements Spring Security's UserDetails interface for authentication and authorization.
- * Stores doctor details, authentication credentials, and relationships to Clinic, Appointments, and Reviews.
- */
 @AllArgsConstructor
 @ToString
 @NoArgsConstructor
@@ -118,7 +113,7 @@ public class Doctor implements UserDetails {
         this.id = id;
         this.fullName = fullName;
         this.email = email;
-        this.password = new BCryptPasswordEncoder().encode(password);
+        this.password = password;
         this.userRole = userRole;
         this.specialization = specialization;
         this.clinic = clinic;

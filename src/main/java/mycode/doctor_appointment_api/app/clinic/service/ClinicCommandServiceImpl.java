@@ -12,10 +12,6 @@ import mycode.doctor_appointment_api.app.clinic.repository.ClinicRepository;
 import org.springframework.stereotype.Service;
 
 
-/**
- * Implementation of {@link ClinicCommandService} for managing clinics.
- * Provides methods to add, update, and delete clinics with validation and mapping.
- */
 @Service
 @AllArgsConstructor
 public class ClinicCommandServiceImpl implements ClinicCommandService {

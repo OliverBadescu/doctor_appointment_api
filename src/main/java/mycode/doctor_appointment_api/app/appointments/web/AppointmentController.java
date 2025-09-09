@@ -5,18 +5,18 @@ import lombok.extern.slf4j.Slf4j;
 import mycode.doctor_appointment_api.app.appointments.dtos.*;
 import mycode.doctor_appointment_api.app.appointments.service.AppointmentCommandService;
 import mycode.doctor_appointment_api.app.appointments.service.AppointmentQueryService;
+import mycode.doctor_appointment_api.app.system.response.ApiResponse;
+import mycode.doctor_appointment_api.app.system.response.PagedResponse;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 
-/**
- * REST controller for managing doctor appointment-related operations.
- * <p>
- * Handles creation, retrieval, update, deletion, and status management of appointments.
- * Access is controlled via role-based authorization (ADMIN, CLIENT, DOCTOR).
- */
 
 @RestController
 @AllArgsConstructor
@@ -83,5 +83,70 @@ public class AppointmentController {
     @PutMapping("/updateStatus/{appointmentId}")
     ResponseEntity<AppointmentResponse> updateAppointmentStatus(@PathVariable int appointmentId, @RequestBody StatusUpdateRequest status){
         return new ResponseEntity<>(appointmentCommandService.updateStatus(status, appointmentId), HttpStatus.ACCEPTED);
+    }
+
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @GetMapping("/appointments")
+    public ResponseEntity<ApiResponse<PagedResponse<AppointmentResponse>>> getAppointmentsPaginated(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size,
+            @RequestParam(defaultValue = "id") String sortBy,
+            @RequestParam(defaultValue = "desc") String sortDir) {
+        
+        Sort sort = sortDir.equalsIgnoreCase("desc") ? 
+                Sort.by(sortBy).descending() : 
+                Sort.by(sortBy).ascending();
+        
+        Pageable pageable = PageRequest.of(page, size, sort);
+        Page<AppointmentResponse> appointmentPage = appointmentQueryService.getAllAppointmentsPaginated(pageable);
+        
+        return ResponseEntity.ok(ApiResponse.success(
+                PagedResponse.of(appointmentPage), 
+                "Appointments retrieved successfully"
+        ));
+    }
+
+    @PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_CLIENT') or hasRole('ROLE_DOCTOR')")
+    @GetMapping("/patient/{patientId}/appointments")
+    public ResponseEntity<ApiResponse<PagedResponse<AppointmentResponse>>> getPatientAppointmentsPaginated(
+            @PathVariable int patientId,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size,
+            @RequestParam(defaultValue = "start") String sortBy,
+            @RequestParam(defaultValue = "asc") String sortDir) {
+        
+        Sort sort = sortDir.equalsIgnoreCase("desc") ? 
+                Sort.by(sortBy).descending() : 
+                Sort.by(sortBy).ascending();
+        
+        Pageable pageable = PageRequest.of(page, size, sort);
+        Page<AppointmentResponse> appointmentPage = appointmentQueryService.getPatientAppointmentsPaginated(patientId, pageable);
+        
+        return ResponseEntity.ok(ApiResponse.success(
+                PagedResponse.of(appointmentPage), 
+                "Patient appointments retrieved successfully"
+        ));
+    }
+
+    @PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_DOCTOR')")
+    @GetMapping("/doctor/{doctorId}/appointments")
+    public ResponseEntity<ApiResponse<PagedResponse<AppointmentResponse>>> getDoctorAppointmentsPaginated(
+            @PathVariable int doctorId,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size,
+            @RequestParam(defaultValue = "start") String sortBy,
+            @RequestParam(defaultValue = "asc") String sortDir) {
+        
+        Sort sort = sortDir.equalsIgnoreCase("desc") ? 
+                Sort.by(sortBy).descending() : 
+                Sort.by(sortBy).ascending();
+        
+        Pageable pageable = PageRequest.of(page, size, sort);
+        Page<AppointmentResponse> appointmentPage = appointmentQueryService.getDoctorAppointmentsPaginated(doctorId, pageable);
+        
+        return ResponseEntity.ok(ApiResponse.success(
+                PagedResponse.of(appointmentPage), 
+                "Doctor appointments retrieved successfully"
+        ));
     }
 }

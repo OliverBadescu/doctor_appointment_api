@@ -1,0 +1,50 @@
+spring:
+  application:
+    name: doctor-appointment-api-test
+    
+  datasource:
+    url: jdbc:h2:mem:testdb;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE;MODE=MySQL
+    username: sa
+    password:
+    driver-class-name: org.h2.Driver
+    
+  h2:
+    console:
+      enabled: true
+      path: /h2-console
+      
+  jpa:
+    hibernate:
+      ddl-auto: create-drop
+    show-sql: true
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.H2Dialect
+        format_sql: true
+        
+  cache:
+    type: simple
+
+server:
+  port: 0 # Random port for tests
+
+logging:
+  level:
+    root: WARN
+    mycode.doctor_appointment_api: DEBUG
+    org.springframework.test: DEBUG
+    org.springframework.security: DEBUG
+    org.hibernate.SQL: DEBUG
+  pattern:
+    console: "%clr(%d{HH:mm:ss.SSS}){faint} %clr(%5p) %clr([%15.15t]){faint} %clr(%-40.40logger{39}){cyan} %clr(:){faint} %m%n"
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health
+        
+# Test JWT settings
+jwt:
+  secret: test-secret-key-for-testing-only
+  expiration: 3600000 # 1 hour

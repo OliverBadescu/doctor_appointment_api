@@ -20,11 +20,6 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Optional;
 
-/**
- * Implementation of {@link DoctorCommandService} that handles
- * logic for creating, updating, and deleting doctors.
- */
-
 @Service
 @AllArgsConstructor
 public class DoctorCommandServiceImpl implements DoctorCommandService {

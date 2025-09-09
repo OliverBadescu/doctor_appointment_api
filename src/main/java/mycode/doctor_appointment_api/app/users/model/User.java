@@ -21,10 +21,6 @@ import static jakarta.persistence.GenerationType.SEQUENCE;
 
 
 
-/**
- * Entity representing a user in the system.
- * Implements UserDetails for Spring Security integration.
- */
 @AllArgsConstructor
 @ToString
 @NoArgsConstructor
@@ -99,14 +95,14 @@ public class User implements UserDetails {
         this.id = id;
         this.fullName = fullName;
         this.email = email;
-        this.password = new BCryptPasswordEncoder().encode(password);
+        this.password = password;
         this.userRole = userRole;
 
     }
 
 
     public void setPassword(String password){
-        this.password= new BCryptPasswordEncoder().encode(password);
+        this.password = password;
     }
 
 
