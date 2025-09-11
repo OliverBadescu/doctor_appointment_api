@@ -90,7 +90,6 @@ A secure, enterprise-grade backend REST API built with **Java 17** and **Spring 
 
 3. **Services will be available at**:
    - **API**: http://localhost:8080/api
-   - **Frontend**: http://localhost:3000
    - **MySQL**: localhost:3308
    - **Health Check**: http://localhost:8080/api/actuator/health
 
