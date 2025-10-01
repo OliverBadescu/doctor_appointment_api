@@ -15,6 +15,7 @@ import mycode.doctor_appointment_api.app.appointments.repository.AppointmentRepo
 import mycode.doctor_appointment_api.app.doctor.exceptions.NoDoctorFound;
 import mycode.doctor_appointment_api.app.doctor.model.Doctor;
 import mycode.doctor_appointment_api.app.doctor.repository.DoctorRepository;
+import mycode.doctor_appointment_api.app.system.email.EmailService;
 import mycode.doctor_appointment_api.app.users.exceptions.NoUserFound;
 import mycode.doctor_appointment_api.app.users.model.User;
 import mycode.doctor_appointment_api.app.users.repository.UserRepository;
@@ -24,8 +25,10 @@ import org.springframework.transaction.annotation.Transactional;
 
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 @AllArgsConstructor
 @Service
@@ -34,6 +37,7 @@ public class AppointmentCommandServiceImpl implements AppointmentCommandService 
     private AppointmentRepository appointmentRepository;
     private UserRepository userRepository;
     private DoctorRepository doctorRepository;
+    private EmailService emailService;
 
 
     @Override
@@ -72,16 +76,28 @@ public class AppointmentCommandServiceImpl implements AppointmentCommandService 
             }
         }
 
+        String confirmationToken = UUID.randomUUID().toString();
+
         Appointment appointment = Appointment.builder()
                 .start(start)
                 .end(end)
                 .user(user)
                 .reason(createAppointmentRequest.reason())
                 .doctor(doctor)
-                .status(AppointmentStatus.UPCOMING)
+                .status(AppointmentStatus.PENDING)
+                .confirmationToken(confirmationToken)
                 .build();
 
         appointmentRepository.saveAndFlush(appointment);
+
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+        emailService.sendConfirmationEmail(
+                user.getEmail(),
+                user.getFullName(),
+                doctor.getFullName(),
+                start.format(formatter),
+                confirmationToken
+        );
 
         return AppointmentMapper.appointmentToResponseDto(appointment);
     }
@@ -147,12 +163,14 @@ public class AppointmentCommandServiceImpl implements AppointmentCommandService 
 
         System.out.println("Updating appointment ID: " + appointmentId + " with cleaned status: " + cleanStatus);
 
-        if (cleanStatus.equalsIgnoreCase("COMPLETED")) {
+        if (cleanStatus.equalsIgnoreCase("PENDING")) {
+            appointment.setStatus(AppointmentStatus.PENDING);
+        } else if (cleanStatus.equalsIgnoreCase("CONFIRMED")) {
+            appointment.setStatus(AppointmentStatus.CONFIRMED);
+        } else if (cleanStatus.equalsIgnoreCase("COMPLETED")) {
             appointment.setStatus(AppointmentStatus.COMPLETED);
         } else if (cleanStatus.equalsIgnoreCase("CANCELLED")) {
             appointment.setStatus(AppointmentStatus.CANCELLED);
-        } else if (cleanStatus.equalsIgnoreCase("UPCOMING")) {
-            appointment.setStatus(AppointmentStatus.UPCOMING);
         } else {
             System.out.println("Warning: Unrecognized status '" + cleanStatus + "' - no update performed");
         }
@@ -163,5 +181,24 @@ public class AppointmentCommandServiceImpl implements AppointmentCommandService 
 
         return AppointmentMapper.appointmentToResponseDto(savedAppointment);
 
+    }
+
+    @Override
+    @Transactional
+    public AppointmentResponse confirmAppointment(String confirmationToken) {
+        Appointment appointment = appointmentRepository.findByConfirmationToken(confirmationToken)
+                .orElseThrow(() -> new NoAppointmentFound("Invalid or expired confirmation token"));
+
+        if (appointment.getStatus() == AppointmentStatus.CONFIRMED) {
+            return AppointmentMapper.appointmentToResponseDto(appointment);
+        }
+
+        appointment.setStatus(AppointmentStatus.CONFIRMED);
+
+        appointment.setConfirmationToken(null);
+
+        Appointment confirmedAppointment = appointmentRepository.save(appointment);
+
+        return AppointmentMapper.appointmentToResponseDto(confirmedAppointment);
     }
 }

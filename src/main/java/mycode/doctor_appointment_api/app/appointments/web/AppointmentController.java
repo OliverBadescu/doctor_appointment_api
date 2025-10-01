@@ -145,8 +145,14 @@ public class AppointmentController {
         Page<AppointmentResponse> appointmentPage = appointmentQueryService.getDoctorAppointmentsPaginated(doctorId, pageable);
         
         return ResponseEntity.ok(ApiResponse.success(
-                PagedResponse.of(appointmentPage), 
+                PagedResponse.of(appointmentPage),
                 "Doctor appointments retrieved successfully"
         ));
+    }
+
+    @GetMapping("/confirm/{token}")
+    public ResponseEntity<ApiResponse<AppointmentResponse>> confirmAppointment(@PathVariable String token) {
+        AppointmentResponse response = appointmentCommandService.confirmAppointment(token);
+        return ResponseEntity.ok(ApiResponse.success(response, "Appointment confirmed successfully"));
     }
 }

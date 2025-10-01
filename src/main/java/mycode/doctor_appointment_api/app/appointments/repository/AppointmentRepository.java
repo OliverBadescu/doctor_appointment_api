@@ -25,7 +25,9 @@ public interface AppointmentRepository extends JpaRepository<Appointment, Intege
     Optional<List<Appointment>> findByDoctorIdAndDate(@Param("doctorId") int doctorId, @Param("date") LocalDate date);
 
     Page<Appointment> findByUserId(Long userId, Pageable pageable);
-    
+
     Page<Appointment> findByDoctorId(Integer doctorId, Pageable pageable);
+
+    Optional<Appointment> findByConfirmationToken(String confirmationToken);
 
 }

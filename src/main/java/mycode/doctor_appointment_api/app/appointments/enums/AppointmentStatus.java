@@ -2,7 +2,8 @@ package mycode.doctor_appointment_api.app.appointments.enums;
 
 
 public enum AppointmentStatus {
-    UPCOMING("upcoming"),
+    PENDING("pending"),
+    CONFIRMED("confirmed"),
     COMPLETED("completed"),
     CANCELLED("cancelled");
 
@@ -18,7 +19,7 @@ public enum AppointmentStatus {
 
     public static AppointmentStatus fromString(String status) {
         if (status == null) {
-            return UPCOMING;
+            return PENDING;
         }
 
         for (AppointmentStatus appointmentStatus : AppointmentStatus.values()) {
@@ -27,6 +28,6 @@ public enum AppointmentStatus {
             }
         }
 
-        return UPCOMING;
+        return PENDING;
     }
 }

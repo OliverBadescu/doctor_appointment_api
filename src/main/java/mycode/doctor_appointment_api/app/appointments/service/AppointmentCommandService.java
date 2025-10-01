@@ -16,4 +16,6 @@ public interface AppointmentCommandService {
     AppointmentResponse deletePatientAppointment(int patientId, int appointmentId);
 
     AppointmentResponse updateStatus(StatusUpdateRequest status, int appointmentId);
+
+    AppointmentResponse confirmAppointment(String confirmationToken);
 }
