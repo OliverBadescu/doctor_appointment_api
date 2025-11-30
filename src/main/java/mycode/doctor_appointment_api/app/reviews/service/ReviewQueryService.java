@@ -1,6 +1,6 @@
 package mycode.doctor_appointment_api.app.reviews.service;
 
-import mycode.doctor_appointment_api.app.reviews.dtos.ReviewResponseList;
+import mycode.doctor_appointment_api.app.reviews.dto.ReviewResponseList;
 
 public interface ReviewQueryService {
 

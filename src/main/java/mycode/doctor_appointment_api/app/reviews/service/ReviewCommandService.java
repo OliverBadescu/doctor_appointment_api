@@ -1,8 +1,8 @@
 package mycode.doctor_appointment_api.app.reviews.service;
 
-import mycode.doctor_appointment_api.app.reviews.dtos.CreateReviewRequest;
-import mycode.doctor_appointment_api.app.reviews.dtos.ReviewResponse;
-import mycode.doctor_appointment_api.app.reviews.dtos.UpdateReviewRequest;
+    import mycode.doctor_appointment_api.app.reviews.dto.CreateReviewRequest;
+import mycode.doctor_appointment_api.app.reviews.dto.ReviewResponse;
+import mycode.doctor_appointment_api.app.reviews.dto.UpdateReviewRequest;
 
 
 public interface ReviewCommandService {

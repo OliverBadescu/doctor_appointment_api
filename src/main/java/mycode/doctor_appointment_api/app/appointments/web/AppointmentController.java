@@ -2,7 +2,7 @@ package mycode.doctor_appointment_api.app.appointments.web;
 
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import mycode.doctor_appointment_api.app.appointments.dtos.*;
+import mycode.doctor_appointment_api.app.appointments.dto.*;
 import mycode.doctor_appointment_api.app.appointments.service.AppointmentCommandService;
 import mycode.doctor_appointment_api.app.appointments.service.AppointmentQueryService;
 import mycode.doctor_appointment_api.app.system.response.ApiResponse;

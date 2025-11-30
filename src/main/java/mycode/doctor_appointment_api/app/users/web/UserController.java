@@ -6,7 +6,7 @@ import lombok.extern.slf4j.Slf4j;
 import mycode.doctor_appointment_api.app.system.jwt.JWTTokenProvider;
 import mycode.doctor_appointment_api.app.system.response.ApiResponse;
 import mycode.doctor_appointment_api.app.system.response.PagedResponse;
-import mycode.doctor_appointment_api.app.users.dtos.*;
+import mycode.doctor_appointment_api.app.users.dto.*;
 import mycode.doctor_appointment_api.app.users.model.User;
 import mycode.doctor_appointment_api.app.users.service.UserCommandService;
 import mycode.doctor_appointment_api.app.users.service.UserQueryService;

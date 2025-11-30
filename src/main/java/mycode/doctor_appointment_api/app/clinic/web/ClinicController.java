@@ -2,10 +2,10 @@ package mycode.doctor_appointment_api.app.clinic.web;
 
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import mycode.doctor_appointment_api.app.clinic.dtos.ClinicResponse;
-import mycode.doctor_appointment_api.app.clinic.dtos.ClinicResponseList;
-import mycode.doctor_appointment_api.app.clinic.dtos.CreateClinicRequest;
-import mycode.doctor_appointment_api.app.clinic.dtos.UpdateClinicRequest;
+import mycode.doctor_appointment_api.app.clinic.dto.ClinicResponse;
+import mycode.doctor_appointment_api.app.clinic.dto.ClinicResponseList;
+import mycode.doctor_appointment_api.app.clinic.dto.CreateClinicRequest;
+import mycode.doctor_appointment_api.app.clinic.dto.UpdateClinicRequest;
 import mycode.doctor_appointment_api.app.clinic.service.ClinicCommandService;
 import mycode.doctor_appointment_api.app.clinic.service.ClinicQueryService;
 import org.springframework.http.HttpStatus;

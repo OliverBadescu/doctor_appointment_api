@@ -1,9 +1,9 @@
 package mycode.doctor_appointment_api.app.appointments.service;
 
 import lombok.AllArgsConstructor;
-import mycode.doctor_appointment_api.app.appointments.dtos.AppointmentResponse;
-import mycode.doctor_appointment_api.app.appointments.dtos.DoctorAppointmentList;
-import mycode.doctor_appointment_api.app.appointments.dtos.PatientAppointmentList;
+import mycode.doctor_appointment_api.app.appointments.dto.AppointmentResponse;
+import mycode.doctor_appointment_api.app.appointments.dto.DoctorAppointmentList;
+import mycode.doctor_appointment_api.app.appointments.dto.PatientAppointmentList;
 import mycode.doctor_appointment_api.app.appointments.exceptions.NoAppointmentFound;
 import mycode.doctor_appointment_api.app.appointments.mapper.AppointmentMapper;
 import mycode.doctor_appointment_api.app.appointments.model.Appointment;
@@ -45,7 +45,7 @@ public class AppointmentQueryServiceImpl implements AppointmentQueryService {
 
     @Override
     public PatientAppointmentList getAllPatientAppointments(int id) {
-        User user = userRepository.findById(id)
+        userRepository.findById(id)
                 .orElseThrow(() -> new NoUserFound("No user with this id found"));
 
         Optional<List<Appointment>> appointments = appointmentRepository.getAllByUserId(id);
@@ -62,9 +62,8 @@ public class AppointmentQueryServiceImpl implements AppointmentQueryService {
 
     @Override
     public DoctorAppointmentList getAllDoctorAppointments(int id) {
-        Doctor doctor = doctorRepository.findById(id)
+        doctorRepository.findById(id)
                 .orElseThrow(() -> new NoDoctorFound("No doctor with this id found"));
-
 
         Optional<List<Appointment>> appointments = appointmentRepository.getAllByDoctorId(id);
 
@@ -93,7 +92,7 @@ public class AppointmentQueryServiceImpl implements AppointmentQueryService {
     @Override
     @Transactional(readOnly = true)
     public Page<AppointmentResponse> getPatientAppointmentsPaginated(int patientId, Pageable pageable) {
-        userRepository.findById((long) patientId)
+        userRepository.findById(patientId)
                 .orElseThrow(() -> new NoUserFound("No user with this id found"));
         
         Page<Appointment> appointmentPage = appointmentRepository.findByUserId((long) patientId, pageable);

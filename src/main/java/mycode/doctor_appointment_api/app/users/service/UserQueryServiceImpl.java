@@ -1,8 +1,8 @@
 package mycode.doctor_appointment_api.app.users.service;
 
 import lombok.AllArgsConstructor;
-import mycode.doctor_appointment_api.app.users.dtos.UserResponse;
-import mycode.doctor_appointment_api.app.users.dtos.UserResponseList;
+import mycode.doctor_appointment_api.app.users.dto.UserResponse;
+import mycode.doctor_appointment_api.app.users.dto.UserResponseList;
 import mycode.doctor_appointment_api.app.users.exceptions.NoUserFound;
 import mycode.doctor_appointment_api.app.users.mapper.UserMapper;
 import mycode.doctor_appointment_api.app.users.model.User;

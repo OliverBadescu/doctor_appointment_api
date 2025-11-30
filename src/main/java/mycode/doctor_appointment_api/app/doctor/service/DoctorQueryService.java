@@ -1,10 +1,10 @@
 package mycode.doctor_appointment_api.app.doctor.service;
 
-import mycode.doctor_appointment_api.app.appointments.dtos.DoctorAppointmentList;
-import mycode.doctor_appointment_api.app.doctor.dtos.AvailableDoctorTimes;
-import mycode.doctor_appointment_api.app.doctor.dtos.AvailableDoctorTimesDays;
-import mycode.doctor_appointment_api.app.doctor.dtos.DoctorResponse;
-import mycode.doctor_appointment_api.app.doctor.dtos.DoctorResponseList;
+import mycode.doctor_appointment_api.app.appointments.dto.DoctorAppointmentList;
+import mycode.doctor_appointment_api.app.doctor.dto.AvailableDoctorTimes;
+import mycode.doctor_appointment_api.app.doctor.dto.AvailableDoctorTimesDays;
+import mycode.doctor_appointment_api.app.doctor.dto.DoctorResponse;
+import mycode.doctor_appointment_api.app.doctor.dto.DoctorResponseList;
 import mycode.doctor_appointment_api.app.doctor.model.Doctor;
 
 import java.time.LocalDate;

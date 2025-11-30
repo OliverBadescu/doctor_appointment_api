@@ -2,10 +2,10 @@ package mycode.doctor_appointment_api.app.appointments.service;
 
 
 import lombok.AllArgsConstructor;
-import mycode.doctor_appointment_api.app.appointments.dtos.AppointmentResponse;
-import mycode.doctor_appointment_api.app.appointments.dtos.CreateAppointmentRequest;
-import mycode.doctor_appointment_api.app.appointments.dtos.StatusUpdateRequest;
-import mycode.doctor_appointment_api.app.appointments.dtos.UpdateAppointmentRequest;
+import mycode.doctor_appointment_api.app.appointments.dto.AppointmentResponse;
+import mycode.doctor_appointment_api.app.appointments.dto.CreateAppointmentRequest;
+import mycode.doctor_appointment_api.app.appointments.dto.StatusUpdateRequest;
+import mycode.doctor_appointment_api.app.appointments.dto.UpdateAppointmentRequest;
 import mycode.doctor_appointment_api.app.appointments.enums.AppointmentStatus;
 import mycode.doctor_appointment_api.app.appointments.exceptions.AppointmentAlreadyExistsAtThisDateAndTime;
 import mycode.doctor_appointment_api.app.appointments.exceptions.NoAppointmentFound;

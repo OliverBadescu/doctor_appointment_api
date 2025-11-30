@@ -1,7 +1,7 @@
 package mycode.doctor_appointment_api.app.doctor.mapper;
 
 import mycode.doctor_appointment_api.app.clinic.mapper.ClinicMapper;
-import mycode.doctor_appointment_api.app.doctor.dtos.DoctorResponse;
+import mycode.doctor_appointment_api.app.doctor.dto.DoctorResponse;
 import mycode.doctor_appointment_api.app.doctor.model.Doctor;
 
 public class DoctorMapper {

@@ -1,7 +1,7 @@
 package mycode.doctor_appointment_api.app.clinic.service;
 
-import mycode.doctor_appointment_api.app.clinic.dtos.ClinicResponse;
-import mycode.doctor_appointment_api.app.clinic.dtos.ClinicResponseList;
+import mycode.doctor_appointment_api.app.clinic.dto.ClinicResponse;
+import mycode.doctor_appointment_api.app.clinic.dto.ClinicResponseList;
 
 public interface ClinicQueryService {
 

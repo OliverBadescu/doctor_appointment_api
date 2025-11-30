@@ -1,13 +1,13 @@
 package mycode.doctor_appointment_api.app.doctor.service;
 
 import lombok.AllArgsConstructor;
-import mycode.doctor_appointment_api.app.appointments.dtos.AppointmentResponse;
-import mycode.doctor_appointment_api.app.appointments.dtos.DoctorAppointmentList;
+import mycode.doctor_appointment_api.app.appointments.dto.AppointmentResponse;
+import mycode.doctor_appointment_api.app.appointments.dto.DoctorAppointmentList;
 import mycode.doctor_appointment_api.app.appointments.exceptions.NoAppointmentFound;
 import mycode.doctor_appointment_api.app.appointments.mapper.AppointmentMapper;
 import mycode.doctor_appointment_api.app.appointments.model.Appointment;
 import mycode.doctor_appointment_api.app.appointments.repository.AppointmentRepository;
-import mycode.doctor_appointment_api.app.doctor.dtos.*;
+import mycode.doctor_appointment_api.app.doctor.dto.*;
 import mycode.doctor_appointment_api.app.doctor.exceptions.NoDoctorFound;
 import mycode.doctor_appointment_api.app.doctor.mapper.DoctorMapper;
 import mycode.doctor_appointment_api.app.doctor.model.Doctor;

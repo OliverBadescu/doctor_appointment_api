@@ -1,8 +1,8 @@
 package mycode.doctor_appointment_api.app.users.mapper;
 
 
-import mycode.doctor_appointment_api.app.users.dtos.CreateUserRequest;
-import mycode.doctor_appointment_api.app.users.dtos.UserResponse;
+import mycode.doctor_appointment_api.app.users.dto.CreateUserRequest;
+import mycode.doctor_appointment_api.app.users.dto.UserResponse;
 import mycode.doctor_appointment_api.app.users.model.User;
 
 public class UserMapper {

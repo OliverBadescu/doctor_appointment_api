@@ -2,10 +2,10 @@ package mycode.doctor_appointment_api.app.reviews.web;
 
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import mycode.doctor_appointment_api.app.reviews.dtos.CreateReviewRequest;
-import mycode.doctor_appointment_api.app.reviews.dtos.ReviewResponse;
-import mycode.doctor_appointment_api.app.reviews.dtos.ReviewResponseList;
-import mycode.doctor_appointment_api.app.reviews.dtos.UpdateReviewRequest;
+import mycode.doctor_appointment_api.app.reviews.dto.CreateReviewRequest;
+import mycode.doctor_appointment_api.app.reviews.dto.ReviewResponse;
+import mycode.doctor_appointment_api.app.reviews.dto.ReviewResponseList;
+import mycode.doctor_appointment_api.app.reviews.dto.UpdateReviewRequest;
 import mycode.doctor_appointment_api.app.reviews.service.ReviewCommandService;
 import mycode.doctor_appointment_api.app.reviews.service.ReviewQueryService;
 import org.springframework.http.HttpStatus;

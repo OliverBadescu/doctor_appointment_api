@@ -1,8 +1,8 @@
 package mycode.doctor_appointment_api.app.users.service;
 
-import mycode.doctor_appointment_api.app.users.dtos.CreateUserRequest;
-import mycode.doctor_appointment_api.app.users.dtos.UpdateUserRequest;
-import mycode.doctor_appointment_api.app.users.dtos.UserResponse;
+import mycode.doctor_appointment_api.app.users.dto.CreateUserRequest;
+import mycode.doctor_appointment_api.app.users.dto.UpdateUserRequest;
+import mycode.doctor_appointment_api.app.users.dto.UserResponse;
 
 public interface UserCommandService {
 

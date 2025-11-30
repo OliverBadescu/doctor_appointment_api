@@ -1,6 +1,6 @@
 package mycode.doctor_appointment_api.app.reviews.mapper;
 
-import mycode.doctor_appointment_api.app.reviews.dtos.ReviewResponse;
+import mycode.doctor_appointment_api.app.reviews.dto.ReviewResponse;
 import mycode.doctor_appointment_api.app.reviews.model.Review;
 
 public class ReviewMapper {
