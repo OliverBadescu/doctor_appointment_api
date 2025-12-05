@@ -34,69 +34,87 @@ import java.util.UUID;
 @Service
 public class AppointmentCommandServiceImpl implements AppointmentCommandService {
 
+    private static final DateTimeFormatter DATE_TIME_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+
     private AppointmentRepository appointmentRepository;
     private UserRepository userRepository;
     private DoctorRepository doctorRepository;
     private EmailService emailService;
 
+    private void validateAppointmentTimes(LocalDateTime start, LocalDateTime end) {
+        LocalDateTime now = LocalDateTime.now();
 
-    @Override
-    @Transactional
-    public AppointmentResponse addAppointment(CreateAppointmentRequest createAppointmentRequest) {
-
-        User user = userRepository.findById(createAppointmentRequest.patientId())
-                .orElseThrow(() -> new NoUserFound("No user with this id found"));
-
-
-        Doctor doctor = doctorRepository.findByFullName(createAppointmentRequest.doctorName())
-                .orElseThrow(() -> new NoDoctorFound("No doctor with this name found"));
-
-
-        LocalDateTime start = createAppointmentRequest.start();
-        LocalDateTime end = createAppointmentRequest.end();
-
-
-        Optional<List<Appointment>> appointmentsOpt = appointmentRepository.getAllByDoctorId(doctor.getId());
-
-
-        if (appointmentsOpt.isPresent()) {
-            boolean hasAppointment = appointmentsOpt.get().stream().anyMatch(existingAppointment -> {
-                LocalDateTime existingStart = existingAppointment.getStart();
-                LocalDateTime existingEnd = existingAppointment.getEnd();
-
-                boolean sameDate = existingStart.toLocalDate().equals(start.toLocalDate());
-                boolean overlaps = start.isBefore(existingEnd) && end.isAfter(existingStart);
-                return sameDate && overlaps;
-            });
-
-            if (hasAppointment) {
-                throw new AppointmentAlreadyExistsAtThisDateAndTime(
-                        "Doctor already has an appointment at this time."
-                );
-            }
+        if (start.isBefore(now)) {
+            throw new IllegalArgumentException("Appointment cannot be scheduled in the past");
         }
 
+        if (!start.isBefore(end)) {
+            throw new IllegalArgumentException("Appointment start time must be before end time");
+        }
+    }
+
+    private void validateNoAppointmentConflicts(Doctor doctor, LocalDateTime start, LocalDateTime end) {
+        List<Appointment> doctorAppointments = appointmentRepository.getAllByDoctorId(doctor.getId())
+                .orElse(List.of());
+
+        boolean hasConflict = doctorAppointments.stream()
+                .anyMatch(existingAppointment -> {
+                    LocalDateTime existingStart = existingAppointment.getStart();
+                    LocalDateTime existingEnd = existingAppointment.getEnd();
+
+                    boolean sameDate = existingStart.toLocalDate().equals(start.toLocalDate());
+                    boolean overlaps = start.isBefore(existingEnd) && end.isAfter(existingStart);
+
+                    return sameDate && overlaps;
+                });
+
+        if (hasConflict) {
+            throw new AppointmentAlreadyExistsAtThisDateAndTime(
+                    "Doctor already has an appointment at this time."
+            );
+        }
+    }
+
+    private Appointment createAndSaveAppointment(User user, Doctor doctor, LocalDateTime start, LocalDateTime end, String reason) {
         String confirmationToken = UUID.randomUUID().toString();
 
         Appointment appointment = Appointment.builder()
                 .start(start)
                 .end(end)
                 .user(user)
-                .reason(createAppointmentRequest.reason())
+                .reason(reason)
                 .doctor(doctor)
                 .status(AppointmentStatus.PENDING)
                 .confirmationToken(confirmationToken)
                 .build();
 
-        appointmentRepository.saveAndFlush(appointment);
+        return appointmentRepository.saveAndFlush(appointment);
+    }
 
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+    @Override
+    @Transactional
+    public AppointmentResponse addAppointment(CreateAppointmentRequest createAppointmentRequest) {
+        LocalDateTime start = createAppointmentRequest.start();
+        LocalDateTime end = createAppointmentRequest.end();
+
+        validateAppointmentTimes(start, end);
+
+        User user = userRepository.findById(createAppointmentRequest.patientId())
+                .orElseThrow(() -> new NoUserFound("No user with this id found"));
+
+        Doctor doctor = doctorRepository.findByFullName(createAppointmentRequest.doctorName())
+                .orElseThrow(() -> new NoDoctorFound("No doctor with this name found"));
+
+        validateNoAppointmentConflicts(doctor, start, end);
+
+        Appointment appointment = createAndSaveAppointment(user, doctor, start, end, createAppointmentRequest.reason());
+
         emailService.sendConfirmationEmail(
                 user.getEmail(),
                 user.getFullName(),
                 doctor.getFullName(),
-                start.format(formatter),
-                confirmationToken
+                start.format(DATE_TIME_FORMATTER),
+                appointment.getConfirmationToken()
         );
 
         return AppointmentMapper.appointmentToResponseDto(appointment);
@@ -163,17 +181,9 @@ public class AppointmentCommandServiceImpl implements AppointmentCommandService 
 
         System.out.println("Updating appointment ID: " + appointmentId + " with cleaned status: " + cleanStatus);
 
-        if (cleanStatus.equalsIgnoreCase("PENDING")) {
-            appointment.setStatus(AppointmentStatus.PENDING);
-        } else if (cleanStatus.equalsIgnoreCase("CONFIRMED")) {
-            appointment.setStatus(AppointmentStatus.CONFIRMED);
-        } else if (cleanStatus.equalsIgnoreCase("COMPLETED")) {
-            appointment.setStatus(AppointmentStatus.COMPLETED);
-        } else if (cleanStatus.equalsIgnoreCase("CANCELLED")) {
-            appointment.setStatus(AppointmentStatus.CANCELLED);
-        } else {
-            System.out.println("Warning: Unrecognized status '" + cleanStatus + "' - no update performed");
-        }
+        // Use the existing fromString method in AppointmentStatus enum
+        AppointmentStatus newStatus = AppointmentStatus.fromString(cleanStatus);
+        appointment.setStatus(newStatus);
 
         Appointment savedAppointment = appointmentRepository.save(appointment);
 
