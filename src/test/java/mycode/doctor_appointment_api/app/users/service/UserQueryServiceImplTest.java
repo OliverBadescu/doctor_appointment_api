@@ -1,7 +1,7 @@
 package mycode.doctor_appointment_api.app.users.service;
 
-import mycode.doctor_appointment_api.app.users.dtos.UserResponse;
-import mycode.doctor_appointment_api.app.users.dtos.UserResponseList;
+import mycode.doctor_appointment_api.app.users.dto.UserResponse;
+import mycode.doctor_appointment_api.app.users.dto.UserResponseList;
 import mycode.doctor_appointment_api.app.users.exceptions.NoUserFound;
 import mycode.doctor_appointment_api.app.users.model.User;
 import mycode.doctor_appointment_api.app.users.repository.UserRepository;

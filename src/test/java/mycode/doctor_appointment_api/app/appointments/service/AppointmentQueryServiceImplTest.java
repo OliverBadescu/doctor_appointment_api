@@ -1,8 +1,8 @@
 package mycode.doctor_appointment_api.app.appointments.service;
 
-import mycode.doctor_appointment_api.app.appointments.dtos.AppointmentResponse;
-import mycode.doctor_appointment_api.app.appointments.dtos.DoctorAppointmentList;
-import mycode.doctor_appointment_api.app.appointments.dtos.PatientAppointmentList;
+import mycode.doctor_appointment_api.app.appointments.dto.AppointmentResponse;
+import mycode.doctor_appointment_api.app.appointments.dto.DoctorAppointmentList;
+import mycode.doctor_appointment_api.app.appointments.dto.PatientAppointmentList;
 import mycode.doctor_appointment_api.app.appointments.exceptions.NoAppointmentFound;
 import mycode.doctor_appointment_api.app.appointments.mock.AppointmentMockData;
 import mycode.doctor_appointment_api.app.appointments.model.Appointment;

@@ -2,9 +2,9 @@ package mycode.doctor_appointment_api.app.integration.tests;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import mycode.doctor_appointment_api.app.system.security.UserRole;
-import mycode.doctor_appointment_api.app.users.dtos.CreateUserRequest;
-import mycode.doctor_appointment_api.app.users.dtos.LoginRequest;
-import mycode.doctor_appointment_api.app.users.dtos.UpdateUserRequest;
+import mycode.doctor_appointment_api.app.users.dto.CreateUserRequest;
+import mycode.doctor_appointment_api.app.users.dto.LoginRequest;
+import mycode.doctor_appointment_api.app.users.dto.UpdateUserRequest;
 import mycode.doctor_appointment_api.app.users.mock.UserMockData;
 import mycode.doctor_appointment_api.app.users.model.User;
 import mycode.doctor_appointment_api.app.users.repository.UserRepository;
@@ -48,7 +48,7 @@ class UserControllerIntegrationTest {
         userRepository.deleteAll();
 
         testUser = UserMockData.createUser("test@email.com", "Test User");
-        testUser.setPassword("testPassword123");
+        testUser.setPassword(passwordEncoder.encode("testPassword123"));
         testUser = userRepository.save(testUser);
     }
 
@@ -80,11 +80,7 @@ class UserControllerIntegrationTest {
     @WithMockUser(roles = "ADMIN")
     @DisplayName("Should create user successfully")
     void addUser() throws Exception {
-        CreateUserRequest request = CreateUserRequest.builder()
-                .email("newuser@test.com")
-                .fullName("New User")
-                .password("newPassword123")
-                .build();
+        CreateUserRequest request = new CreateUserRequest("New User", "newuser@test.com", "newPassword123");
 
         mockMvc.perform(post("/api/v1/user/add")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -124,10 +120,7 @@ class UserControllerIntegrationTest {
     @WithMockUser(roles = "ADMIN")
     @DisplayName("Should update user successfully")
     void updateUser() throws Exception {
-        UpdateUserRequest request = UpdateUserRequest.builder()
-                .email("updated@email.com")
-                .fullName("Updated Name")
-                .build();
+        UpdateUserRequest request = new UpdateUserRequest("Updated Name", "updated@email.com");
 
         mockMvc.perform(put("/api/v1/user/update/" + testUser.getId())
                         .contentType(MediaType.APPLICATION_JSON)
@@ -147,10 +140,7 @@ class UserControllerIntegrationTest {
     @WithMockUser(roles = "ADMIN")
     @DisplayName("Should return 404 when updating non-existent user")
     void updateUserNotFound() throws Exception {
-        UpdateUserRequest request = UpdateUserRequest.builder()
-                .email("updated@email.com")
-                .fullName("Updated Name")
-                .build();
+        UpdateUserRequest request = new UpdateUserRequest("Updated Name", "updated@email.com");
         long nonExistentId = 999L;
 
         mockMvc.perform(put("/api/v1/user/update/" + nonExistentId)
@@ -217,11 +207,7 @@ class UserControllerIntegrationTest {
     @Test
     @DisplayName("Should register user successfully")
     void registerUser() throws Exception {
-        CreateUserRequest request = CreateUserRequest.builder()
-                .email("register@test.com")
-                .fullName("Register User")
-                .password("registerPassword123")
-                .build();
+        CreateUserRequest request = new CreateUserRequest("Register User", "register@test.com", "registerPassword123");
 
         mockMvc.perform(post("/api/v1/user/register")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -270,11 +256,7 @@ class UserControllerIntegrationTest {
     @Test
     @DisplayName("Should return 400 for duplicate email registration")
     void registerUserDuplicateEmail() throws Exception {
-        CreateUserRequest request = CreateUserRequest.builder()
-                .email("test@email.com")
-                .fullName("Duplicate User")
-                .password("duplicatePassword123")
-                .build();
+        CreateUserRequest request = new CreateUserRequest("Duplicate User", "test@email.com", "duplicatePassword123");
 
         mockMvc.perform(post("/api/v1/user/register")
                         .contentType(MediaType.APPLICATION_JSON)

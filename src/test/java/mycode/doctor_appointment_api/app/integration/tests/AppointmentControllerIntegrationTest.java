@@ -2,14 +2,13 @@ package mycode.doctor_appointment_api.app.integration.tests;
 
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import mycode.doctor_appointment_api.app.appointments.dtos.CreateAppointmentRequest;
+import mycode.doctor_appointment_api.app.appointments.dto.CreateAppointmentRequest;
 import mycode.doctor_appointment_api.app.appointments.enums.AppointmentStatus;
 import mycode.doctor_appointment_api.app.appointments.model.Appointment;
 import mycode.doctor_appointment_api.app.appointments.repository.AppointmentRepository;
 import mycode.doctor_appointment_api.app.clinic.mock.ClinicMockData;
 import mycode.doctor_appointment_api.app.clinic.model.Clinic;
 import mycode.doctor_appointment_api.app.clinic.repository.ClinicRepository;
-import mycode.doctor_appointment_api.app.doctor.mock.DoctorMockData;
 import mycode.doctor_appointment_api.app.doctor.model.Doctor;
 import mycode.doctor_appointment_api.app.doctor.repository.DoctorRepository;
 import mycode.doctor_appointment_api.app.system.security.UserRole;
@@ -69,8 +68,8 @@ class AppointmentControllerIntegrationTest {
         doctorRepository.deleteAll();
         userRepository.deleteAll();
 
-        startTime = LocalDateTime.now();
-        endTime = LocalDateTime.now();
+        startTime = LocalDateTime.now().plusDays(1);
+        endTime = LocalDateTime.now().plusDays(1).plusHours(1);
 
         Clinic savedClinic = clinicRepository.save(ClinicMockData.createClinic());
 
@@ -119,7 +118,7 @@ class AppointmentControllerIntegrationTest {
                 .andExpect(jsonPath("$.reason").value("Regular checkup"))
                 .andExpect(jsonPath("$.doctor.fullName").value(testDoctor.getFullName()))
                 .andExpect(jsonPath("$.user.fullName").value(testUser.getFullName()))
-                .andExpect(jsonPath("$.status").value("UPCOMING"));
+                .andExpect(jsonPath("$.status").value("PENDING"));
 
         assert appointmentRepository.count() == 1;
     }
@@ -209,7 +208,7 @@ class AppointmentControllerIntegrationTest {
         appointment.setEnd(end);
         appointment.setDoctor(testDoctor);
         appointment.setUser(testUser);
-        appointment.setStatus(AppointmentStatus.UPCOMING);
+        appointment.setStatus(AppointmentStatus.PENDING);
         return appointmentRepository.save(appointment);
     }
 

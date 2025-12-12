@@ -1,15 +1,15 @@
 package mycode.doctor_appointment_api.app.appointments.web;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import mycode.doctor_appointment_api.app.appointments.dtos.*;
+import mycode.doctor_appointment_api.app.appointments.dto.*;
 import mycode.doctor_appointment_api.app.appointments.enums.AppointmentStatus;
-import mycode.doctor_appointment_api.app.doctor.dtos.DoctorResponse;
+import mycode.doctor_appointment_api.app.doctor.dto.DoctorResponse;
 import mycode.doctor_appointment_api.app.appointments.service.AppointmentCommandService;
 import mycode.doctor_appointment_api.app.appointments.service.AppointmentQueryService;
 import mycode.doctor_appointment_api.app.system.jwt.JWTAuthorizationFilter;
 import mycode.doctor_appointment_api.app.system.jwt.JWTTokenProvider;
 import mycode.doctor_appointment_api.app.system.security.UserRole;
-import mycode.doctor_appointment_api.app.users.dtos.UserResponse;
+import mycode.doctor_appointment_api.app.users.dto.UserResponse;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -59,8 +59,8 @@ class AppointmentControllerTest {
 
     @BeforeEach
     void setup() {
-        startTime = LocalDateTime.of(2025, 5, 1, 10, 0);
-        endTime = LocalDateTime.of(2025, 5, 1, 11, 0);
+        startTime = LocalDateTime.of(2026, 5, 1, 10, 0);
+        endTime = LocalDateTime.of(2026, 5, 1, 11, 0);
 
         doctorResponse = new DoctorResponse(1, "John Doe", "pass", "test@doctor.com", "Cardiologist", "", null, UserRole.DOCTOR);
         userResponse = new UserResponse(1, "jane@example.com", "pass", "Jane Smith", UserRole.CLIENT);
@@ -72,7 +72,7 @@ class AppointmentControllerTest {
                 "Consultation",
                 doctorResponse,
                 userResponse,
-                AppointmentStatus.UPCOMING
+                AppointmentStatus.PENDING
         );
     }
 
@@ -120,7 +120,7 @@ class AppointmentControllerTest {
                 "Updated Consultation",
                 doctorResponse,
                 userResponse,
-                AppointmentStatus.UPCOMING
+                AppointmentStatus.PENDING
         );
 
         when(appointmentCommandService.updateAppointment(any(UpdateAppointmentRequest.class), any(Integer.class))).thenReturn(updatedResponse);

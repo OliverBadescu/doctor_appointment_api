@@ -27,7 +27,6 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 
 @AllArgsConstructor
@@ -181,7 +180,6 @@ public class AppointmentCommandServiceImpl implements AppointmentCommandService 
 
         System.out.println("Updating appointment ID: " + appointmentId + " with cleaned status: " + cleanStatus);
 
-        // Use the existing fromString method in AppointmentStatus enum
         AppointmentStatus newStatus = AppointmentStatus.fromString(cleanStatus);
         appointment.setStatus(newStatus);
 

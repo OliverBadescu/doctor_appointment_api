@@ -5,7 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import mycode.doctor_appointment_api.app.system.jwt.JWTAuthorizationFilter;
 import mycode.doctor_appointment_api.app.system.jwt.JWTTokenProvider;
 import mycode.doctor_appointment_api.app.system.security.UserRole;
-import mycode.doctor_appointment_api.app.users.dtos.*;
+import mycode.doctor_appointment_api.app.users.dto.*;
 import mycode.doctor_appointment_api.app.users.mapper.UserMapper;
 import mycode.doctor_appointment_api.app.users.mock.UserMockData;
 import mycode.doctor_appointment_api.app.users.model.User;
@@ -90,11 +90,7 @@ public class UserControllerTest {
     @Test
     @WithMockUser(roles = "ADMIN")
     void addUser() throws Exception{
-        CreateUserRequest createUserRequest = CreateUserRequest.builder()
-                .email("email")
-                .fullName("name")
-                .password("testPassword123")
-                .build();
+        CreateUserRequest createUserRequest = new CreateUserRequest("name", "email", "testPassword123");
 
         User user = UserMockData.createUser("email", "name");
         user.setId(1);
@@ -130,10 +126,7 @@ public class UserControllerTest {
     @WithMockUser(roles = "ADMIN")
     void updateUser() throws Exception {
 
-        UpdateUserRequest updateUserRequest = UpdateUserRequest.builder()
-                .email("updated@email.com")
-                .fullName("Updated Name")
-                .build();
+        UpdateUserRequest updateUserRequest = new UpdateUserRequest("Updated Name", "updated@email.com");
 
 
         User updatedUser = UserMockData.createUser("updated@email.com", "Updated Name");
@@ -275,11 +268,7 @@ public class UserControllerTest {
     @Test
     void register_successful() throws Exception {
 
-        CreateUserRequest createUserRequest = CreateUserRequest.builder()
-                .email("newuser@test.com")
-                .fullName("New User")
-                .password("password123")
-                .build();
+        CreateUserRequest createUserRequest = new CreateUserRequest("New User", "newuser@test.com", "password123");
 
         User user = UserMockData.createUser("newuser@test.com", "New User");
         user.setUserRole(UserRole.CLIENT);

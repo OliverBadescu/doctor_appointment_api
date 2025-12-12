@@ -7,7 +7,6 @@ import mycode.doctor_appointment_api.app.users.model.User;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.List;
 
 
 public class AppointmentMockData {
@@ -17,13 +16,17 @@ public class AppointmentMockData {
         LocalDateTime end = start.plusMinutes(durationMinutes);
         Doctor doctor = DoctorMockData.createDoctor();
         doctor.setId(1);
+        User user = new User();
+        user.setId(1);
+        user.setEmail("test@test.com");
+        user.setFullName("Test User");
         return Appointment.builder()
                 .id(id)
                 .start(start)
                 .end(end)
                 .reason("Checkup")
                 .doctor(doctor)
-                .user(null)
+                .user(user)
                 .build();
     }
 

@@ -1,8 +1,8 @@
 package mycode.doctor_appointment_api.app.integration.tests;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import mycode.doctor_appointment_api.app.clinic.dtos.CreateClinicRequest;
-import mycode.doctor_appointment_api.app.clinic.dtos.UpdateClinicRequest;
+import mycode.doctor_appointment_api.app.clinic.dto.CreateClinicRequest;
+import mycode.doctor_appointment_api.app.clinic.dto.UpdateClinicRequest;
 import mycode.doctor_appointment_api.app.clinic.mock.ClinicMockData;
 import mycode.doctor_appointment_api.app.clinic.model.Clinic;
 import mycode.doctor_appointment_api.app.clinic.repository.ClinicRepository;

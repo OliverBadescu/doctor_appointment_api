@@ -1,10 +1,9 @@
 package mycode.doctor_appointment_api.app.doctor.service;
 
-import mycode.doctor_appointment_api.app.appointments.exceptions.NoAppointmentFound;
 import mycode.doctor_appointment_api.app.appointments.mock.AppointmentMockData;
 import mycode.doctor_appointment_api.app.appointments.model.Appointment;
 import mycode.doctor_appointment_api.app.appointments.repository.AppointmentRepository;
-import mycode.doctor_appointment_api.app.doctor.dtos.*;
+import mycode.doctor_appointment_api.app.doctor.dto.*;
 import mycode.doctor_appointment_api.app.doctor.exceptions.NoDoctorFound;
 import mycode.doctor_appointment_api.app.doctor.mock.DoctorMockData;
 import mycode.doctor_appointment_api.app.doctor.model.Doctor;
@@ -94,11 +93,9 @@ class DoctorQueryServiceImplTest {
         Doctor doctor = DoctorMockData.createDoctor(); doctor.setId(1);
         when(doctorRepository.findById(1)).thenReturn(Optional.of(doctor));
 
-        LocalDate day1 = start;
-        LocalDate day2 = end;
-        when(appointmentRepository.findByDoctorIdAndDate(1, day1)).thenReturn(Optional.empty());
-        Appointment ap2 = AppointmentMockData.createAppointment(2, day2, 11, 0, 30);
-        when(appointmentRepository.findByDoctorIdAndDate(1, day2)).thenReturn(Optional.of(List.of(ap2)));
+        when(appointmentRepository.findByDoctorIdAndDate(1, start)).thenReturn(Optional.empty());
+        Appointment ap2 = AppointmentMockData.createAppointment(2, end, 11, 0, 30);
+        when(appointmentRepository.findByDoctorIdAndDate(1, end)).thenReturn(Optional.of(List.of(ap2)));
 
         AvailableDoctorTimesDays result = doctorQueryService.getDoctorAvailableTimeDifferentDays(1, start, end);
         List<AvailableTimesAndDates> list = result.times();
