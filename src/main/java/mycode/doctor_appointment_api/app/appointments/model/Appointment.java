@@ -74,12 +74,6 @@ public class Appointment {
     )
     private AppointmentStatus status = AppointmentStatus.PENDING;
 
-    @Column(
-            name = "confirmation_token",
-            columnDefinition = "TEXT"
-    )
-    private String confirmationToken;
-
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "doctor_id", referencedColumnName = "id")
     @JsonBackReference

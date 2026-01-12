@@ -28,6 +28,4 @@ public interface AppointmentRepository extends JpaRepository<Appointment, Intege
 
     Page<Appointment> findByDoctorId(Integer doctorId, Pageable pageable);
 
-    Optional<Appointment> findByConfirmationToken(String confirmationToken);
-
 }

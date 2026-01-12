@@ -15,7 +15,6 @@ import mycode.doctor_appointment_api.app.appointments.repository.AppointmentRepo
 import mycode.doctor_appointment_api.app.doctor.exceptions.NoDoctorFound;
 import mycode.doctor_appointment_api.app.doctor.model.Doctor;
 import mycode.doctor_appointment_api.app.doctor.repository.DoctorRepository;
-import mycode.doctor_appointment_api.app.system.email.EmailService;
 import mycode.doctor_appointment_api.app.users.exceptions.NoUserFound;
 import mycode.doctor_appointment_api.app.users.model.User;
 import mycode.doctor_appointment_api.app.users.repository.UserRepository;
@@ -25,20 +24,15 @@ import org.springframework.transaction.annotation.Transactional;
 
 
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.List;
-import java.util.UUID;
 
 @AllArgsConstructor
 @Service
 public class AppointmentCommandServiceImpl implements AppointmentCommandService {
 
-    private static final DateTimeFormatter DATE_TIME_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
-
     private AppointmentRepository appointmentRepository;
     private UserRepository userRepository;
     private DoctorRepository doctorRepository;
-    private EmailService emailService;
 
     private void validateAppointmentTimes(LocalDateTime start, LocalDateTime end) {
         LocalDateTime now = LocalDateTime.now();
@@ -75,8 +69,6 @@ public class AppointmentCommandServiceImpl implements AppointmentCommandService 
     }
 
     private Appointment createAndSaveAppointment(User user, Doctor doctor, LocalDateTime start, LocalDateTime end, String reason) {
-        String confirmationToken = UUID.randomUUID().toString();
-
         Appointment appointment = Appointment.builder()
                 .start(start)
                 .end(end)
@@ -84,7 +76,6 @@ public class AppointmentCommandServiceImpl implements AppointmentCommandService 
                 .reason(reason)
                 .doctor(doctor)
                 .status(AppointmentStatus.PENDING)
-                .confirmationToken(confirmationToken)
                 .build();
 
         return appointmentRepository.saveAndFlush(appointment);
@@ -107,14 +98,6 @@ public class AppointmentCommandServiceImpl implements AppointmentCommandService 
         validateNoAppointmentConflicts(doctor, start, end);
 
         Appointment appointment = createAndSaveAppointment(user, doctor, start, end, createAppointmentRequest.reason());
-
-        emailService.sendConfirmationEmail(
-                user.getEmail(),
-                user.getFullName(),
-                doctor.getFullName(),
-                start.format(DATE_TIME_FORMATTER),
-                appointment.getConfirmationToken()
-        );
 
         return AppointmentMapper.appointmentToResponseDto(appointment);
     }
@@ -189,24 +172,5 @@ public class AppointmentCommandServiceImpl implements AppointmentCommandService 
 
         return AppointmentMapper.appointmentToResponseDto(savedAppointment);
 
-    }
-
-    @Override
-    @Transactional
-    public AppointmentResponse confirmAppointment(String confirmationToken) {
-        Appointment appointment = appointmentRepository.findByConfirmationToken(confirmationToken)
-                .orElseThrow(() -> new NoAppointmentFound("Invalid or expired confirmation token"));
-
-        if (appointment.getStatus() == AppointmentStatus.CONFIRMED) {
-            return AppointmentMapper.appointmentToResponseDto(appointment);
-        }
-
-        appointment.setStatus(AppointmentStatus.CONFIRMED);
-
-        appointment.setConfirmationToken(null);
-
-        Appointment confirmedAppointment = appointmentRepository.save(appointment);
-
-        return AppointmentMapper.appointmentToResponseDto(confirmedAppointment);
     }
 }

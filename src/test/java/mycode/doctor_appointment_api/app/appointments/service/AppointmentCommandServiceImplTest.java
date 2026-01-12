@@ -10,7 +10,6 @@ import mycode.doctor_appointment_api.app.appointments.model.Appointment;
 import mycode.doctor_appointment_api.app.appointments.repository.AppointmentRepository;
 import mycode.doctor_appointment_api.app.doctor.model.Doctor;
 import mycode.doctor_appointment_api.app.doctor.repository.DoctorRepository;
-import mycode.doctor_appointment_api.app.system.email.EmailService;
 import mycode.doctor_appointment_api.app.users.model.User;
 import mycode.doctor_appointment_api.app.users.repository.UserRepository;
 import mycode.doctor_appointment_api.app.doctor.mock.DoctorMockData;
@@ -40,9 +39,6 @@ class AppointmentCommandServiceImplTest {
 
     @Mock
     private DoctorRepository doctorRepository;
-
-    @Mock
-    private EmailService emailService;
 
     @InjectMocks
     private AppointmentCommandServiceImpl appointmentCommandService;
