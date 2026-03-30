@@ -1,5 +1,5 @@
 #Use the official OpenJDK base image
-FROM openjdk:19-jdk-slim
+FROM eclipse-temurin:17-jdk-jammy
 #Use the official OpenJDK base image
 
 #Metadata as described above

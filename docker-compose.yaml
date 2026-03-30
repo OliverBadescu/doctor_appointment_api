@@ -24,7 +24,7 @@ services:
 
   service:
     container_name: service-container-doctor-appointment-api
-    image: "oliver005/doctor_appointment_api:11.05.2025.20.54.59-prod"
+    build: .
     ports:
       - "8080:8080"
     restart: always
