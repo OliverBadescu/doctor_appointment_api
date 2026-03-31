@@ -15,3 +15,8 @@ server:
   error:
     include-binding-errors: always
     include-message: always
+
+mailgun:
+  api-key: ${MAILGUN_API_KEY}
+  domain: sandbox99807eff6aca4406988942a259c015de.mailgun.org
+  from: Mailgun Sandbox <postmaster@sandbox99807eff6aca4406988942a259c015de.mailgun.org>

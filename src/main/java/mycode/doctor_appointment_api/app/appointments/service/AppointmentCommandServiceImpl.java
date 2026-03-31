@@ -15,13 +15,14 @@ import mycode.doctor_appointment_api.app.appointments.repository.AppointmentRepo
 import mycode.doctor_appointment_api.app.doctor.exceptions.NoDoctorFound;
 import mycode.doctor_appointment_api.app.doctor.model.Doctor;
 import mycode.doctor_appointment_api.app.doctor.repository.DoctorRepository;
+import mycode.doctor_appointment_api.app.email.EmailService;
 import mycode.doctor_appointment_api.app.users.exceptions.NoUserFound;
 import mycode.doctor_appointment_api.app.users.model.User;
 import mycode.doctor_appointment_api.app.users.repository.UserRepository;
 
 import org.springframework.stereotype.Service;
 
-
+import java.time.format.DateTimeFormatter;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
@@ -33,6 +34,7 @@ public class AppointmentCommandServiceImpl implements AppointmentCommandService 
     private AppointmentRepository appointmentRepository;
     private UserRepository userRepository;
     private DoctorRepository doctorRepository;
+    private EmailService emailService;
 
 
     @Override
@@ -80,6 +82,20 @@ public class AppointmentCommandServiceImpl implements AppointmentCommandService 
                 .build();
 
         appointmentRepository.saveAndFlush(appointment);
+
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+        String subject = "Appointment Confirmation - " + start.format(formatter);
+        String body = "Dear " + user.getFullName() + ",\n\n"
+                + "Your appointment has been successfully booked. Here are the details:\n\n"
+                + "Doctor: " + doctor.getFullName() + "\n"
+                + "Specialization: " + doctor.getSpecialization() + "\n"
+                + "Date & Time: " + start.format(formatter) + " - " + end.format(formatter) + "\n"
+                + "Reason: " + appointment.getReason() + "\n\n"
+                + "Status: UPCOMING\n\n"
+                + "Thank you for choosing our service!\n"
+                + "Doctor Appointment Team";
+
+        emailService.sendAppointmentConfirmation(user.getEmail(), user.getFullName(), subject, body);
 
         return AppointmentMapper.appointmentToResponseDto(appointment);
     }
