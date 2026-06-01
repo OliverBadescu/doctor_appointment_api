@@ -1,7 +1,6 @@
 package mycode.doctor_appointment_api.app.email;
 
 import com.mashape.unirest.http.HttpResponse;
-import com.mashape.unirest.http.JsonNode;
 import com.mashape.unirest.http.Unirest;
 import com.mashape.unirest.http.exceptions.UnirestException;
 import org.slf4j.Logger;
@@ -27,15 +26,20 @@ public class EmailService {
         try {
             log.info("Sending email to {} via Mailgun...", toEmail);
 
-            HttpResponse<JsonNode> response = Unirest.post("https://api.eu.mailgun.net/v3/" + domain + "/messages")
+            HttpResponse<String> response = Unirest.post("https://api.eu.mailgun.net/v3/" + domain + "/messages")
                     .basicAuth("api", apiKey)
                     .queryString("from", from)
                     .queryString("to", toName + " <" + toEmail + ">")
                     .queryString("subject", subject)
                     .queryString("text", body)
-                    .asJson();
+                    .asString();
 
-            log.info("Mailgun response - Status: {}, Body: {}", response.getStatus(), response.getBody());
+            if (response.getStatus() >= 200 && response.getStatus() < 300) {
+                log.info("Email sent to {} - Status: {}", toEmail, response.getStatus());
+            } else {
+                log.error("Mailgun rejected email to {} - Status: {}, Body: {}",
+                        toEmail, response.getStatus(), response.getBody());
+            }
         } catch (UnirestException e) {
             log.error("Failed to send email to {}", toEmail, e);
         }
