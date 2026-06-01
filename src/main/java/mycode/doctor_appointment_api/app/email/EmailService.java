@@ -27,7 +27,7 @@ public class EmailService {
         try {
             log.info("Sending email to {} via Mailgun...", toEmail);
 
-            HttpResponse<JsonNode> response = Unirest.post("https://api.mailgun.net/v3/" + domain + "/messages")
+            HttpResponse<JsonNode> response = Unirest.post("https://api.eu.mailgun.net/v3/" + domain + "/messages")
                     .basicAuth("api", apiKey)
                     .queryString("from", from)
                     .queryString("to", toName + " <" + toEmail + ">")
