@@ -1,0 +1,25 @@
+# Fly.io config for the MySQL 8 database (private — no public IP).
+# Reachable from the backend at: doctor-appointment-mysql.internal:3306
+app = "doctor-appointment-mysql"
+primary_region = "fra"   # MUST match the backend's region for low-latency DB calls
+
+[build]
+  dockerfile = "Dockerfile"
+
+[env]
+  MYSQL_DATABASE = "doctor_appointment_api"
+  # MYSQL_ROOT_PASSWORD is set via `fly secrets set` — never commit it.
+
+# Persistent storage for the database files. Created with:
+#   fly volumes create mysql_data --size 3 --region fra -a doctor-appointment-mysql
+[mounts]
+  source = "mysql_data"
+  destination = "/var/lib/mysql"
+
+# A database must never auto-stop or scale beyond one machine (single volume).
+[[vm]]
+  size = "shared-cpu-1x"
+  memory = "1gb"
+
+# No [http_service]/[[services]] block on purpose: the DB stays on the private
+# network only. The backend reaches it via internal DNS, not a public address.

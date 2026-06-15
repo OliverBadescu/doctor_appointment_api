@@ -1,0 +1,13 @@
+# Keep the build context small so `fly deploy` uploads fast.
+target/
+.git/
+.github/
+.idea/
+*.iml
+.env
+docker-compose.yaml
+fly.toml
+fly-mysql/
+my.cnf/
+.DS_Store
+*.md

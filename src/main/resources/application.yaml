@@ -1,12 +1,14 @@
 spring:
   datasource:
-    url: jdbc:mysql://localhost:3306/doctor_appointment_api?useUnicode=true&characterEncoding=utf8&useSSL=false&createDatabaseIfNotExist=true&allowPublicKeyRetrieval=true
-    username: root
-    password: Makona200512
+    # In prod these are supplied by Fly secrets (SPRING_DATASOURCE_URL / _USERNAME / _PASSWORD).
+    # The values after ':' are local-dev defaults only.
+    url: ${SPRING_DATASOURCE_URL:jdbc:mysql://localhost:3306/doctor_appointment_api?useUnicode=true&characterEncoding=utf8&useSSL=false&createDatabaseIfNotExist=true&allowPublicKeyRetrieval=true}
+    username: ${SPRING_DATASOURCE_USERNAME:root}
+    password: ${SPRING_DATASOURCE_PASSWORD:Makona200512}
   jpa:
     hibernate:
-      ddl-auto: update
-    show-sql: true
+      ddl-auto: ${JPA_DDL_AUTO:update}
+    show-sql: ${JPA_SHOW_SQL:true}
     properties:
       hibernate:
         dialect: org.hibernate.dialect.MySQL8Dialect
